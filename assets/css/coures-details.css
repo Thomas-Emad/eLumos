@@ -1,0 +1,184 @@
+/* coures-details => (Head Course) */
+.coures-details .header {
+    background-color: #000;
+    color: #fff;
+}
+
+.coures-details .header .container .content {
+    gap: 40px;
+    width: 100%;
+}
+
+.coures-details .content-details .content,
+.coures-details .header .container .content .info {
+    width: 60%;
+    padding: 50px 0;
+}
+
+.coures-details .header .container .content .info .type {
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: #555555;
+    color: #fff;
+}
+
+.coures-details .header .container .content .info .by span {
+    color: var(--dark-gray-color);
+    font-size: 1.1rem;
+}
+
+.coures-details .header .container .content .info .by a {
+    color: #fff;
+    transition: var(--trans-3);
+}
+
+.coures-details .header .container .content .info .by a:hover {
+    color: var(--primary-color);
+}
+
+.coures-details .header .container .content .info .details {
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.coures-details .header .container .content .info .details div {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.coures-details .content-details .cart-side,
+.coures-details .header .container .content .cart-side {
+    position: relative;
+    width: 40%;
+}
+
+.coures-details .header .container .content .cart-side .box {
+    position: absolute;
+    top: 20%;
+    right: 0;
+    border: solid 1px #eaeaea;
+    background-color: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    color: #000;
+}
+
+.coures-details .header .container .content .cart-side .box img {
+    max-width: 100%;
+}
+
+.coures-details .header .container .content .cart-side .box .buy {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.coures-details .header .container .content .cart-side .box .buy .price {
+    color: red;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.coures-details .header .container .content .cart-side .box .buy .button-buy {
+    padding: 10px 20px;
+    color: #fff;
+    background-color: var(--primary-color);
+    border-radius: 20px;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 991px) {
+    .coures-details .header .container .content {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+
+    .coures-details .header .container .content .info,
+    .coures-details .header .container .content .cart-side,
+    .coures-details .content-details .cart-side,
+    .coures-details .content-details .content {
+        width: 100%;
+    }
+
+    .coures-details .header .container .content .cart-side .box {
+        position: relative;
+    }
+
+    .coures-details .header .container .content .cart-side .box img {
+        width: 100%;
+    }
+}
+
+/* coures-details => (content-details) */
+.coures-details .content-details .content .details {
+    border: solid 1px #eaeaea;
+    border-radius: 5px;
+}
+
+.coures-details .content-details .content .details .labs {
+    overflow-y: auto;
+}
+
+.coures-details .content-details .content .details .labs::-webkit-scrollbar {
+    height: 5px;
+}
+
+.coures-details .content-details .content .details .labs .lab {
+    padding: 15px 30px;
+    transition: var(--trans-3);
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.coures-details .content-details .content .details .labs .lab.active,
+.coures-details .content-details .content .details .labs .lab:hover {
+    background-color: #eaeaea;
+    color: var(--primary-color);
+}
+
+.coures-details .content-details .content .details .parent {
+    background-color: #eaeaea;
+    padding: 20px;
+}
+
+.coures-details .content-details .content .details .parent .box {
+    display: none;
+    color: var(--dark-gray-color);
+    line-height: 1.5rem;
+}
+
+.coures-details .content-details .content .details .parent .box.active {
+    display: block;
+}
+
+.coures-details .content-details .content .details .parent .box details {
+    padding: 10px;
+    background-color: #fff;
+    color: #000;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: var(--trans-3);
+}
+
+.coures-details .content-details .content .details .parent .box .color-gray {
+    color: var(--dark-gray-color);
+    font-weight: lighter;
+}
+
+.coures-details .content-details .content .details .parent .box details summary {
+    transition: var(--trans-3);
+}
+
+.coures-details .content-details .content .details .parent .box details:hover {
+    background-color: #f8f8f8;
+}
+
+.coures-details .content-details .content .details .parent .box details[open] summary {
+    color: var(--primary-color);
+}

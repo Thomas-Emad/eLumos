@@ -115,6 +115,10 @@ main {
     flex-direction: column;
 }
 
+.gap-20 {
+    gap: 20px;
+}
+
 .position-relative {
     position: relative;
 }
