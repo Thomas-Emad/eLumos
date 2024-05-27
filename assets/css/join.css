@@ -1,0 +1,113 @@
+/* Forms */
+.form {
+    display: none;
+}
+
+.form.active {
+    display: block;
+}
+
+.join {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.join .container {
+    border: solid 1px #e2e2e2;
+    border-radius: 20px;
+    width: 70%;
+}
+
+.join .container .types {
+    border-bottom: solid 1px #e2e2e2;
+}
+
+
+.join .container .types .button {
+    display: inline-block;
+    padding: 10px 15px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: var(--trans-3);
+}
+
+.join .container .types .button.active,
+.join .container .types .button:hover {
+    background-color: #f5f5f5;
+    border-bottom: solid 2px var(--primary-color);
+}
+
+.join .container .form .form-content .title {
+    font-size: 2rem;
+}
+
+.join .container .form .form-content>input {
+    width: 100%;
+    border: solid 1px #e2e2e2;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    outline: none;
+    transition: var(--trans-3);
+}
+
+.join .container .form .form-content input:hover,
+.join .container .form .form-content input:focus {
+    border: solid 1px var(--primary-color);
+}
+
+.join .container .form .form-content .remember {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.join .container .form .form-content button[type=submit] {
+    outline: none;
+    border: none;
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 10px;
+    width: 100%;
+    border-radius: 20px;
+    transition: var(--trans-3);
+    cursor: pointer;
+}
+
+.join .container .form .form-content button[type=submit]:hover {
+    background-color: #f1a45e;
+}
+
+.join .container .form .form-content a {
+    display: block;
+    margin-top: 10px;
+    color: var(--dark-gray-color);
+    text-decoration: none;
+    transition: var(--trans-3);
+}
+
+.join .container .form .form-content a:hover {
+    color: #222;
+}
+
+.join .container .form .form-content select {
+    width: 100%;
+    border: solid 1px #e2e2e2;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    outline: none;
+    transition: var(--trans-3);
+}
+
+@media (max-width: 767px) {
+    .join .container {
+        width: 95%;
+    }
+}

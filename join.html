@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="assets/css/normalize.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/join.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet">
+    <title>eLumos</title>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container pt-0 pb-0 d-flex justify-content-between align-items-center">
+            <a href="index.html" class="logo">
+                <img src="assets/images/logo.png" alt="logo">
+            </a>
+            <nav class="links" id="nav-menu">
+                <ul class="d-flex">
+                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="#">Courses</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Pages</a></li>
+                    <li><a href="#" class="just-mobile">Login / Register</a></li>
+                </ul>
+            </nav>
+            <div class="d-flex align-items-center sub">
+                <div class="d-flex align-items-center ">
+                    <span class="p-2 mr-2 border-radius-5 join-nav just-pc"><a href="join.html">Login /
+                            Register</a></span>
+                    <a href="search.html" class="icon-search"><img src="assets/images/icons/search.png"
+                            alt="search icon"></a>
+                </div>
+                <div class="show-nav">
+                    <img src="assets/images/icons/menu.png" alt="show menu">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- breakcrumb -->
+    <section class="breakcrumb">
+        <div class="container">
+            <div class="d-flex align-items-center">
+                <h3>Homepage</h3><span>></span><span> Login / Register </span>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Content  -->
+    <main class="join">
+        <div class="container">
+            <div class="types">
+                <span class="login button active" data-type="login">Login</span>
+                <span class="register button" data-type="register">Register</span>
+            </div>
+            <div class="form form-login active">
+                <form action="" class="form-content">
+                    <h2 class="title">Login</h2>
+                    <input type="email" name="" id="" placeholder="Email *">
+                    <input type="password" name="" id="" placeholder="Password *">
+                    <label for="remember" class="remember">
+                        <input type="checkbox" name="" id="remember">
+                        Remember me
+                    </label>
+                    <button type="submit">Login</button>
+                    <a href="#">Lost Your password?!</a>
+                </form>
+            </div>
+            <div class="form form-register">
+                <form action="" class="form-content">
+                    <h2 class="title">Register</h2>
+                    <input type="email" name="" id="" placeholder="Email *">
+                    <select name="" id="">
+                        <option value="student">Student</option>
+                        <option value="instructor">Instructor</option>
+                    </select>
+                    <input type="password" name="" id="" placeholder="Password *">
+                    <input type="password" name="" id="" placeholder="Confirm Password *">
+
+                    <button type="submit">Register</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="an-section an-bottom">
+        <div class="container">
+            <div class="content">
+                <div class="box">
+                    <img src="assets/images/logo.png" class="logo" alt="logo">
+                    <p class="mt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
+                </div>
+                <div class="box">
+                    <h4 class="title m-0">GET HELP</h4>
+                    <ul>
+                        <li class="pb-2"><a href="#" title="Contact Us">Contact Us</a></li>
+                        <li class="pb-2"><a href="#" title="Latest Articles">Latest Articles</a></li>
+                        <li class="pb-2"><a href="#" title="FAQ">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="box">
+                    <h4 class="title m-0">TOP CAREER</h4>
+                    <ul>
+                        <li class="pb-2"><a href="#" title="Web Development">Web Development</a></li>
+                        <li class="pb-2"><a href="#" title="Mobile Development">Mobile Development</a></li>
+                        <li class="pb-2"><a href="#" title="WordPress">WordPress</a></li>
+                        <li class="pb-2"><a href="#" title="Programming">Programming</a></li>
+                    </ul>
+                </div>
+                <div class="box">
+                    <h4 class="title m-0">CONTACT US</h4>
+                    <p>Address: 2321 New Design Str, Lorem Ipsum10 Hudson Yards, USA</p>
+                    <div>
+                        <p>Tel: + (123) 2500-567-8988</p>
+                        <p>Mail: supportlms@gmail.com</p>
+                    </div>
+                    <div>
+                        <ul class="icons d-flex align-items-center">
+                            <li><a href="#" title="Link facebook"><img class="icon-media mr-2"
+                                        src="assets/images/icons/facebook.svg" alt="icon facebook"></li>
+                            <li><a href="#" title="Link twitter"><img class="icon-media mr-2"
+                                        src="assets/images/icons/twitter.svg" alt="icon twitter"></a></li>
+                            <li><a href="#" title="Link youtube"><img class="icon-media mr-2"
+                                        src="assets/images/icons/youtube.svg" alt="icon youtube"></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="copy-right">
+                <p class="m-0 p-4">eLumos © 2024. All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll-top -->
+    <a class="scroll-top" title="Button Scroll top"></a>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/join.js"></script>
+</body>
+</html>
