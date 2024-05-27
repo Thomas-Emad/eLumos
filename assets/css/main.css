@@ -290,7 +290,9 @@ header .sub .show-nav img {
     cursor: pointer;
 }
 
+
 header nav ul li a:hover,
+header .sub .join-nav.active,
 header .sub .join-nav:hover,
 header .sub .icon-search:hover,
 header .sub .show-nav img:hover {
@@ -449,4 +451,39 @@ footer .container .copy-right {
     color: #fff;
     font-weight: bold;
     font-size: 2rem
+}
+
+/* pagination style */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.pagination .pagination-links {
+    display: flex;
+    gap: 15px;
+}
+
+.pagination .pagination-links .link {
+    padding: 10px 15px;
+    border: solid 1px #eaeaea;
+    border-radius: 100px;
+    font-weight: bold;
+    transition: var(--trans-3);
+}
+
+.pagination .pagination-links .link.active,
+.pagination .pagination-links .link:hover {
+    color: #fff;
+    border-color: #000;
+    background-color: #000000;
+}
+
+.pagination .pagination-links .link.prev.active img,
+.pagination .pagination-links .link.prev:hover img,
+.pagination .pagination-links .link.next.active img,
+.pagination .pagination-links .link.next:hover img {
+    filter: grayscale(100%) brightness(0%) invert(100%);
 }

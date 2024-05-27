@@ -1,0 +1,212 @@
+/* Courses */
+
+main .container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+main .container>.content {
+    width: 65%;
+}
+
+main .container .content .head {
+    padding: 25px 0;
+}
+
+main .container .content .head .search {
+    position: relative;
+}
+
+@media (max-width: 767px) {
+    main .container .content .head {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    main .container .content .head .search input,
+    main .container .content .head .search {
+        width: 100%;
+    }
+}
+
+main .container .content .head .search .button-search {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    transition: var(--trans-3);
+    filter: invert(80%) sepia(20%) saturate(0%) hue-rotate(162deg) brightness(70%) contrast(50%);
+    cursor: pointer;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    padding: 5px;
+}
+
+main .container .content .head .search .button-search:hover {
+    filter: invert(59%) sepia(86%) saturate(558%) hue-rotate(339deg) brightness(101%) contrast(101%);
+}
+
+main .container .content .head input {
+    outline: none;
+    padding: 10px 0;
+    border: none;
+    border-bottom: solid 3px #000;
+    transition: var(--trans-3);
+}
+
+main .container .content .head input:focus,
+main .container .content .head input:hover {
+    border-bottom: solid 3px #f1a45e;
+}
+
+/* Courses */
+main .container .courses {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+main .container .courses .box {
+    border: solid 1px #eaeaea;
+    border-radius: 20px;
+    transition: var(--trans-3);
+    color: var(--dark-gray-color);
+    overflow: hidden;
+}
+
+main .container .courses .box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 10px 0 rgb(0 0 0 / 20%);
+}
+
+
+main .container .courses .box .image img {
+    max-width: 100%;
+}
+
+main .container .courses .box .image .tab {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #000;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    box-shadow: 0 0 10px 0 rgba(255, 255, 255, 0.2);
+}
+
+main .container .courses .box .content .info {
+    gap: 10px;
+}
+
+main .container .courses .box .content .info .by {
+    font-size: 0.8rem;
+    color: inherit;
+}
+
+main .container .courses .box .content .info .by a {
+    color: #000;
+    font-weight: bold;
+}
+
+main .container .courses .box .content .info .title {
+    font-size: 1.1rem;
+    color: #000;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+main .container .courses .box .content .price {
+    border-top: solid 1px #eaeaea;
+    font-size: 0.9rem;
+}
+
+main .container .courses .box .content .price .more {
+    color: #000;
+    font-weight: bold;
+}
+
+
+/* Filter */
+main .container .filter {
+    width: 30%;
+    transition: var(--trans-3);
+}
+
+main .container .filter .type:not(:last-child) {
+    margin: 20px 0;
+    border-bottom: solid 1px #eaeaea;
+}
+
+
+main .container .filter .type h2 {
+    margin-bottom: 10px;
+}
+
+main .container .filter .type .box input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+main .container .filter .type .box label {
+    cursor: pointer;
+    transition: var(--trans-3);
+    padding: 10px 5px;
+    border-radius: 5px;
+}
+
+main .container .filter .type .box label:hover {
+    background-color: #eaeaea;
+}
+
+main .container .filter .type .box input[type="checkbox"]:checked~.text {
+    font-weight: bold;
+}
+
+/* Show, hidden filters in mobile view */
+main .container .show-filter-mobile {
+    display: none;
+    padding: 20px 10px;
+    border-bottom: solid 2px #eaeaea;
+    font-size: 1.1rem;
+    color: var(--dark-gray-color);
+    cursor: pointer;
+    transition: var(--trans-3);
+    border-radius: 5px;
+}
+
+main .container .show-filter-mobile img {
+    width: 20px;
+}
+
+main .container .show-filter-mobile.active,
+main .container .show-filter-mobile:hover {
+    background-color: #eaeaea;
+}
+
+@media (max-width: 767px) {
+    main .container {
+        flex-direction: column-reverse;
+    }
+
+    main .container .content,
+    main .container .filter {
+        width: 100%;
+    }
+
+    main .container .show-filter-mobile {
+        display: flex;
+    }
+
+    main .container .filter {
+        overflow: hidden;
+        height: 0;
+    }
+
+    main .container .filter.active {
+        height: max-content;
+    }
+}
