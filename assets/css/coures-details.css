@@ -137,12 +137,12 @@
 
 .coures-details .content-details .content .details .labs .lab.active,
 .coures-details .content-details .content .details .labs .lab:hover {
-    background-color: #eaeaea;
+    background-color: #f5f5f5;
     color: var(--primary-color);
 }
 
 .coures-details .content-details .content .details .parent {
-    background-color: #eaeaea;
+    background-color: #f5f5f5;
     padding: 20px;
 }
 
@@ -162,7 +162,6 @@
     color: #000;
     font-weight: bold;
     border-radius: 5px;
-    cursor: pointer;
     transition: var(--trans-3);
 }
 
@@ -181,4 +180,164 @@
 
 .coures-details .content-details .content .details .parent .box details[open] summary {
     color: var(--primary-color);
+}
+
+.coures-details .content-details .content .details .parent .box details summary>div {
+    display: inline-flex;
+    width: 95%;
+}
+
+.coures-details .content-details .content .details .parent .box details .parent-lessons .lesson {
+    padding: 15px 20px;
+    width: 100%;
+    font-weight: lighter;
+    font-size: 1.1rem;
+    transition: var(--trans-3);
+}
+
+.coures-details .content-details .content .details .parent .box details .parent-lessons .lesson:hover {
+    background-color: #f8f8f8;
+    color: var(--primary-color);
+}
+
+.coures-details .content-details .content .details .parent .box details .parent-lessons .lesson .preview {
+    color: #fff;
+    padding: 5px 10px;
+    background-color: #2580D5;
+    border-radius: 5px;
+    transition: var(--trans-3);
+}
+
+.coures-details .content-details .content .details .parent .box details .parent-lessons .lesson .preview:hover {
+    background-color: #1a5f9d;
+}
+
+@media (max-width: 991px) {
+
+    .coures-details .content-details .content .details .parent .box details summary,
+    .coures-details .content-details .content .details .parent .box details .parent-lessons .lesson {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+/* coures-details => (content-instructor) */
+.coures-details .content-details .content .details .parent .content-instructor .links .icon {
+    color: var(--dark-gray-color);
+    transition: var(--trans-3);
+}
+
+.coures-details .content-details .content .details .parent .content-instructor .links .icon:hover {
+    color: var(--primary-color);
+}
+
+.coures-details .content-details .content .details .parent .content-faqs details {
+    color: var(--dark-gray-color);
+}
+
+.coures-details .content-details .content .details .parent .content-faqs details div {
+    font-weight: lighter;
+}
+
+@media (max-width: 767px) {
+    .coures-details .content-details .content .details .parent .content-instructor .info {
+        flex-direction: column;
+    }
+}
+
+/* coures-details => (content-reviews) */
+.coures-details .content-details .content .details .parent .content-reviews .title-head {
+    font-size: 1.5rem;
+}
+
+.coures-details .content-details .content .details .parent .content-reviews .title {
+    color: #000;
+}
+
+.coures-details .content-details .content .details .parent .content-reviews .rates .total-rate .title {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.coures-details .content-details .content .details .parent .content-reviews .rates .star {
+    color: var(--primary-color);
+}
+
+.coures-details .content-details .content .details .parent .content-reviews .rates .rate .progress {
+    position: relative;
+    min-width: 50%;
+    width: 70%;
+    height: 10px;
+    background-color: #eaeaea;
+}
+
+.coures-details .content-details .content .details .parent .content-reviews .rates .rate .text {
+    font-size: 1.1rem;
+}
+
+.coures-details .content-details .content .details .parent .content-reviews .rates .rate .progress span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 100%;
+    background-color: var(--primary-color);
+
+}
+
+@media (max-width:600px) {
+    .coures-details .content-details .content .details .parent .content-reviews .rates .rate {
+        justify-content: center;
+    }
+
+    .coures-details .content-details .content .details .parent .content-reviews .rates .rate .progress {
+        display: none;
+    }
+}
+
+/* coures-details => (content-reviews) => Comments */
+.coures-details .content-details .content .details .parent .content-reviews .comments .comment {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.coures-details .content-details .content .details .parent .content-reviews .comments .comment:not(:last-child) {
+    border-bottom: solid 1px #eaeaea;
+}
+
+.coures-details .content-details .content .details .parent .content-reviews .comments .comment .image img {
+    border-radius: 100px;
+    overflow: hidden;
+    width: 250px;
+}
+
+.coures-details .content-details .content .details .parent .content-reviews .comments .comment .image img {
+    max-width: 100%;
+}
+
+.coures-details .content-details .content .details .parent .content-reviews .comments .comment .title {
+    color: #000;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.coures-details .content-details .content .details .parent .content-reviews .comments .comment .reply {
+    color: #000;
+    cursor: pointer;
+}
+
+.coures-details .content-details .content .details .parent .content-reviews .comments .comment .reply .icon {
+    color: #F51A1A;
+}
+
+@media (max-width: 767px) {
+    .coures-details .content-details .content .details .parent .content-reviews .comments .comment {
+        flex-direction: column;
+    }
+
+    .coures-details .content-details .content .details .parent .content-reviews .comments .comment .image img {
+        width: 100px;
+    }
 }
