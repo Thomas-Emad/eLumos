@@ -6,21 +6,21 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('home');
 })->name('home');
-Route::view("join", 'auth.join')->name("join");
 Route::view("courses", 'courses')->name("courses");
 Route::view("course-details", 'course-details')->name("course-details");
-Route::view('profile', 'profile')->name('profile');
 
+// Route::group(['middleware' => 'auth'], function () {
+Route::get('dashboard/{page?}', function ($page = 'home') {
+    if (view()->exists('dashboard.' . $page)) {
+        return  view('dashboard.' . $page);
+    } else {
+        return abort(404);
+    }
+})->name('dashboard');
 
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::view('dashboard/profile', 'dashboard.profile')->name('profile');
+Route::view('dashboard/add-course', 'dashboard.add-course')->name('add-course');
 // });
 
-// require __DIR__ . '/auth.php';
+
+require __DIR__ . '/auth.php';

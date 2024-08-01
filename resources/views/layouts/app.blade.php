@@ -8,7 +8,7 @@
 
     <title>{{ config('app.name', 'eLumos') }} | @yield('title')</title>
 
-    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}" type="image/x-icon">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -25,7 +25,7 @@
     @yield('css')
 </head>
 
-<body class="font-sans antialiased bg-white">
+<body class="font-sans antialiased bg-[#fafafa] dark:bg-gray-800 dark:text-gray-100">
     <div class="min-h-screen">
         @include('layouts.header')
 

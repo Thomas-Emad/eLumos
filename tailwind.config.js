@@ -9,7 +9,8 @@ export default {
         "./resources/**/*.blade.php",
         "./resources/**/**/*.blade.php",
         "./resources/**/*.js",
-        "./node_modules/flowbite/**/*.js"
+        "./node_modules/flowbite/**/*.js",
+        'node_modules/preline/dist/*.js',
 
     ],
 
@@ -23,6 +24,8 @@ export default {
 
     plugins: [
         forms,
-        require('flowbite/plugin')
+        require('flowbite/plugin'),
+        require('preline/plugin'),
+
     ],
 };

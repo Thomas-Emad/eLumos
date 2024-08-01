@@ -1,13 +1,6 @@
 @extends('layouts.app')
 @section('title', 'course details')
 
-@section('css')
-    <style>
-        body {
-            background-color: #fafafa !important;
-        }
-    </style>
-@endsection
 
 @section('content')
     <div class="min-h-60 bg-center bg-cover bg-no-repear relative mt-16"
@@ -65,11 +58,11 @@
 
     <div class="container mx-auto max-w-screen-xl p-4 flex flex-col md:flex-row gap-4">
         <div class="w-full md:w-2/3 ">
-            <div class="p-4 bg-white rounded-xl border border-gray-200">
+            <div class="p-4 bg-white dark:bg-gray-700 rounded-xl border border-gray-200">
                 <h2 class="font-bold text-xl text-amber-700 mb-3">Overview</h2>
                 <div class="text-sm">
                     <h3 class="font-bold">Course Description</h3>
-                    <p class="text-gray-600">
+                    <p class="text-gray-600 dark:text-gray-100">
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
                         industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
                         and scrambled it to make a type specimen book. It has survived not only five centuries, but also the
@@ -83,7 +76,7 @@
                 </div>
                 <div class="text-sm mt-2">
                     <h3 class="font-bold">What you'll learn</h3>
-                    <div class="text-gray-600 ps-2">
+                    <div class="text-gray-600 dark:text-gray-100 ps-2">
                         <p>test one</p>
                         <p>test one</p>
                         <p>test one</p>
@@ -93,7 +86,7 @@
                 </div>
                 <div class="text-sm mt-2">
                     <h3 class="font-bold">Requirements</h3>
-                    <div class="text-gray-600 ps-2">
+                    <div class="text-gray-600 dark:text-gray-100 ps-2">
                         <p>test one</p>
                         <p>test one</p>
                         <p>test one</p>
@@ -103,7 +96,7 @@
                 </div>
 
             </div>
-            <div class="p-4 bg-white rounded-xl border border-gray-200 mt-4">
+            <div class="p-4 bg-white dark:bg-gray-700 rounded-xl border border-gray-200 mt-4">
                 <div class="flex justify-between gap-2 items-center font-bold">
                     <h2 class=" text-xl text-amber-700 mb-3">Course Content</h2>
                     <div>
@@ -128,7 +121,7 @@
                             </button>
                         </h2>
                         <div id="accordion-collapse-body-1" class="hidden" aria-labelledby="accordion-collapse-heading-1">
-                            <div class="p-2 border border-b-0 border-gray-200 text-gray-600 text-sm">
+                            <div class="p-2 border border-b-0 border-gray-200 text-gray-600 dark:text-gray-100 text-sm">
                                 <div
                                     class="flex justify-between gap-2 border-b-2 border-gray-100 last-of-type:border-none p-2">
                                     <div>
@@ -185,7 +178,7 @@
                         </h2>
                         <div id="accordion-collapse-body-2" class="hidden"
                             aria-labelledby="accordion-collapse-heading-2">
-                            <div class="p-2 border border-b-0 border-gray-200 text-gray-600 text-sm">
+                            <div class="p-2 border border-b-0 border-gray-200 text-gray-600 dark:text-gray-100 text-sm">
                                 <div
                                     class="flex justify-between gap-2 border-b-2 border-gray-100 last-of-type:border-none p-2">
                                     <div>
@@ -242,7 +235,7 @@
                         </h2>
                         <div id="accordion-collapse-body-3" class="hidden"
                             aria-labelledby="accordion-collapse-heading-3">
-                            <div class="p-2 border border-b-0 border-gray-200 text-gray-600 text-sm">
+                            <div class="p-2 border border-b-0 border-gray-200 text-gray-600 dark:text-gray-100 text-sm">
                                 <div
                                     class="flex justify-between gap-2 border-b-2 border-gray-100 last-of-type:border-none p-2">
                                     <div>
@@ -287,7 +280,7 @@
                 </div>
 
             </div>
-            <div class="p-4 bg-white rounded-xl border border-gray-200 mt-4">
+            <div class="p-4 bg-white dark:bg-gray-700 rounded-xl border border-gray-200 mt-4">
                 <h3 class="font-bold text-xl pb-2">About the instructor</h3>
                 <div class="flex justify-between items-center gap-2 border-b border-gray-200 py-4">
                     <div class="flex items-center gap-2">
@@ -309,7 +302,8 @@
                         <span>4.5 Instructor Rating</span>
                     </div>
                 </div>
-                <div class="flex gap-4 border-b border-gray-200 py-4 font-bold text-gray-700 text-sm mb-1">
+                <div
+                    class="flex gap-4 border-b border-gray-200 py-4 font-bold text-gray-700 dark:text-gray-200 text-sm mb-1">
                     <div>
                         <i class="fa-solid fa-play text-amber-700"></i>
                         <span>5 Courses</span>
@@ -327,7 +321,7 @@
                         <span>270,866 students enrolled</span>
                     </div>
                 </div>
-                <div class="text-gray-800 text-sm whitespace-pre-line">
+                <div class="text-gray-800 dark:text-gray-200 text-sm whitespace-pre-line">
                     UI/UX Designer, with 7+ Years Experience. Guarantee of High Quality Work.
 
                     Skills: Web Design, UI Design, UX/UI Design, Mobile Design, User Interface Design, Sketch, Photoshop,
@@ -343,7 +337,7 @@
                     5. Worldwide
                 </div>
             </div>
-            <div class="p-4 bg-white rounded-xl border border-gray-200 mt-4">
+            <div class="p-4 bg-white dark:bg-gray-700 rounded-xl border border-gray-200 mt-4">
                 <h3 class="font-bold text-xl pb-2">Reviews</h3>
                 <div class="flex justify-between items-center gap-2 border-b border-gray-200 py-4">
                     <div class="flex items-center gap-2">
@@ -366,7 +360,7 @@
                     </div>
                 </div>
                 <p>
-                    <q class="text-gray-800 text-sm  italic">Lorem, ipsum dolor sit amet consectetur
+                    <q class="text-gray-800 dark:text-gray-200 text-sm  italic">Lorem, ipsum dolor sit amet consectetur
                         adipisicing
                         elit. Nemo, atque soluta suscipit nobis reiciendis
                         odio velit? At quasi ab distinctio, quo pariatur velit nulla quod praesentium eveniet, non vitae.
@@ -378,7 +372,7 @@
             </div>
         </div>
         <div class="w-full md:w-1/3 h-fit -translate-y-0 md:-translate-y-52 z-[2] flex flex-col gap-4">
-            <div class="p-4 bg-white rounded-xl border border-gray-200 ">
+            <div class="p-4 bg-white dark:bg-gray-700 rounded-xl border border-gray-200 ">
                 <div class="relative cursor-pointer rounded-xl overflow-hidden" data-modal-target="video-preview"
                     data-modal-toggle="video-preview">
                     <img src="{{ asset('assets/images/courses.png') }}" class="w-full h-full " alt="view course">
@@ -390,7 +384,7 @@
                 </div>
                 <div class="flex justify-between items-center gap-2 py-4">
                     <span class="text-bold text-2xl text-green-500">50$</span>
-                    <div class="text-gray-600 text-sm">
+                    <div class="text-gray-600 dark:text-gray-100 text-sm">
                         <span class="line-through">100$</span>
                         <span>50% off</span>
                     </div>
@@ -409,7 +403,7 @@
                     </div>
 
                     <div data-popover id="share-course-tooltipe" role="tooltip"
-                        class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+                        class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white dark:bg-gray-700 border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
                         <div class="px-3 py-2 text-center">
                             <p>Want Share This Course?!</p>
                         </div>
@@ -422,9 +416,9 @@
                         Now</a>
                 </div>
             </div>
-            <div class="p-4 bg-white rounded-xl border border-gray-200">
+            <div class="p-4 bg-white dark:bg-gray-700 rounded-xl border border-gray-200">
                 <h3 class="font-bold text-xl pb-2">Includes</h3>
-                <div class="flex flex-col gap-2 text-sm text-gray-600">
+                <div class="flex flex-col gap-2 text-sm text-gray-600 dark:text-gray-100">
                     <div class="p-2 border-b border-gray-200 last-of-type:border-none">
                         <i class="fa-solid fa-users text-amber-700 mr-2"></i>
                         <span>
@@ -464,14 +458,14 @@
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-2xl max-h-full">
             <!-- Modal content -->
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <div class="relative bg-white dark:bg-gray-700 rounded-lg shadow dark:bg-gray-700">
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 dark:text-white">
                         Trailer Course
                     </h3>
                     <button type="button"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 dark:text-gray-100 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                         data-modal-hide="video-preview">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 14 14">
@@ -493,7 +487,7 @@
                 <!-- Modal footer -->
                 <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                     <button data-modal-hide="video-preview" type="button"
-                        class="w-full text-gray-800 border border-gray-800  hover:bg-gray-800 hover:text-white duration-300 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
+                        class="w-full text-gray-800 dark:text-gray-200 border border-gray-800  hover:bg-gray-800 hover:text-white duration-300 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
                         Close
                     </button>
                 </div>
@@ -505,14 +499,14 @@
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-lg max-h-full">
             <!-- Modal content -->
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
+            <div class="relative bg-white dark:bg-gray-700 rounded-lg shadow dark:bg-gray-800">
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5">
                     <h3 class="text-lg text-gray-500 dark:text-gray-400">
                         Share course
                     </h3>
                     <button type="button"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-700 dark:hover:text-white"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 dark:text-gray-100 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-700 dark:hover:text-white"
                         data-modal-toggle="course-modal">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 14 14">
@@ -524,7 +518,8 @@
                 </div>
                 <!-- Modal body -->
                 <div class="px-4 pb-4 md:px-5 md:pb-5">
-                    <label for="course-url" class="text-sm font-medium text-gray-900 dark:text-white mb-2 block">Share the
+                    <label for="course-url"
+                        class="text-sm font-medium text-gray-900 dark:text-gray-100 dark:text-white mb-2 block">Share the
                         course link below with your friends:</label>
                     <div class="relative mb-4">
                         <input id="course-url" type="text"
@@ -555,7 +550,7 @@
                         </div>
                     </div>
                     <button type="button" data-modal-hide="course-modal"
-                        class="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Close</button>
+                        class="py-2.5 px-5 text-sm font-medium text-gray-900 dark:text-gray-100 focus:outline-none bg-white dark:bg-gray-700 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Close</button>
                 </div>
             </div>
         </div>
@@ -565,14 +560,14 @@
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-2xl max-h-full">
             <!-- Modal content -->
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <div class="relative bg-white dark:bg-gray-700 rounded-lg shadow">
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 ">
                         Reviews Students
                     </h3>
                     <button type="button"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        class=" bg-transparent hover:bg-gray-200 text-gray-400 hover:text-gray-900  dark:text-gray-100 dark:hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 "
                         data-modal-hide="reviews-modal">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 14 14">
@@ -593,9 +588,10 @@
                         </div>
                         <div id="add_feedback-body-1" class="hidden" aria-labelledby="add_feedback-heading-1">
                             <form class="mt-2">
-                                <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 ">
-                                    <div class="px-4 py-2 bg-white rounded-t-lg ">
-                                        <textarea id="comment" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 focus:ring-0 "
+                                <div class="w-full mb-4 border border-gray-200 dark:bg-gray-600 rounded-lg bg-gray-50 ">
+                                    <div class="px-4 py-2 bg-white dark:bg-gray-700 rounded-t-lg ">
+                                        <textarea id="comment" rows="4"
+                                            class="w-full px-0 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 border-0 focus:ring-0 "
                                             placeholder="Write Your Feedback..." required></textarea>
                                     </div>
                                     <div class="flex items-center justify-between px-3 py-2 border-t">
@@ -606,14 +602,14 @@
                                     </div>
                                 </div>
                             </form>
-                            <p class="ms-auto text-xs text-gray-500 ">Remember, contributions to this
+                            <p class="ms-auto text-xs text-gray-500 dark:text-gray-100">Remember, contributions to this
                                 topic should follow our <a href="#" class="text-blue-600  hover:underline">Community
                                     Guidelines</a>.</p>
 
                         </div>
                     </div>
                     <div class="flex flex-col gap-4">
-                        <div class="bg-gray-50 border border-gray-100 rounded-xl p-2">
+                        <div class="bg-gray-50 dark:bg-gray-600 border border-gray-100 rounded-xl p-2">
                             <div class="flex justify-between items-center gap-2 border-b border-gray-200 py-4">
                                 <div class="flex items-center gap-2">
                                     <img src="{{ asset('assets/images/user-1.png') }}" class="w-12 h-12 rounded-full"
@@ -646,7 +642,7 @@
                 <!-- Modal footer -->
                 <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                     <button data-modal-hide="reviews-modal" type="button"
-                        class="w-full text-gray-800 border border-gray-800  hover:bg-gray-800 hover:text-white duration-300 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
+                        class="w-full text-gray-800 dark:text-gray-200 border border-gray-800  hover:bg-gray-800 hover:text-white duration-300 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
                         Close
                     </button>
                 </div>

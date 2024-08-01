@@ -10,10 +10,11 @@
         style="height:400px;background-image:url('{{ asset('assets/images/landing.png') }}')">
         <div class="max-w-screen-xl container mx-auto p-4  flex items-center min-h-full">
             <div>
-                <h1 class="font-bold text-5xl ">
+                <h1 class="font-bold text-5xl text-black">
                     Build Skills with <br> Online Course
                 </h1>
-                <p class="mt-2 text-gray-700">We understand the amount of time and your success, it's all only here.</p>
+                <p class="mt-2 text-gray-700">We understand the amount of time and your success, it's all
+                    only here.</p>
             </div>
         </div>
     </div>
@@ -23,10 +24,10 @@
         <div class="flex items-center justify-between flex-col gap-2 md:flex-row">
             <div class="text-center md:text-left">
                 <h2 class="font-bold text-2xl">Top Categories</h2>
-                <p class="text-gray-700">Explore our Popular Categories</p>
+                <p class="text-gray-700 dark:text-gray-200">Explore our Popular Categories</p>
             </div>
             <a href="#"
-                class="block px-6 py-3 rounded-full text-gray-800 border-2 border-gray-800 hover:border-black hover:text-black">All
+                class="block px-6 py-3 rounded-full text-gray-800 dark:text-gray-200 border-2 border-gray-800 hover:border-black hover:text-black dark:border-gray-200 dark:hover:border-amber-700 duration-300">All
                 Categories</a>
         </div>
         <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-5 mt-6">
@@ -34,31 +35,31 @@
                 class="flex flex-col items-center p-4 px-16 border border-gray-200 rounded-lg hover:-translate-y-2 hover:shadow-md transition-all duration-300">
                 <img src="{{ asset('assets/images/icons/art.png') }}" class="h-8 w-8" alt="icon ">
                 <span class="font-bold text-xl my-2 whitespace-nowrap">Art & Design</span>
-                <span class="text-gray-700 text-sm">38 Courses</span>
+                <span class="text-gray-700 dark:text-gray-200 text-sm">38 Courses</span>
             </a>
             <a href="#"
                 class="flex flex-col items-center p-4 px-16 border border-gray-200 rounded-lg hover:-translate-y-2 hover:shadow-md transition-all duration-300">
                 <img src="{{ asset('assets/images/icons/art.png') }}" class="h-8 w-8" alt="icon ">
                 <span class="font-bold text-xl my-2 whitespace-nowrap">Art & Design</span>
-                <span class="text-gray-700 text-sm">38 Courses</span>
+                <span class="text-gray-700 dark:text-gray-200 text-sm">38 Courses</span>
             </a>
             <a href="#"
                 class="flex flex-col items-center p-4 px-16 border border-gray-200 rounded-lg hover:-translate-y-2 hover:shadow-md transition-all duration-300">
                 <img src="{{ asset('assets/images/icons/art.png') }}" class="h-8 w-8" alt="icon ">
                 <span class="font-bold text-xl my-2 whitespace-nowrap">Art & Design</span>
-                <span class="text-gray-700 text-sm">38 Courses</span>
+                <span class="text-gray-700 dark:text-gray-200 text-sm">38 Courses</span>
             </a>
             <a href="#"
                 class="flex flex-col items-center p-4 px-16 border border-gray-200 rounded-lg hover:-translate-y-2 hover:shadow-md transition-all duration-300">
                 <img src="{{ asset('assets/images/icons/art.png') }}" class="h-8 w-8" alt="icon ">
                 <span class="font-bold text-xl my-2 whitespace-nowrap">Art & Design</span>
-                <span class="text-gray-700 text-sm">38 Courses</span>
+                <span class="text-gray-700 dark:text-gray-200 text-sm">38 Courses</span>
             </a>
             <a href="#"
                 class="flex flex-col items-center p-4 px-16 border border-gray-200 rounded-lg hover:-translate-y-2 hover:shadow-md transition-all duration-300">
                 <img src="{{ asset('assets/images/icons/art.png') }}" class="h-8 w-8" alt="icon ">
                 <span class="font-bold text-xl my-2 whitespace-nowrap">Art & Design</span>
-                <span class="text-gray-700 text-sm">38 Courses</span>
+                <span class="text-gray-700 dark:text-gray-200 text-sm">38 Courses</span>
             </a>
 
         </div>
@@ -71,10 +72,10 @@
         <div class="flex items-center justify-between flex-col gap-2 md:flex-row">
             <div class="text-center md:text-left">
                 <h2 class="font-bold text-2xl">Featured courses</h2>
-                <p class="text-gray-700">Explore our Popular Courses</p>
+                <p class="text-gray-700 dark:text-gray-200">Explore our Popular Courses</p>
             </div>
             <a href="#"
-                class="block px-6 py-3 rounded-full text-gray-800 border-2 border-gray-800 hover:border-black hover:text-black">All
+                class="block px-6 py-3 rounded-full text-gray-800 dark:text-gray-200 border-2 border-gray-800 hover:border-black hover:text-black dark:border-gray-200 dark:hover:border-amber-700 duration-300">All
                 Courses</a>
         </div>
         <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-5 mt-6">
@@ -87,83 +88,24 @@
                         Development</span>
                 </a>
                 <div class="p-4 flex flex-col gap-2">
-                    <span class="text-sm"><span class="text-gray-800 ">by</span> <a href="#" class="font-bold">Thomas
-                            Emad</a></span>
-                    <a href="#" class="font-bold text-gray-800 text-2xl -mt-2 hover:text-black transition">Learn
-                        Laravel 11.x</a>
-                    <div class="flex justify-between">
-                        <span class="flex items-center gap-2">
-                            <i class="fa-solid fa-clock text-amber-600"></i>
-                            <span class="text-sm text-gray-800">2 Weeks</span>
-                        </span>
-                        <span class="flex items-center gap-2">
-                            <i class="fa-solid fa-graduation-cap text-amber-600"></i>
-                            <span class="text-sm text-gray-800">2 Weeks</span>
-                        </span>
-                    </div>
-                    <hr>
-                    <div class="flex justify-between text-gray-800">
-                        <span class="text-sm">50$</span>
-                        <a href="#" class="font-bold">View More</a>
-                    </div>
-                </div>
-            </div>
-            <div
-                class="flex flex-col overflow-hidden rounded-xl border border-gray-200 transition-all duration-300 hover:shadow-md hover:-translate-y-2">
-                <a href="#" class="relative">
-                    <img src="{{ asset('assets/images/courses.png') }}" alt="photo course">
-                    <span
-                        class="absolute top-3 left-3 px-3 py-1 bg-gray-900 shadow shadow-gray-800 text-white text-sm rounded-lg">Web
-                        Development</span>
-                </a>
-                <div class="p-4 flex flex-col gap-2">
-                    <span class="text-sm"><span class="text-gray-800 ">by</span> <a href="#" class="font-bold">Thomas
-                            Emad</a></span>
-                    <a href="#" class="font-bold text-gray-800 text-2xl -mt-2 hover:text-black transition">Learn
-                        Laravel 11.x</a>
-                    <div class="flex justify-between">
-                        <span class="flex items-center gap-2">
-                            <i class="fa-solid fa-clock text-amber-600"></i>
-                            <span class="text-sm text-gray-800">2 Weeks</span>
-                        </span>
-                        <span class="flex items-center gap-2">
-                            <i class="fa-solid fa-graduation-cap text-amber-600"></i>
-                            <span class="text-sm text-gray-800">2 Weeks</span>
-                        </span>
-                    </div>
-                    <hr>
-                    <div class="flex justify-between text-gray-800">
-                        <span class="text-sm">50$</span>
-                        <a href="#" class="font-bold">View More</a>
-                    </div>
-                </div>
-            </div>
-            <div
-                class="flex flex-col overflow-hidden rounded-xl border border-gray-200 transition-all duration-300 hover:shadow-md hover:-translate-y-2">
-                <a href="#" class="relative">
-                    <img src="{{ asset('assets/images/courses.png') }}" alt="photo course">
-                    <span
-                        class="absolute top-3 left-3 px-3 py-1 bg-gray-900 shadow shadow-gray-800 text-white text-sm rounded-lg">Web
-                        Development</span>
-                </a>
-                <div class="p-4 flex flex-col gap-2">
-                    <span class="text-sm"><span class="text-gray-800 ">by</span> <a href="#"
+                    <span class="text-sm"><span class="text-gray-800 dark:text-gray-200 ">by</span> <a href="#"
                             class="font-bold">Thomas
                             Emad</a></span>
-                    <a href="#" class="font-bold text-gray-800 text-2xl -mt-2 hover:text-black transition">Learn
+                    <a href="#"
+                        class="font-bold text-gray-800 dark:text-gray-200 dark:hover:text-amber-500 text-2xl -mt-2 hover:text-black transition">Learn
                         Laravel 11.x</a>
                     <div class="flex justify-between">
                         <span class="flex items-center gap-2">
                             <i class="fa-solid fa-clock text-amber-600"></i>
-                            <span class="text-sm text-gray-800">2 Weeks</span>
+                            <span class="text-sm text-gray-800 dark:text-gray-200">2 Weeks</span>
                         </span>
                         <span class="flex items-center gap-2">
                             <i class="fa-solid fa-graduation-cap text-amber-600"></i>
-                            <span class="text-sm text-gray-800">2 Weeks</span>
+                            <span class="text-sm text-gray-800 dark:text-gray-200">2 Weeks</span>
                         </span>
                     </div>
                     <hr>
-                    <div class="flex justify-between text-gray-800">
+                    <div class="flex justify-between text-gray-800 dark:text-gray-200">
                         <span class="text-sm">50$</span>
                         <a href="#" class="font-bold">View More</a>
                     </div>
@@ -178,23 +120,88 @@
                         Development</span>
                 </a>
                 <div class="p-4 flex flex-col gap-2">
-                    <span class="text-sm"><span class="text-gray-800 ">by</span> <a href="#"
+                    <span class="text-sm"><span class="text-gray-800 dark:text-gray-200 ">by</span> <a href="#"
                             class="font-bold">Thomas
                             Emad</a></span>
-                    <a href="#" class="font-bold text-gray-800 text-2xl -mt-2 hover:text-black transition">Learn
+                    <a href="#"
+                        class="font-bold text-gray-800 dark:text-gray-200 dark:hover:text-amber-500 text-2xl -mt-2 hover:text-black transition">Learn
                         Laravel 11.x</a>
                     <div class="flex justify-between">
                         <span class="flex items-center gap-2">
                             <i class="fa-solid fa-clock text-amber-600"></i>
-                            <span class="text-sm text-gray-800">2 Weeks</span>
+                            <span class="text-sm text-gray-800 dark:text-gray-200">2 Weeks</span>
                         </span>
                         <span class="flex items-center gap-2">
                             <i class="fa-solid fa-graduation-cap text-amber-600"></i>
-                            <span class="text-sm text-gray-800">2 Weeks</span>
+                            <span class="text-sm text-gray-800 dark:text-gray-200">2 Weeks</span>
                         </span>
                     </div>
                     <hr>
-                    <div class="flex justify-between text-gray-800">
+                    <div class="flex justify-between text-gray-800 dark:text-gray-200">
+                        <span class="text-sm">50$</span>
+                        <a href="#" class="font-bold">View More</a>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="flex flex-col overflow-hidden rounded-xl border border-gray-200 transition-all duration-300 hover:shadow-md hover:-translate-y-2">
+                <a href="#" class="relative">
+                    <img src="{{ asset('assets/images/courses.png') }}" alt="photo course">
+                    <span
+                        class="absolute top-3 left-3 px-3 py-1 bg-gray-900 shadow shadow-gray-800 text-white text-sm rounded-lg">Web
+                        Development</span>
+                </a>
+                <div class="p-4 flex flex-col gap-2">
+                    <span class="text-sm"><span class="text-gray-800 dark:text-gray-200 ">by</span> <a href="#"
+                            class="font-bold">Thomas
+                            Emad</a></span>
+                    <a href="#"
+                        class="font-bold text-gray-800 dark:text-gray-200 dark:hover:text-amber-500 text-2xl -mt-2 hover:text-black transition">Learn
+                        Laravel 11.x</a>
+                    <div class="flex justify-between">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-clock text-amber-600"></i>
+                            <span class="text-sm text-gray-800 dark:text-gray-200">2 Weeks</span>
+                        </span>
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-graduation-cap text-amber-600"></i>
+                            <span class="text-sm text-gray-800 dark:text-gray-200">2 Weeks</span>
+                        </span>
+                    </div>
+                    <hr>
+                    <div class="flex justify-between text-gray-800 dark:text-gray-200">
+                        <span class="text-sm">50$</span>
+                        <a href="#" class="font-bold">View More</a>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="flex flex-col overflow-hidden rounded-xl border border-gray-200 transition-all duration-300 hover:shadow-md hover:-translate-y-2">
+                <a href="#" class="relative">
+                    <img src="{{ asset('assets/images/courses.png') }}" alt="photo course">
+                    <span
+                        class="absolute top-3 left-3 px-3 py-1 bg-gray-900 shadow shadow-gray-800 text-white text-sm rounded-lg">Web
+                        Development</span>
+                </a>
+                <div class="p-4 flex flex-col gap-2">
+                    <span class="text-sm"><span class="text-gray-800 dark:text-gray-200 ">by</span> <a href="#"
+                            class="font-bold">Thomas
+                            Emad</a></span>
+                    <a href="#"
+                        class="font-bold text-gray-800 dark:text-gray-200 dark:hover:text-amber-500 text-2xl -mt-2 hover:text-black transition">Learn
+                        Laravel 11.x</a>
+                    <div class="flex justify-between">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-clock text-amber-600"></i>
+                            <span class="text-sm text-gray-800 dark:text-gray-200">2 Weeks</span>
+                        </span>
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-graduation-cap text-amber-600"></i>
+                            <span class="text-sm text-gray-800 dark:text-gray-200">2 Weeks</span>
+                        </span>
+                    </div>
+                    <hr>
+                    <div class="flex justify-between text-gray-800 dark:text-gray-200">
                         <span class="text-sm">50$</span>
                         <a href="#" class="font-bold">View More</a>
                     </div>
@@ -209,11 +216,12 @@
         <div class="bg-cover bg-no-repert bg-left md:bg-center rounded-xl flex items-center min-h-60"
             style="background-image:url('{{ asset('assets/images/learn-press.png') }}')">
             <div
-                class="w-96 md:w-1/2 h-fit p-4 md:py-6 bg-[#f3f3f3cf] md:bg-transparent rounded-xl  flex flex-col items-center md:items-start gap-2  mx-auto md:m-0 text-center md:text-start">
+                class="text-gray-800 w-96 md:w-1/2 h-fit p-4 md:py-6 bg-[#f3f3f3cf] md:bg-transparent rounded-xl  flex flex-col items-center md:items-start gap-2  mx-auto md:m-0 text-center md:text-start">
 
                 <span>GET MORE POWER FROM</span>
                 <h3 class="font-bold text-2xl">LearnPress Add-Ons</h3>
-                <p class="text-gray-800">The next level of Lumos - Lumos Courses. More Powerful, Flexible and Magical
+                <p>The next level of Lumos - Lumos Courses. More Powerful,
+                    Flexible and Magical
                     Inside.</p>
                 <a href="#"
                     class="inline w-fit px-4 py-2  text-white bg-amber-500 hover:bg-amber-600 transition font-bold rounded-full">Explorer
@@ -226,27 +234,26 @@
     <div class="container mx-auto mt-4 p-4 max-w-screen-xl -translate-x-full  an-section an-right ">
         <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4">
             <div
-                class="flex flex-col items-center gap-2 bg-gray-100 px-6 py-4 rounded-lg cursor-pointer  transition duration-300 hover:-translate-y-2">
+                class="flex flex-col items-center gap-2 bg-gray-100 px-6 py-4 rounded-lg cursor-pointer  transition duration-300 hover:-translate-y-2 dark:bg-gray-700">
                 <span class="font-bold text-3xl text-amber-600 counter-target" data-target='1000'>1000</span>
                 <span class="font-bold">Active Students</span>
             </div>
             <div
-                class="flex flex-col items-center gap-2 bg-gray-100 px-6 py-4 rounded-lg cursor-pointer  transition duration-300 hover:-translate-y-2">
+                class="flex flex-col items-center gap-2 bg-gray-100 px-6 py-4 rounded-lg cursor-pointer  transition duration-300 hover:-translate-y-2 dark:bg-gray-700">
                 <span class="font-bold text-3xl text-amber-600 counter-target" data-target='1000'>1000</span>
                 <span class="font-bold">Total Courses</span>
             </div>
             <div
-                class="flex flex-col items-center gap-2 bg-gray-100 px-6 py-4 rounded-lg cursor-pointer  transition duration-300 hover:-translate-y-2">
+                class="flex flex-col items-center gap-2 bg-gray-100 px-6 py-4 rounded-lg cursor-pointer  transition duration-300 hover:-translate-y-2 dark:bg-gray-700">
                 <span class="font-bold text-3xl text-amber-600 counter-target" data-target='1000'>1000</span>
                 <span class="font-bold">Instructor</span>
             </div>
             <div
-                class="flex flex-col items-center gap-2 bg-gray-100 px-6 py-4 rounded-lg cursor-pointer  transition duration-300 hover:-translate-y-2">
+                class="flex flex-col items-center gap-2 bg-gray-100 px-6 py-4 rounded-lg cursor-pointer  transition duration-300 hover:-translate-y-2 dark:bg-gray-700">
                 <span class="font-bold text-3xl text-amber-600 counter-target" data-target='1000'>1000</span>
                 <span class="font-bold">Satisfaction rate</span>
             </div>
         </div>
-
     </div>
 
     <hr class="w-10/12 m-auto my-4">
@@ -259,22 +266,27 @@
             <div>
                 <h3 class="text-4xl ">Grow us your skill <br>
                     with eLumos Online</h3>
-                <p class="text-gray-700 my-4">We have a strong and informative community here, with outstanding teachers
+                <p class="text-gray-700 dark:text-gray-200 my-4">We have a strong and informative community here, with
+                    outstanding teachers
                     in
                     all areas</p>
                 <div>
                     <div>
-                        <i class="fa-solid fa-check text-green-500"></i> <span class="text-gray-700">Certificate</span>
+                        <i class="fa-solid fa-check text-green-500"></i> <span
+                            class="text-gray-700 dark:text-gray-200">Certificate</span>
                     </div>
                     <div>
-                        <i class="fa-solid fa-check text-green-500"></i> <span class="text-gray-700">Great
+                        <i class="fa-solid fa-check text-green-500"></i> <span
+                            class="text-gray-700 dark:text-gray-200">Great
                             following</span>
                     </div>
                     <div>
-                        <i class="fa-solid fa-check text-green-500"></i> <span class="text-gray-700">Multiple exams</span>
+                        <i class="fa-solid fa-check text-green-500"></i> <span
+                            class="text-gray-700 dark:text-gray-200">Multiple exams</span>
                     </div>
                     <div>
-                        <i class="fa-solid fa-check text-green-500"></i> <span class="text-gray-700">Continuous
+                        <i class="fa-solid fa-check text-green-500"></i> <span
+                            class="text-gray-700 dark:text-gray-200">Continuous
                             development</span>
                     </div>
                 </div>
@@ -290,10 +302,10 @@
         <div class="bg-cover bg-no-repert bg-left md:bg-center rounded-xl flex items-center min-h-64"
             style="background-image:url('{{ asset('assets/images/education.png') }}')">
             <div
-                class="w-96 md:w-1/2 h-fit p-4 md:py-6 bg-[#f3f3f3cf] md:bg-transparent rounded-xl  flex flex-col items-center gap-2  mx-auto text-center">
+                class="text-gray-800 w-96 md:w-1/2 h-fit p-4 md:py-6 bg-[#f3f3f3cf] md:bg-transparent rounded-xl  flex flex-col items-center gap-2  mx-auto text-center">
                 <span class="font-bold">PROVIDING AMAZING</span>
                 <h3 class="font-bold text-3xl">Education Wordpress Theme</h3>
-                <p class="text-gray-800">The next level of eLumos. Learn anytime and anywhere.</p>
+                <p>The next level of eLumos. Learn anytime and anywhere.</p>
                 <a href="#"
                     class="inline w-fit px-4 py-2  text-white bg-amber-500 hover:bg-amber-600 transition font-bold rounded-full">Explorer
                     Courses</a>
@@ -305,7 +317,7 @@
     <div class="container mx-auto mt-4 p-4 max-w-screen-xl -translate-x-full  an-section an-right">
         <div class="text-center">
             <h2 class="font-bold text-2xl">Student feedbacks</h2>
-            <p class="text-gray-700 text-sm">What Students Say About Academy eLumos</p>
+            <p class="text-gray-700 dark:text-gray-200 text-sm">What Students Say About Academy eLumos</p>
         </div>
         <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4 mt-4">
             <div class="flex flex-col gap-2 border border-gray-200 p-4 rounded-xl">
@@ -350,7 +362,7 @@
             style="background-image:url('{{ asset('assets/images/let-start.png') }}')">
             <div class="flex gap-4 items-center">
                 <img src="{{ asset('assets/images/let-start-icon.png') }}" alt="let start icon">
-                <p>Let’s Start With Academy eLumos</p>
+                <p class="text-gray-800">Let’s Start With Academy eLumos</p>
             </div>
             <div class="flex gap-4">
                 <a href="#"
@@ -370,10 +382,10 @@
         <div class="flex items-center justify-between flex-col gap-2 md:flex-row">
             <div class="text-center md:text-left">
                 <h2 class="font-bold text-2xl">Latest articles</h2>
-                <p class="text-gray-700">Explore our Free Acticles</p>
+                <p class="text-gray-700 dark:text-gray-200">Explore our Free Acticles</p>
             </div>
             <a href="#"
-                class="block px-6 py-3 rounded-full text-gray-800 border-2 border-gray-800 hover:border-black hover:text-black">All
+                class="block px-6 py-3 rounded-full text-gray-800 dark:text-gray-200 border-2 border-gray-800 hover:border-black hover:text-black dark:border-gray-200 dark:hover:border-amber-700 duration-300">All
                 Articles</a>
         </div>
         <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4 mt-4">
