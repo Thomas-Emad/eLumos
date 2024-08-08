@@ -97,13 +97,21 @@ function modeView() {
         }
     });
 }
-// modeView()
+
+// Loader
+function loader() {
+    document.addEventListener('DOMContentLoaded', function () {
+        const loader = document.querySelector("#loader");
+        loader.className += " hidden";
+    })
+}
 
 
 function init() {
     animateScroll();
     counter();
-    modeView()
+    modeView();
+    loader();
 }
 
 

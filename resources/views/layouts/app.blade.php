@@ -26,8 +26,16 @@
 </head>
 
 <body class="font-sans antialiased bg-[#fafafa] dark:bg-gray-800 dark:text-gray-100">
+    <div id="loader"
+        class="fixed top-0 left-0 w-screen h-screen bg-white dark:bg-gray-900 z-[5000] flex items-center justify-center">
+        <img src="{{ asset('assets/images/favicon.png') }}" class="w-20 h-20" alt="Loading Site">
+    </div>
+
+
     <div class="min-h-screen">
         @include('layouts.header')
+
+
 
         <!-- Page Content -->
         <main>

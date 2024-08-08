@@ -26,12 +26,12 @@
                 <h1 class="font-bold text-2xl mb-2">Login</h1>
                 <form action='{{ route('login') }}' method='post'>
                     @csrf
-                    <x-input-icon name='email' title="Your Email" typeInput='email' class="" defValue=''
+                    <x-input-icon name='email' title="Your Email" typeInput='email' class="" defValue='elumos@gmail.com'
                         id="email-login" placeholder="name@gmail.com">
                         <i class="fa-solid fa-envelope text-gray-500"></i>
                     </x-input-icon>
 
-                    <x-input-icon name='password' title="Your Password" typeInput='password' class="" defValue=''
+                    <x-input-icon name='password' title="Your Password" typeInput='password' class="" defValue='123456'
                         id="password-login" placeholder="********">
                         <i class="fa-solid fa-lock text-gray-500"></i>
                     </x-input-icon>

@@ -1,37 +1,27 @@
 <footer class="bg-gray-50 border-t dark:bg-gray-900 mt-4">
     <div class="mx-auto w-full max-w-screen-xl">
         <div class="grid grid-cols-2 gap-8 px-4 py-6 lg:py-8 md:grid-cols-4">
-            <div>
-                <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Company</h2>
-                <ul class="text-gray-500 dark:text-gray-400 font-medium">
-                    <li class="mb-4">
-                        <a href="#" class=" hover:underline">About</a>
-                    </li>
-                    <li class="mb-4">
-                        <a href="#" class="hover:underline">Careers</a>
-                    </li>
-                    <li class="mb-4">
-                        <a href="#" class="hover:underline">Brand Center</a>
-                    </li>
-                    <li class="mb-4">
-                        <a href="#" class="hover:underline">Blog</a>
-                    </li>
-                </ul>
+            <div class="grid grid-cols-subgrid gap-4 col-span-4 md:col-span-2 content-center">
+                <img src="{{ asset('assets/images/logo.png') }}" alt="Logo Site">
+                <p class="text-sm text-gray-500 dark:text-gray-400 ">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut consequat mauris Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit. Ut consequat mauris
+                </p>
             </div>
             <div>
-                <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Help center</h2>
+                <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Pages</h2>
                 <ul class="text-gray-500 dark:text-gray-400 font-medium">
                     <li class="mb-4">
-                        <a href="#" class="hover:underline">Discord Server</a>
+                        <a href="{{ route('home') }}" title="Go to Home Page" class=" hover:underline">Home</a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="hover:underline">Twitter</a>
+                        <a href="{{ route('join') }}" title="Go to JoinUS Page" class="hover:underline">JoinUS</a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="hover:underline">Facebook</a>
+                        <a href="#" class="hover:underline" title="Go to Blog Page">Blog</a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="hover:underline">Contact Us</a>
+                        <a href="{{ route('courses') }}" class="hover:underline" title="Go to Courses Page">Courses</a>
                     </li>
                 </ul>
             </div>
@@ -39,13 +29,12 @@
                 <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Legal</h2>
                 <ul class="text-gray-500 dark:text-gray-400 font-medium">
                     <li class="mb-4">
-                        <a href="#" class="hover:underline">Privacy Policy</a>
+                        <a href="{{ route('privacy') }}" title="Go to Privacy Policy Page"
+                            class="hover:underline">Privacy Policy</a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="hover:underline">Licensing</a>
-                    </li>
-                    <li class="mb-4">
-                        <a href="#" class="hover:underline">Terms &amp; Conditions</a>
+                        <a href="{{ route('terms') }}" title="Go to Terms &amp; Conditions Page"
+                            class="hover:underline">Terms &amp; Conditions</a>
                     </li>
                 </ul>
             </div>

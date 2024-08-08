@@ -6,27 +6,27 @@
         <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
             <div class="p-4 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-400 rounded-xl ">
                 <p class="text-gray-700 dark:text-gray-400 text-xl">Enrolled Courses</p>
-                <p class="font-bold text-gray-900 text-4xl mt-2">13</p>
+                <p class="font-bold text-gray-900 text-4xl mt-2 dark:text-white">13</p>
             </div>
             <div class="p-4 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-400 rounded-xl ">
                 <p class="text-gray-700 dark:text-gray-400 text-xl">Active Courses</p>
-                <p class="font-bold text-gray-900 text-4xl mt-2">13</p>
+                <p class="font-bold text-gray-900 text-4xl mt-2 dark:text-white">13</p>
             </div>
             <div class="p-4 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-400 rounded-xl ">
                 <p class="text-gray-700 dark:text-gray-400 text-xl">Completed Courses</p>
-                <p class="font-bold text-gray-900 text-4xl mt-2">13</p>
+                <p class="font-bold text-gray-900 text-4xl mt-2 dark:text-white">13</p>
             </div>
             <div class="p-4 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-400 rounded-xl ">
                 <p class="text-gray-700 dark:text-gray-400 text-xl">Total Students</p>
-                <p class="font-bold text-gray-900 text-4xl mt-2">13</p>
+                <p class="font-bold text-gray-900 text-4xl mt-2 dark:text-white">13</p>
             </div>
             <div class="p-4 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-400 rounded-xl ">
                 <p class="text-gray-700 dark:text-gray-400 text-xl">Total Courses</p>
-                <p class="font-bold text-gray-900 text-4xl mt-2">13</p>
+                <p class="font-bold text-gray-900 text-4xl mt-2 dark:text-white">13</p>
             </div>
             <div class="p-4 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-400 rounded-xl ">
                 <p class="text-gray-700 dark:text-gray-400 text-xl">Total Earnings</p>
-                <p class="font-bold text-gray-900 text-4xl mt-2">$13</p>
+                <p class="font-bold text-gray-900 text-4xl mt-2 dark:text-white">$13</p>
             </div>
         </div>
         <hr class="my-4">

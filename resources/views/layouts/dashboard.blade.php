@@ -17,7 +17,7 @@
                     class="w-24 h-24 rounded-full mx-auto border-2 border-solid border-white" style="margin-top:-3rem">
                 <div class="p-3">
                     <div class="flex items-center gap-1 flex-col">
-                        <h2 class="font-bold text-xl text-gray-900 hover:text-amber-600 duration-200">
+                        <h2 class="font-bold text-xl text-gray-900 dark:text-white hover:text-amber-600 duration-200">
                             <a href="{{ route('profile') }}">Thomas Emad</a>
                         </h2>
                         <span class="text-gray-800 dark:text-gray-300">Instructor</span>
@@ -28,68 +28,83 @@
                 </div>
             </div>
             <div class='rounded-xl border border-gray-200 overflow-hidden bg-white dark:bg-gray-700 p-3 mt-3'>
-                <h2 class="font-bold text-gray-900 text-lg">Dashboard</h2>
-                <ul class="mt-2 ">
+                <h2 class="font-bold text-gray-900 text-lg dark:text-gray-50">Dashboard</h2>
+                <ul class="mt-2 text-gray-800 dark:text-gray-300">
                     <li><a href="{{ route('dashboard') }}/home"
-                            class="flex items-center gap-2 @if (request()->is('dashboard/home') || request()->is('dashboard')) text-amber-600 @else text-gray-800 dark:text-gray-300 @endif hover:text-amber-600 duration-200">
+                            class="flex items-center gap-2 @if (request()->is('dashboard/home') || request()->is('dashboard')) text-amber-600 @endif  hover:text-amber-600 duration-200">
                             <i class="fa-solid fa-chart-simple "></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li><a href="{{ route('dashboard') }}/profile"
-                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/profile')) text-amber-600 @else text-gray-800 dark:text-gray-300 @endif hover:text-amber-600 duration-200">
+                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/profile')) text-amber-600 @endif hover:text-amber-600 duration-200">
                             <i class="fa-solid fa-user "></i>
                             <span>My Profile</span>
                         </a>
                     </li>
-                    <li><a href="{{ route('dashboard') }}/courses"
-                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/courses')) text-amber-600 @else text-gray-800 dark:text-gray-300 @endif hover:text-amber-600 duration-200">
+                    <li><a href="{{ route('dashboard') }}/courses-list"
+                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/courses-list')) text-amber-600 @endif hover:text-amber-600 duration-200">
                             <i class="fa-solid fa-graduation-cap"></i>
                             <span>Enrolled Courses</span>
                         </a>
                     </li>
-                    <li><a href="{{ route('dashboard') }}/wishlist"
-                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/wishlist')) text-amber-600 @else text-gray-800 dark:text-gray-300 @endif hover:text-amber-600 duration-200">
+                    <li><a href="{{ route('dashboard') }}/roles"
+                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/roles')) @endif hover:text-amber-600 duration-200">
+                            <i class="fa-solid fa-user-gear"></i>
+                            <span>Roles</span>
+                        </a>
+                    </li>
+                    {{-- <li><a href="{{ route('dashboard') }}/wishlist"
+                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/wishlist')) @endif hover:text-amber-600 duration-200">
                             <i class="fa-solid fa-heart"></i>
                             <span>Wishlist</span>
                         </a>
                     </li>
                     <li><a href="{{ route('dashboard') }}/reviews"
-                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/reviews')) text-amber-600 @else text-gray-800 dark:text-gray-300 @endif hover:text-amber-600 duration-200">
+                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/reviews')) @endif hover:text-amber-600 duration-200">
                             <i class="fa-solid fa-star"></i>
                             <span>Reviews</span>
                         </a>
                     </li>
                     <li><a href="{{ route('dashboard') }}/orders"
-                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/orders')) text-amber-600 @else text-gray-800 dark:text-gray-300 @endif hover:text-amber-600 duration-200">
+                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/orders')) @endif hover:text-amber-600 duration-200">
                             <i class="fa-solid fa-basket-shopping"></i>
                             <span>Order History</span>
                         </a>
                     </li>
                     <li><a href="{{ route('dashboard') }}/messages"
-                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/messages')) text-amber-600 @else text-gray-800 dark:text-gray-300 @endif hover:text-amber-600 duration-200">
+                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/messages')) @endif hover:text-amber-600 duration-200">
                             <i class="fa-solid fa-comment-dots"></i>
                             <span>Messages</span>
                         </a>
                     </li>
                     <li><a href="{{ route('dashboard') }}/tickets"
-                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/tickets')) text-amber-600 @else text-gray-800 dark:text-gray-300 @endif hover:text-amber-600 duration-200">
+                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/tickets')) @endif hover:text-amber-600 duration-200">
                             <i class="fa-solid fa-ticket"></i>
                             <span>Support Tickets</span>
+                        </a>
+                    </li> --}}
+                </ul>
+                <hr class="mx-6 my-4">
+                <h2 class="font-bold text-gray-900 text-lg dark:text-gray-50">Instructor</h2>
+                <ul class="mt-2 text-gray-800 dark:text-gray-300">
+                    <li><a href="{{ route('dashboard') }}/my-courses"
+                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/my-courses'))  @endif hover:text-amber-600 duration-200">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>My Courses</span>
                         </a>
                     </li>
                 </ul>
                 <hr class="mx-6 my-4">
-                <h2 class="font-bold text-gray-900 text-lg">Account Settings</h2>
-                <ul class="mt-2">
-                    <li><a href="#"
-                            class="mt-2 flex items-center gap-2 text-gray-800 dark:text-gray-300 hover:text-amber-600 duration-200">
+                <h2 class="font-bold text-gray-900 text-lg dark:text-gray-50">Account Settings</h2>
+                <ul class="mt-2 text-gray-800 dark:text-gray-300">
+                    <li><a href="#" class="mt-2 flex items-center gap-2 hover:text-amber-600 duration-200">
                             <i class="fa-solid fa-sliders"></i> <span>Settings</span>
                         </a>
                     </li>
                     <li>
                         <a onclick="document.getElementById('form-logout').submit()"
-                            class="mt-2 flex items-center gap-2 text-gray-800 dark:text-gray-300 hover:text-amber-600 duration-200">
+                            class="mt-2 flex items-center gap-2 cursor-pointer hover:text-amber-600 duration-200">
                             <i class="fa-solid fa-right-from-bracket"></i> <span>logout</span>
                         </a>
                         <form action="{{ route('logout') }}" method="post" id='form-logout'>
