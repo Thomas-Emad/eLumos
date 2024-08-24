@@ -18,28 +18,32 @@
         </div>
         <div
             class="text-gray-500 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-200 rounded-lg shadow-sm  sm:p-4 font-medium text-center  p-4">
+
+            <!-- Title Section -->
             <h1 class="font-bold text-2xl text-gray-800 dark:text-gray-50 mb-2">
-                @if (request()->input('page') == '1' || empty(request()->input('page')))
+                @if (request()->input('step') == '1' || empty(request()->input('step')))
                     Course Details
-                @elseif (request()->input('page') == '2')
+                @elseif (request()->input('step') == '2')
                     Curriculum
-                @elseif (request()->input('page') == '3')
+                @elseif (request()->input('step') == '3')
                     Course Media
-                @elseif (request()->input('page') == '4')
+                @elseif (request()->input('step') == '4')
                     Course landing Page
-                @elseif (request()->input('page') == '5')
+                @elseif (request()->input('step') == '5')
                     Course Message
-                @elseif (request()->input('page') == '6')
+                @elseif (request()->input('step') == '6')
                     Settings
                 @endif
             </h1>
+
+            <!-- Course Steps, Progsess Bar -->
             <ol class="overflow-x-auto flex items-center w-full space-x-2  whitespace-nowrap  sm:space-x-4 pb-3">
 
-                <li class=" @if (request()->input('page') == '1' || empty(request()->input('page'))) text-blue-600 @endif">
-                    <a href="{{ route('dashboard') }}/add-course?page=1"
+                <li class="@if (request()->input('step') == '1' || empty(request()->input('step'))) text-blue-600 @endif">
+                    <a href="@if (Route::is('dashboard.add-course')) # @else {{ route('dashboard.course.edit', ['course' => $course->id]) }}?step=1 @endif"
                         class="flex items-center hover:text-amber-600 duration-300">
                         <span
-                            class="flex items-center justify-center w-5 h-5 me-2 text-xs border  rounded-full shrink-0 @if (request()->input('page') == '1') border-blue-500 @else border-gray-500 @endif">
+                            class="flex items-center justify-center w-5 h-5 me-2 text-xs border  rounded-full shrink-0 @if (request()->input('step') == '1') border-blue-500 @else border-gray-500 @endif">
                             1
                         </span>
                         Course Details
@@ -51,11 +55,11 @@
                     </a>
                 </li>
 
-                <li class=" @if (request()->input('page') == '2') text-blue-600 @endif">
-                    <a href="{{ route('dashboard') }}/add-course?page=2"
-                        class="flex items-center hover:text-amber-600 duration-300">
+                <li class=" @if (request()->input('step') == '2') text-blue-600 @endif disabled:opacity-50">
+                    <a href="@if (Route::is('dashboard.course.edit')) {{ route('dashboard.course.edit', ['course' => $course->id]) }}?step=2 @endif"
+                        class="flex items-center hover:text-amber-600 duration-300 @if (empty($course) || $course->steps < 2) pointer-events-none @endif">
                         <span
-                            class="flex items-center justify-center w-5 h-5 me-2 text-xs border  rounded-full shrink-0 @if (request()->input('page') == '2') border-blue-500 @else border-gray-500 @endif">
+                            class="flex items-center justify-center w-5 h-5 me-2 text-xs border  rounded-full shrink-0 @if (request()->input('step') == '2') border-blue-500 @else border-gray-500 @endif">
                             2
                         </span>
                         Curriculum
@@ -66,11 +70,11 @@
                         </svg>
                     </a>
                 </li>
-                <li class="@if (request()->input('page') == '3') text-blue-600 @endif">
-                    <a href="{{ route('dashboard') }}/add-course?page=3"
-                        class="flex items-center hover:text-amber-600 duration-300">
+                <li class="@if (request()->input('step') == '3') text-blue-600 @endif">
+                    <a href="@if (Route::is('dashboard.course.edit')) {{ route('dashboard.course.edit', ['course' => $course->id]) }}?step=3 @endif"
+                        class="flex items-center hover:text-amber-600 duration-300 @if (empty($course) || $course->steps < 3) pointer-events-none @endif">
                         <span
-                            class="flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 @if (request()->input('page') == '3') border-blue-500 @else border-gray-500 @endif">
+                            class="flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 @if (request()->input('step') == '3') border-blue-500 @else border-gray-500 @endif">
                             3
                         </span>
                         Course Media
@@ -81,11 +85,11 @@
                         </svg>
                     </a>
                 </li>
-                <li class="@if (request()->input('page') == '4') text-blue-600 @endif">
-                    <a href="{{ route('dashboard') }}/add-course?page=4"
-                        class="flex items-center hover:text-amber-600 duration-300">
+                <li class="@if (request()->input('step') == '4') text-blue-600 @endif">
+                    <a href="@if (Route::is('dashboard.course.edit')) {{ route('dashboard.course.edit', ['course' => $course->id]) }}?step=4 @endif"
+                        class="flex items-center hover:text-amber-600 duration-300 @if (empty($course) || $course->steps < 4) pointer-events-none @endif">
                         <span
-                            class="flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 @if (request()->input('page') == '4') border-blue-500 @else border-gray-500 @endif ">
+                            class="flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 @if (request()->input('step') == '4') border-blue-500 @else border-gray-500 @endif ">
                             4
                         </span>
                         Course landing Page
@@ -96,11 +100,11 @@
                         </svg>
                     </a>
                 </li>
-                <li class="@if (request()->input('page') == '5') text-blue-600 @endif">
-                    <a href="{{ route('dashboard') }}/add-course?page=5"
-                        class="flex items-center hover:text-amber-600 duration-300">
+                <li class="@if (request()->input('step') == '5') text-blue-600 @endif">
+                    <a href="@if (Route::is('dashboard.course.edit')) {{ route('dashboard.course.edit', ['course' => $course->id]) }}?step=5 @endif"
+                        class="flex items-center hover:text-amber-600 duration-300 @if (empty($course) || $course->steps < 5) pointer-events-none @endif">
                         <span
-                            class="flex items-center justify-center w-5 h-5 me-2 text-xs border  rounded-full shrink-0  @if (request()->input('page') == '5') border-blue-500 @else border-gray-500 @endif">
+                            class="flex items-center justify-center w-5 h-5 me-2 text-xs border  rounded-full shrink-0  @if (request()->input('step') == '5') border-blue-500 @else border-gray-500 @endif">
                             5
                         </span>
                         Course Message
@@ -112,40 +116,43 @@
                     </a>
                 </li>
 
-                <li class="@if (request()->input('page') == '6') text-blue-600 @endif">
-                    <a href="{{ route('dashboard') }}/add-course?page=6"
-                        class="flex items-center hover:text-amber-600 duration-300">
+                <li class="@if (request()->input('step') == '6') text-blue-600 @endif">
+                    <a href="@if (Route::is('dashboard.course.edit')) {{ route('dashboard.course.edit', ['course' => $course->id]) }}?step=6 @endif"
+                        class="flex items-center hover:text-amber-600 duration-300 @if (empty($course) || $course->steps < 6) pointer-events-none @endif">
                         <span
-                            class="flex items-center justify-center w-5 h-5 me-2 text-xs border  rounded-full shrink-0 @if (request()->input('page') == '6') border-blue-500 @else border-gray-500 @endif">
+                            class="flex items-center justify-center w-5 h-5 me-2 text-xs border  rounded-full shrink-0 @if (request()->input('step') == '6') border-blue-500 @else border-gray-500 @endif">
                             6
                         </span>
                         Settings
                     </a>
                 </li>
             </ol>
+
         </div>
 
         <div
             class=" w-full p-4 space-y-2 font-medium text-gray-500 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-200 rounded-lg shadow-sm  sm:p-4 sm:space-y-4 ">
-            @if (request()->input('page') == '1' || empty(request()->input('page')))
-                <form action="">
+            @if (request()->input('step') == '1' || empty(request()->input('step')))
+                <form action="{{ route('dashboard.add-course.store') }}" method="POST">
+                    @csrf
                     <div class="mb-2">
                         <p class="text-sm text-gray-500 dark:text-gray-100 ">Let's find out what people learn from this
                             course?!..</p>
+
                         <x-textarea name='learn-course' placeholder='Write your thoughts here...'
-                            nameInput='What do the students learn?' value=''></x-textarea>
+                            nameInput='What do the students learn?'>{{ old('learn-course', $course->learn ?? '') }}</x-textarea>
                     </div>
                     <div class="mb-1">
                         <p class="text-sm text-gray-500 dark:text-gray-100 ">Are there any requirements to attend this
                             course?!..</p>
                         <x-textarea name='requirements-course' placeholder='Write your thoughts here...'
-                            nameInput='What are the requirements?!..' value=''></x-textarea>
+                            nameInput='What are the requirements?!..'>{{ old('requirements-course', $course->requirements ?? '') }}</x-textarea>
                     </div>
-                    <button
+                    <button type="submit"
                         class="block mt-2 ml-auto font-bold px-4 py-2 border border-amber-500 text-amber-500 hover:text-white hover:bg-amber-500 duration-300 rounded-xl">Save
                         Changes</button>
                 </form>
-            @elseif (request()->input('page') == '2')
+            @elseif (request()->input('step') == '2')
                 <form action="">
                     <div class="flex items-center justify-between gap-2">
                         <h2 class="font-bold text-xl">Curriculum</h2>
@@ -195,7 +202,7 @@
                         class="block mt-2 ml-auto font-bold px-4 py-2 border border-amber-500 text-amber-500 hover:text-white hover:bg-amber-500 duration-300 rounded-xl">Save
                         Changes</button>
                 </form>
-            @elseif (request()->input('page') == '3')
+            @elseif (request()->input('step') == '3')
                 <form action=''>
                     <h2 class="font-bold text-xl mb-1">- Course background</h2>
                     <div class="flex items-center justify-center w-full">
@@ -246,7 +253,7 @@
                         class="block mt-2 ml-auto font-bold px-4 py-2 border border-amber-500 text-amber-500 hover:text-white hover:bg-amber-500 duration-300 rounded-xl">Save
                         Changes</button>
                 </form>
-            @elseif(request()->input('page') == '4')
+            @elseif (request()->input('step') == '4')
                 <form action=''>
                     <x-input name='title-course' nameInput='Title Course' value=''></x-input>
                     <x-input name='subtitle-course' nameInput='Subtitle Course' value=''></x-input>
@@ -264,7 +271,7 @@
                         class="block mt-2 ml-auto font-bold px-4 py-2 border border-amber-500 text-amber-500 hover:text-white hover:bg-amber-500 duration-300 rounded-xl">Save
                         Changes</button>
                 </form>
-            @elseif (request()->input('page') == '5')
+            @elseif (request()->input('step') == '5')
                 <form action="">
                     <div class="mb-2">
                         <p class="text-sm text-gray-500 dark:text-gray-100 ">Would you prefer to inform the buyer by any
@@ -283,7 +290,7 @@
                         class="block mt-2 ml-auto font-bold px-4 py-2 border border-amber-500 text-amber-500 hover:text-white hover:bg-amber-500 duration-300 rounded-xl">Save
                         Changes</button>
                 </form>
-            @elseif (request()->input('page') == '6')
+            @elseif (request()->input('step') == '6')
                 <form action="">
                     <x-input name='price-course' nameInput='Price Course' value=''></x-input>
                     <div
@@ -298,34 +305,43 @@
             @endif
         </div>
 
-        <div
-            class=" flex items-center justify-between w-full p-2 space-x-2 font-medium text-center text-gray-500 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-200 rounded-lg shadow-sm sm:space-x-4 ">
-            @if (request()->input('page') > 1)
-                <a href="{{ route('dashboard') }}/add-course?page={{ request()->input('page') - 1 }}"
-                    class="font-bold px-4 py-2 border border-gray-500 text-gray-500 dark:text-gray-100 hover:text-white hover:bg-gray-500 duration-300 rounded-xl">
-                    Prev
-                </a>
-            @else
-                <div></div>
-            @endif
-            @if (request()->input('page') < 6)
-                <a href="{{ route('dashboard') }}/add-course?page={{ request()->input('page') + 1 }}"
-                    class="font-bold px-4 py-2 border border-green-500 text-green-500 hover:text-white hover:bg-green-500 duration-300 rounded-xl">
-                    Next
-                </a>
-            @else
-                <div></div>
-            @endif
+        <!-- Course Navigation Section -->
+        @if (!empty($course))
+            <div
+                class="flex items-center justify-between w-full p-2 space-x-2 font-medium text-center text-gray-500 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-200 rounded-lg shadow-sm sm:space-x-4">
+                @php
+                    $currentStep = request()->input('step') ?? 1;
+                @endphp
 
-        </div>
+                @if ($currentStep > 1)
+                    <a href="{{ route('dashboard.course.edit', ['course' => $course->id]) }}?step={{ $currentStep - 1 }}"
+                        class="font-bold px-4 py-2 border border-gray-500 text-gray-500 dark:text-gray-100 hover:text-white hover:bg-gray-500 duration-300 rounded-xl">
+                        Prev
+                    </a>
+                @else
+                    <div></div>
+                @endif
+
+                @if ($currentStep < 6 && $course->steps > $currentStep)
+                    <a href="{{ route('dashboard.course.edit', ['course' => $course->id]) }}?step={{ $currentStep + 1 }}"
+                        class="font-bold px-4 py-2 border border-green-500 text-green-500 hover:text-white hover:bg-green-500 duration-300 rounded-xl">
+                        Next
+                    </a>
+                @else
+                    <div></div>
+                @endif
+            </div>
+        @endif
+
+
     </div>
 
     {{-- Modals --}}
-    @if (request()->input('page') == '2')
+    @if (request()->input('step') == '2')
         <x-modal id="add-section-modal">
             <!-- Modal header -->
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-50 dark:text-white">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-50">
                     <span>Do you want to add a new section?!</span>
                 </h3>
                 <button type="button"
@@ -345,7 +361,6 @@
                 <input type="text"
                     class="bg-gray-50 border border-gray-300 text-gray-900 dark:text-gray-50 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5"
                     placeholder="Title of this section.." required />
-
             </div>
             <!-- Modal footer -->
             <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
@@ -360,7 +375,7 @@
         <x-modal id="edit-section-modal">
             <!-- Modal header -->
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-50 dark:text-white">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-50">
                     <span>Edit in This Section</span>
                 </h3>
                 <button type="button"
@@ -412,7 +427,7 @@
         <x-modal id="add-lecture-modal">
             <!-- Modal header -->
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-50 dark:text-white">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-50">
                     <i class="fa-solid fa-laptop-file mr-2"></i>
                     <span>Do you want to add a new lecture?!</span>
                 </h3>
@@ -429,6 +444,9 @@
             </div>
             <!-- Modal body -->
             <div class="p-4 md:p-5 space-y-4">
+                <x-input type="text" name='title' nameInput="Title lecture" placeholder="Title of this lecture.."
+                    value='' required />
+                <hr>
                 <div>
                     <div id="lecture" data-tabs-toggle="#lecture-content" role="tablist">
                         <button class="inline-block py-2 px-4  rounded-xl bg-gray-100" id="video-tab"
@@ -519,7 +537,7 @@
                 Yes, I'm sure
             </button>
             <button data-modal-hide="delete-lecture-modal" type="button"
-                class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 dark:text-gray-50 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No,
+                class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No,
                 cancel</button>
         </x-modal-info>
     @endif

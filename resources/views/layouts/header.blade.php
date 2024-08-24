@@ -43,7 +43,7 @@
                             </div>
                             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
                                 <li>
-                                    <a href="{{ route('dashboard') }}"
+                                    <a href="{{ route('dashboard.index') }}"
                                         class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white dark:text-gray-200">Dashboard</a>
                                 </li>
                                 <li>
@@ -149,7 +149,7 @@
         </ul>
         <ul>
             <li>
-                <a href="{{ route('dashboard') }}"
+                <a href="{{ route('dashboard.index') }}"
                     class="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                     <div class="font-semibold">Dashboard</div>
                     <span class="text-sm text-gray-500 dark:text-gray-400">Connect with third-party tools that

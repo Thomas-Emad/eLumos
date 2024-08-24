@@ -6,35 +6,36 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
-    {
-        Schema::create('courses', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->string('title', 50);
-            $table->string('headline', 255);
-            $table->text('description');
-            $table->string('image', 255);
-            $table->string('preview_video', 255);
-            $table->foreignId('language_id')->constrained();
-            $table->float('price', 8, 2);
-            $table->json('learn');
-            $table->text("requirements");
-            $table->enum('status', ['active', 'inactive', 'removed', 'blocked'])->default('active');
-            $table->enum('level', ['beginner', 'intermediate', 'advanced'])->default('beginner');
-            $table->softDeletes();
-            $table->timestamps();
-        });
-    }
+  /**
+   * Run the migrations.
+   */
+  public function up(): void
+  {
+    Schema::create('courses', function (Blueprint $table) {
+      $table->uuid('id')->primary();
+      $table->foreignId('user_id')->constrained();
+      $table->string('title', 50)->nullable();
+      $table->string('headline', 255)->nullable();
+      $table->text('description')->nullable();
+      $table->string('image', 255)->nullable();
+      $table->string('preview_video', 255)->nullable();
+      $table->foreignId('language_id')->nullable()->constrained();
+      $table->float('price', 8, 2)->nullable();
+      $table->text('learn')->nullable();
+      $table->text("requirements")->nullable();
+      $table->integer("steps")->default(2);
+      $table->enum('status', ['draft', 'pending', 'active', 'inactive', 'removed', 'blocked'])->default('draft');
+      $table->enum('level', ['beginner', 'intermediate', 'advanced'])->default('beginner');
+      $table->softDeletes();
+      $table->timestamps();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('courses');
-    }
+  /**
+   * Reverse the migrations.
+   */
+  public function down(): void
+  {
+    Schema::dropIfExists('courses');
+  }
 };
