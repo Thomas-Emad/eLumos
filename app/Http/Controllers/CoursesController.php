@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use App\Http\Resources\CoursesDashboardResource;
+use Illuminate\Support\Facades\Cache;
 
 
 class CoursesController extends Controller implements HasMiddleware
@@ -46,7 +47,7 @@ class CoursesController extends Controller implements HasMiddleware
     return view('dashboard.courses', ['countCourses' => $countCourses]);
   }
 
-  public function getCourses()
+  public function getCourses(): JsonResponse
   {
     if (!request()->ajax()) {
       return abort(404);
@@ -116,6 +117,9 @@ class CoursesController extends Controller implements HasMiddleware
    */
   public function edit(Course $course)
   {
+    if ($course->user_id != auth()->user()->id) {
+      return abort(404);
+    }
     return view('dashboard.instructor.course-operations', ['course' => $course]);
   }
 

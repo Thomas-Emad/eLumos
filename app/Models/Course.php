@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Course extends Model
 {
@@ -31,5 +32,9 @@ class Course extends Model
   public function user(): BelongsTo
   {
     return $this->belongsTo(User::class, 'user_id', 'id');
+  }
+  public function sections(): HasMany
+  {
+    return $this->hasMany(CourseSections::class, 'course_id', 'id');
   }
 }

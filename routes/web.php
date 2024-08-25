@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\CoursesController;
+use App\Http\Controllers\CourseSectionsController;
 use App\Http\Controllers\StepsForwardController;
 
 
@@ -33,16 +34,15 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
       Route::get('/add-course',  'create')->name('add-course');
       Route::post('/add-course',  'store')->name('add-course.store');
       Route::get('/course/{course}/edit',  'edit')->name('course.edit');
-
-      Route::prefix('api')->group(function () {
-        Route::get('/show/courses/{type?}',  'getCourses')->name('courses.show');
-        Route::get('/course/addSection',  'addSection')->name('course.edit.addSection');
-      });
+    });
+    Route::prefix('api')->group(function () {
+      Route::get('/show/courses/{type?}',  [CoursesController::class, 'getCourses'])->name('courses.show');
+      Route::get('/course/getSections',  [CourseSectionsController::class, 'getSections'])->name('course.edit.getSections');
+      Route::post('/course/addSection',  [CourseSectionsController::class, 'addSection'])->name('course.edit.addSection');
     });
 
     Route::view('/', 'dashboard.home')->name('index');
     Route::view('/profile/{id?}', 'dashboard.profile')->name('profile');
-
 
     Route::view('/courses-list', 'dashboard.courses-list')->name('courses-list');
   });
