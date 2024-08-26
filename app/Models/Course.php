@@ -37,4 +37,18 @@ class Course extends Model
   {
     return $this->hasMany(CourseSections::class, 'course_id', 'id');
   }
+
+
+  public function changeSortOrderSection(int $section_id, bool $up = true)
+  {
+    $section = $this->sections()->findOrFail($section_id);
+    if ($up) {
+      if ($section->order_sort > 1) {
+        $section->decrement('order_sort', 1);
+      }
+    } else {
+      $section->increment('order_sort', 1);
+    }
+    return $this;
+  }
 }

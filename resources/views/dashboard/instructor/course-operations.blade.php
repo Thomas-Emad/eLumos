@@ -401,56 +401,61 @@
       </form>
     </x-modal>
     <x-modal id="edit-section-modal">
-      <!-- Modal header -->
-      <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-        <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-50">
-          <span>Edit in This Section</span>
-        </h3>
-        <button type="button"
-          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 dark:text-gray-50 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-          data-modal-hide="edit-section-modal">
-          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-            viewBox="0 0 14 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-          </svg>
-          <span class="sr-only">Close modal</span>
-        </button>
-      </div>
-      <!-- Modal body -->
-      <div class="p-4 md:p-5 space-y-4">
-        <p class="text-sm text-gray-500 dark:text-gray-100 ">Do you want to change the name of this section?!..</p>
-        <input type="text"
-          class="bg-gray-50 border border-gray-300 text-gray-900 dark:text-gray-50 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5"
-          placeholder="Title of this section.." required />
-
-      </div>
-      <!-- Modal footer -->
-      <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-        <button data-modal-hide="edit-section-modal" type="button"
-          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-          Save Changes
-        </button>
-        <button data-modal-hide="edit-section-modal" type="button"
-          class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 dark:text-gray-50 focus:outline-none bg-white dark:bg-gray-800 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Close</button>
-      </div>
+      <form id="edit-section">
+        <!-- Modal header -->
+        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-50">
+            <span>Edit in This Section</span>
+          </h3>
+          <button type="button"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 dark:text-gray-50 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+            data-modal-hide="edit-section-modal">
+            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+              viewBox="0 0 14 14">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+        </div>
+        <!-- Modal body -->
+        <div class="p-4 md:p-5 space-y-4">
+          <p class="text-sm text-gray-500 dark:text-gray-100 ">Do you want to change the name of this section?!..</p>
+          <input type="text" name="title"
+            class="bg-gray-50 border border-gray-300 text-gray-900 dark:text-gray-50 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5"
+            placeholder="Title of this section.." required />
+          <input type="hidden" name="id">
+        </div>
+        <!-- Modal footer -->
+        <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+          <button data-modal-hide="edit-section-modal" type="submit"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            Save Changes
+          </button>
+          <button data-modal-hide="edit-section-modal" type="button"
+            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-whit rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Close</button>
+        </div>
+      </form>
     </x-modal>
     <x-modal-info id="delete-section-modal">
-      <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-      </svg>
-      <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-100 ">Are you sure you want
-        to delete
-        this Section?</h3>
-      <button data-modal-hide="delete-section-modal" type="button"
-        class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-        Yes, I'm sure
-      </button>
-      <button data-modal-hide="delete-section-modal" type="button"
-        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 dark:text-gray-50 focus:outline-none bg-white dark:bg-gray-800 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No,
-        cancel</button>
+      <form id="delete-section">
+        <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-100 ">
+          Are you sure you want to delete this Lecture?
+        </h3>
+        <input type="hidden" name="id">
+        <button data-modal-hide="delete-section-modal" type="submit"
+          class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+          Yes, I'm sure
+        </button>
+        <button data-modal-hide="delete-section-modal" type="button"
+          class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No,
+          cancel</button>
+      </form>
     </x-modal-info>
     <x-modal id="add-lecture-modal">
       <!-- Modal header -->
@@ -570,92 +575,7 @@
 @endsection
 @section('js')
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script>
-    $(document).ready(function() {
-      // initialize tabs
-      const tabButtons = document.querySelectorAll("[role='tab']");
-      const tabContents = document.querySelectorAll("[role='tabpanel']");
-
-      tabButtons.forEach(button => {
-        button.addEventListener("click", function() {
-          tabButtons.forEach(btn => btn.classList.remove(
-            "bg-gray-100", "text-gray-700", "hover:bg-gray-50"));
-          this.classList.add("bg-gray-100", "text-gray-700", "hover:bg-gray-50");
-          tabContents.forEach(content => content.classList.add("hidden"));
-          const target = document.querySelector(this.dataset.tabsTarget);
-          target.classList.remove("hidden");
-        });
-      });
-
-      // Get All Sections By api
-      let sections = [];
-      $.ajax({
-        type: 'GET',
-        url: "{{ route('dashboard.course.edit.getSections') }}",
-        data: {
-          course_id: "{{ $course->id ?? 0 }}",
-        }
-      }).done((data) => {
-        sections.push(...data.sections);
-        displaySections(sections)
-      })
-
-      // Display Sections from sections array
-      function displaySections(sections) {
-        $(".sections").empty();
-        sections.forEach((section, index) => {
-          $(".sections").append(`
-            <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-xl mb-2">
-              <div class="flex gap-2 justify-between">
-                <div class="flex gap-2 items-center">
-                  <h3><b>Section ${section.order_sort}:</b> ${section.title}</h3>
-                  <i class="fa-solid fa-pen-to-square p-2 rounded-full hover:bg-white dark:bg-gray-800 duration-300 cursor-pointer"
-                    data-modal-target="edit-section-modal" data-modal-toggle="edit-section-modal"></i>
-                  <i class="fa-solid fa-trash p-2 rounded-full hover:bg-white dark:bg-gray-800 duration-300 cursor-pointer"
-                    data-modal-target="delete-section-modal" data-modal-toggle="delete-section-modal"></i>
-                </div>
-                <button data-modal-target="add-lecture-modal" data-modal-toggle="add-lecture-modal" type="button"
-                  class="block text-sm font-bold px-4 py-2 border border-amber-500 text-amber-500 hover:text-white hover:bg-amber-500 duration-300 rounded-xl">
-                  Add Lecture
-                </button>
-              </div>
-              <div class="flex gap-4 flex-col mt-2">
-                <p class="bg-white p-2 rounded-xl text-sm text-center text-gray-500 dark:text-gray-100">You can add up to 10 lectures</p>
-              </div>
-            </div>
-          `)
-        })
-      }
-
-      // Optimize Request add Section
-      $("#add-section button[type=submit]").on('click', function(e) {
-        e.preventDefault();
-        $('#loader').removeClass('hidden');
-        $('.notifications').empty();
-
-        const data = {
-          title: $("#add-section input[name=title]").val(),
-          course_id: "{{ $course->id ?? 0 }}",
-          _token: "{{ csrf_token() }}",
-          _method: "POST",
-        }
-
-        $.ajax({
-          type: 'POST',
-          url: "{{ route('dashboard.course.edit.addSection') }}",
-          data: JSON.stringify(data),
-          contentType: 'application/json',
-        }).done((data) => {
-          sections.push(...data.section);
-          displaySections(sections);
-        }).fail((data) => {
-          $('.notifications').append(`@include('components.notifications.fail', ['message' => '${data.responseJSON.message}'])`);
-        }).always((data) => {
-          $("#add-section input[name=title]").val() = "";
-          $('#loader').addClass('hidden');
-        })
-      })
-
-    });
-  </script>
+  @if (isset($course))
+    @include('dashboard.instructor.course-operations-js')
+  @endif
 @endsection

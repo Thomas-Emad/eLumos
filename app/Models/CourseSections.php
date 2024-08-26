@@ -10,7 +10,7 @@ class CourseSections extends Model
 {
   use HasFactory;
 
-  protected $fillable = ['course_id', 'section_id', 'title', 'order'];
+  protected $fillable = ['course_id', 'section_id', 'title', 'order_sort'];
 
   public function lectures(): HasMany
   {

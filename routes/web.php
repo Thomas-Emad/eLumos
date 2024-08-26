@@ -39,6 +39,9 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
       Route::get('/show/courses/{type?}',  [CoursesController::class, 'getCourses'])->name('courses.show');
       Route::get('/course/getSections',  [CourseSectionsController::class, 'getSections'])->name('course.edit.getSections');
       Route::post('/course/addSection',  [CourseSectionsController::class, 'addSection'])->name('course.edit.addSection');
+      Route::put("/course/updateSection",  [CourseSectionsController::class, 'update'])->name('course.edit.editSection');
+      Route::delete('/course/deleteSection',  [CourseSectionsController::class, 'destroy'])->name('course.edit.deleteSection');
+      Route::put('/course/changeSortSection', [CourseSectionsController::class, 'changeSortSection'])->name('course.edit.changeSortSection');
     });
 
     Route::view('/', 'dashboard.home')->name('index');
