@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SectionsCourseResource extends JsonResource
+class LectureCourseResource extends JsonResource
 {
   /**
    * Transform the resource into an array.
@@ -15,10 +15,9 @@ class SectionsCourseResource extends JsonResource
   public function toArray(Request $request): array
   {
     return [
-      'section_id' => $this->id,
+      'id' => $this->id,
       'title' => $this->title,
       'order_sort' => $this->order_sort,
-      'lectures' => LectureCourseResource::collection($this->lectures),
     ];
   }
 }

@@ -16,11 +16,19 @@ return new class extends Migration
       $table->foreignUuid('course_id')->constrained()->onDelete('cascade');
       $table->unsignedBigInteger('section_id');
       $table->foreign('section_id')->references('id')->on('course_sections')->onDelete('cascade');
+
+      $table->string('video_id')->nullable();
+      $table->text('content')->nullable();
+
+      // we will create table for lecture to exams
+
       $table->string('title', 50);
       $table->integer('order_sort')->default(1);
       $table->timestamps();
     });
   }
+
+
 
   /**
    * Reverse the migrations.

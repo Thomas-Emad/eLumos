@@ -9,7 +9,13 @@ use App\Models\CourseSections;
 
 class CourseSectionsController extends Controller
 {
-  public function getSections(Request $request)
+  /**
+   * Retrieves course sections based on the provided course ID.
+   *
+   * @param Request $request The HTTP request containing the course ID.
+   * @return \Illuminate\Http\JsonResponse A JSON response containing the course sections.
+   */
+  public function index(Request $request)
   {
     $sections = CourseSections::where('course_id', $request->course_id)->OrderBy('order_sort', 'asc')->get();
     return response()->json([
@@ -18,7 +24,13 @@ class CourseSectionsController extends Controller
     ], 200);
   }
 
-  public function addSection(Request $request)
+  /**
+   * Adds a new section to a course based on the provided request data.
+   *
+   * @param Request $request The HTTP request containing the course ID and section title.
+   * @return \Illuminate\Http\JsonResponse A JSON response containing the newly added section and a success message.
+   */
+  public function store(Request $request)
   {
     $request->validate([
       'course_id' => ['required', 'exists:courses,id'],
@@ -33,12 +45,18 @@ class CourseSectionsController extends Controller
 
     return response()->json([
       'section' => [
-        new SectionsCourseResource($course->sections()->get()->last()),
+        new SectionsCourseResource($course->sections()->get()->last())
       ],
       'message' => 'Added Section Has Been Done Successfully.'
     ], 200);
   }
 
+  /**
+   * Updates an existing course section based on the provided request data.
+   *
+   * @param Request $request The HTTP request containing the course ID, section ID, and new title.
+   * @return \Illuminate\Http\JsonResponse A JSON response containing the updated section and a success message.
+   */
   public function update(Request $request)
   {
     $request->validate([
@@ -58,6 +76,12 @@ class CourseSectionsController extends Controller
     ], 202);
   }
 
+  /**
+   * Changes the sort order of a course section.
+   *
+   * @param Request $request The HTTP request containing the course ID, section ID, and direction of the sort order change.
+   * @return The updated sections.
+   */
   public function changeSortSection(Request $request)
   {
     $request->validate([
@@ -81,9 +105,15 @@ class CourseSectionsController extends Controller
       $course->changeSortOrderSection($next->id, true); //  Switch
     }
 
-    return $this->getSections($request);
+    return $this->index($request);
   }
 
+  /**
+   * Deletes a course section and updates the order sort of the remaining sections.
+   *
+   * @param Request $request The HTTP request containing the section ID and course ID.
+   * @return \Illuminate\Http\JsonResponse A JSON response containing a success message and the deleted section ID.
+   */
   public function destroy(Request $request)
   {
     $request->validate([

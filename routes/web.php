@@ -6,9 +6,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\CourseSectionsController;
 use App\Http\Controllers\StepsForwardController;
-
-
-
+use App\Http\Controllers\CourseLecturesController;
 
 // Basic Pages
 Route::view('/', 'home')->name('home');
@@ -37,11 +35,25 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     });
     Route::prefix('api')->group(function () {
       Route::get('/show/courses/{type?}',  [CoursesController::class, 'getCourses'])->name('courses.show');
-      Route::get('/course/getSections',  [CourseSectionsController::class, 'getSections'])->name('course.edit.getSections');
-      Route::post('/course/addSection',  [CourseSectionsController::class, 'addSection'])->name('course.edit.addSection');
-      Route::put("/course/updateSection",  [CourseSectionsController::class, 'update'])->name('course.edit.editSection');
-      Route::delete('/course/deleteSection',  [CourseSectionsController::class, 'destroy'])->name('course.edit.deleteSection');
-      Route::put('/course/changeSortSection', [CourseSectionsController::class, 'changeSortSection'])->name('course.edit.changeSortSection');
+
+      // Api CRUD Operations for Course Sections
+      Route::put('/course/sections/changeSortSection', [CourseSectionsController::class, 'changeSortSection'])->name('course.sections.changeSortSection');
+      Route::apiResource('/course/sections', CourseSectionsController::class)->names([
+        'index' => 'course.sections.index',
+        'store' => 'course.sections.store',
+        'update' => 'course.sections.update',
+        'destroy' => 'course.sections.destroy',
+      ]);
+
+      // Api CRUD Operations for Course Lectures
+      Route::apiResource('/course/lectures', CourseLecturesController::class)->names([
+        'index' => 'course.lectures.index',
+        'store' => 'course.lectures.store',
+        'update' => 'course.lectures.update',
+        'destroy' => 'course.lectures.destroy',
+      ]);
+      Route::put('/course/lectures/changeSortSection', [CourseLecturesController::class, 'changeSortLecture'])->name('course.lectures.changeSortLecture');
+      Route::post('/course/lectures/uploadVideo', [CourseLecturesController::class, 'uploadVideo'])->name('course.lectures.uploadVideo');
     });
 
     Route::view('/', 'dashboard.home')->name('index');
@@ -58,8 +70,16 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     Route::get('dashboard/role/users', 'users')->name('roles.users');
     Route::post('dashboard/role/user/change', 'changeRoleUser')->name('roles.users.change');
   });
-});
 
+  Route::get('files', function () {
+    // $file = Yaza\LaravelGoogleDriveStorage\Gdrive::get('Video eLumos/filename.png');
+    // $readStream = Yaza\LaravelGoogleDriveStorage\Gdrive::readStream("");
+    // $meta = Yaza\LaravelGoogleDriveStorage\Gdrive::all('/', true);
+    // $files = \App\Classes\GoogleDriveService::searchFolder("UU8Ir51jZM.png", 'all');
+
+    return (\Tes\LaravelGoogleDriveStorage\GoogleDriveService::delete("1jGhj2nX2MNbH5VPwe8SqTsKSUu0U-S-VX", 'testing.png'));
+  });
+});
 
 
 

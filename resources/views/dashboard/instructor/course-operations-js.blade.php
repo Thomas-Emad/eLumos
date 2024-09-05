@@ -36,16 +36,18 @@
                     </div>
                     <div class='flex gap-2 items-center'>
                       ${(index + 1) >= 1 && sections.length > (index + 1) ?
-          `<i class="changeSortOrderSection fa-solid fa-arrow-down p-2 rounded-xl hover:bg-gray-200 duration-300 cursor-pointer" data-sort-order="down" data-section-id="${section.section_id}"></i>` : ''}
+                      `<i class="changeSortOrderSection fa-solid fa-arrow-down p-2 rounded-xl hover:bg-gray-200 duration-300 cursor-pointer" data-sort-order="down" data-section-id="${section.section_id}"></i>` : ''}
                       ${(index + 1) > 1 ? `<i class="changeSortOrderSection fa-solid fa-arrow-up p-2 rounded-xl hover:bg-gray-200 duration-300 cursor-pointer" data-sort-order="up" data-section-id="${section.section_id}"></i>` : ''}
                       <button data-modal-target="add-lecture-modal" data-modal-toggle="add-lecture-modal" data-section-id="${section.section_id}" type="button"
-                        class="block text-sm font-bold px-4 py-2 border border-amber-500 text-amber-500 hover:text-white hover:bg-amber-500 duration-300 rounded-xl">
+                        class="showModal block text-sm font-bold px-4 py-2 border border-amber-500 text-amber-500 hover:text-white hover:bg-amber-500 duration-300 rounded-xl">
                         Add Lecture
                       </button>
                     </div>
                   </div>
                   <div class="flex gap-4 flex-col mt-2">
-                    <p class="bg-white p-2 rounded-xl text-sm text-center text-gray-500 dark:text-gray-100">You can add up to 10 lectures</p>
+                    ${section.lectures.length > 0 ? displayLectures(section.lectures).outerHTML : `
+                      <p class="bg-white p-2 rounded-xl text-sm text-center text-gray-500 dark:text-gray-100">You can add up to 10 lectures</p>
+                    `}
                   </div>
                 </div>
               `);
@@ -53,6 +55,42 @@
         initFlowbite();
       }
     }
+    // Display Lectures from lectures array
+    function displayLectures(lectures) {
+      if (!Array.isArray(lectures)) {
+        console.error('Invalid input: lectures should be an array.');
+        return;
+      }
+
+      const lectureContainer = document.createElement('div');
+      lectureContainer.classList.add('flex', 'gap-4', 'flex-col', 'mt-2');
+
+      if (lectures.length > 0) {
+        lectures.forEach((lecture, index) => {
+          lectureContainer.innerHTML += `
+              <div class="px-4 py-2 bg-white dark:bg-gray-600 rounded-xl flex justify-between gap-2 items-center">
+                <div class="flex gap-2 items-center font-bold text-gray-900 dark:text-gray-50 text-xl">
+                  <i class="fa-solid fa-laptop-file"></i>
+                  <h4>${lecture.title}</h4>
+                </div>
+                <div class="flex gap-4 text-gray-600">
+                  <i class="fa-solid fa-pen-to-square hover:text-amber-700 duration-300 cursor-pointer"
+                    data-modal-target="add-lecture-modal" data-modal-toggle="add-lecture-modal"></i>
+                  <i class="fa-solid fa-trash hover:text-amber-700 duration-300 cursor-pointer"
+                    data-modal-target="delete-lecture-modal" data-modal-toggle="delete-lecture-modal"></i>
+                </div>
+              </div>
+          `;
+        });
+      } else {
+        lectureContainer.innerHTML = `
+          <p class="bg-white p-2 rounded-xl text-sm text-center text-gray-500 dark:text-gray-100">You can add up to 10 lectures</p></p>
+        `;
+      }
+
+      return lectureContainer;
+    }
+
 
     // Event delegation for dynamic elements Show info modal
     $(".sections").on("click", ".showModal", function() {
@@ -67,11 +105,17 @@
       changeSortOrderSection(sectionId, sortOrder);
     });
 
+    // remove Data from modal
+    function removeDataFromModal() {
+      $('.modal input[name=id]').val('');
+      $('.modal input[name=title]').val('');
+    }
+
     // Get All Sections By api
     let sections = [];
     $.ajax({
       type: 'GET',
-      url: "{{ route('dashboard.course.edit.getSections') }}",
+      url: "{{ route('dashboard.course.sections.index') }}",
       data: {
         course_id: "{{ $course->id ?? 0 }}",
       }
@@ -95,7 +139,7 @@
 
       $.ajax({
         type: 'POST',
-        url: "{{ route('dashboard.course.edit.addSection') }}",
+        url: "{{ route('dashboard.course.sections.store') }}",
         data: JSON.stringify(data),
         contentType: 'application/json',
       }).done((data) => {
@@ -104,7 +148,7 @@
       }).fail((data) => {
         $('.notifications').append(`@include('components.notifications.fail', ['message' => '${data.responseJSON.message}'])`);
       }).always((data) => {
-        $("#add-section input[name=title]").val('');
+        removeDataFromModal();
         $('#loader').addClass('hidden');
       })
     })
@@ -124,7 +168,7 @@
 
       $.ajax({
         type: 'POST',
-        url: "{{ route('dashboard.course.edit.editSection') }}",
+        url: "{{ route('dashboard.course.sections.update', 'section') }}",
         data: JSON.stringify(data),
         contentType: 'application/json',
       }).done((data) => {
@@ -135,12 +179,11 @@
           }
           return section;
         })
-        // sections.push(data.section);
         displaySections(sections);
       }).fail((data) => {
         $('.notifications').append(`@include('components.notifications.fail', ['message' => '${data.responseJSON.message}'])`);
       }).always((data) => {
-        $("#edit-section input[name=title]").val('');
+        removeDataFromModal();
         $('#loader').addClass('hidden');
       })
     })
@@ -159,7 +202,7 @@
 
       $.ajax({
         type: 'POST',
-        url: "{{ route('dashboard.course.edit.deleteSection') }}",
+        url: "{{ route('dashboard.course.sections.destroy', 'section') }}",
         data: JSON.stringify(data),
         contentType: 'application/json',
       }).done((data) => {
@@ -177,7 +220,7 @@
 
       $.ajax({
         type: 'POST',
-        url: "{{ route('dashboard.course.edit.changeSortSection') }}",
+        url: "{{ route('dashboard.course.sections.changeSortSection') }}",
         data: {
           _method: "PUT",
           _token: "{{ csrf_token() }}",
@@ -192,6 +235,95 @@
         $("#loader").addClass('hidden');
       })
     }
+
+
+    // Add new Lecture
+    $("#add-lecture").on('submit', function(e) {
+      e.preventDefault();
+      $('#loader').removeClass('hidden');
+      $('.notifications').empty();
+
+      // Add data to form
+      let form = new FormData();
+      form.append('title', $("#add-lecture input[name=title]").val());
+      form.append('section_id', $("#add-lecture input[name=id]").val());
+      form.append('content', $("#add-lecture textarea[name=content]").val());
+      form.append('video', $("#add-lecture input[name=video]")[0].files[0]);
+      form.append('_token', "{{ csrf_token() }}");
+
+
+      $.ajax({
+        type: 'POST',
+        url: "{{ route('dashboard.course.lectures.store') }}",
+
+        data: form,
+        contentType: 'application/json',
+        cache: false,
+        contentType: false,
+        processData: false,
+
+      }).done((data) => {
+        $('.notifications').append(`@include('components.notifications.success', ['message' => '${data.message}'])`);
+
+        // replace section with new one
+        sections = sections.map(section => {
+          console.log(data.section.section_id)
+          if (section.section_id == data.section.section_id) {
+            return Object.assign({}, section, data.section);
+          }
+          return section;
+        })
+        displaySections(sections);
+      }).fail((data) => {
+        $('.notifications').append(`@include('components.notifications.fail', ['message' => '${data.responseJSON.message}'])`);
+      }).always((data) => {
+        removeDataFromModal();
+        $('#loader').addClass('hidden');
+      })
+    })
+
+
+
+
+    $('#upload-video').on('click', function() {
+      const formData = new FormData();
+
+      formData.append('video', $("#add-lecture input[name=video]")[0].files[0]);
+      formData.append('section_id', $("#add-lecture input[name=id]").val());
+      formData.append('_token', "{{ csrf_token() }}");
+
+      $.ajax({
+        url: '{{ route('dashboard.course.lectures.uploadVideo') }}',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        xhr: function() {
+          const xhr = $.ajaxSettings.xhr();
+          if (xhr.upload) {
+            xhr.upload.addEventListener('progress', function(event) {
+              if (event.lengthComputable) {
+                const percentComplete = (event.loaded / event.total) * 100;
+                console.log(percentComplete);
+                // $('#progressBar').val(percentComplete);
+                // $('#progressText').text(Math.round(percentComplete) + '%');
+              }
+            }, false);
+          }
+          return xhr;
+        },
+        beforeSend: function() {
+          // $('#progressContainer').show();
+        },
+        success: function(response) {
+          // $('#progressText').text('تم الرفع!');
+        },
+        error: function() {
+          // $('#progressText').text('فشل الرفع!');
+        }
+      });
+    })
+
 
   });
 </script>
