@@ -9,12 +9,12 @@
   "license": "MIT",
   "require": {
     "php": "^8.2",
+    "cloudinary-labs/cloudinary-laravel": "^2.2",
     "illuminate/contracts": "^11.22",
     "laravel/framework": "^11.9",
     "laravel/telescope": "^5.2",
     "laravel/tinker": "^2.9",
-    "spatie/laravel-permission": "^6.9",
-    "tes/laravel-google-drive-storage": "^1.0"
+    "spatie/laravel-permission": "^6.9"
   },
   "require-dev": {
     "fakerphp/faker": "^1.23",

@@ -17,7 +17,7 @@ return new class extends Migration
       $table->unsignedBigInteger('section_id');
       $table->foreign('section_id')->references('id')->on('course_sections')->onDelete('cascade');
 
-      $table->string('video_id')->nullable();
+      $table->json('video')->nullable();
       $table->text('content')->nullable();
 
       // we will create table for lecture to exams

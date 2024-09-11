@@ -5,6 +5,8 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+use function PHPUnit\Framework\isNull;
+
 class LectureCourseResource extends JsonResource
 {
   /**
@@ -18,6 +20,9 @@ class LectureCourseResource extends JsonResource
       'id' => $this->id,
       'title' => $this->title,
       'order_sort' => $this->order_sort,
+      'hasContent' => !is_null($this->content),
+      'hasVideo' =>  !is_null($this->video),
+      'hasExam' => false,
     ];
   }
 }

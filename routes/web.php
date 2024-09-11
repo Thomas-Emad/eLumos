@@ -49,11 +49,10 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
       Route::apiResource('/course/lectures', CourseLecturesController::class)->names([
         'index' => 'course.lectures.index',
         'store' => 'course.lectures.store',
+        'show' => 'course.lectures.show',
         'update' => 'course.lectures.update',
         'destroy' => 'course.lectures.destroy',
       ]);
-      Route::put('/course/lectures/changeSortSection', [CourseLecturesController::class, 'changeSortLecture'])->name('course.lectures.changeSortLecture');
-      Route::post('/course/lectures/uploadVideo', [CourseLecturesController::class, 'uploadVideo'])->name('course.lectures.uploadVideo');
     });
 
     Route::view('/', 'dashboard.home')->name('index');

@@ -79,7 +79,7 @@ class CoursesController extends Controller implements HasMiddleware
   public function create(): View
   {
     if (empty(request()->input('step')) || request()->input('step') == '1') {
-      return view('dashboard.instructor.course-operations');
+      return view('dashboard.instructor.course.course-operations');
     } else {
       return abort(404);
     }
@@ -120,7 +120,7 @@ class CoursesController extends Controller implements HasMiddleware
     if ($course->user_id != auth()->user()->id) {
       return abort(404);
     }
-    return view('dashboard.instructor.course-operations', ['course' => $course]);
+    return view('dashboard.instructor.course.course-operations', ['course' => $course]);
   }
 
   /**
