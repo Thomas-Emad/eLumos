@@ -50,9 +50,9 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
         'index' => 'course.lectures.index',
         'store' => 'course.lectures.store',
         'show' => 'course.lectures.show',
-        'update' => 'course.lectures.update',
         'destroy' => 'course.lectures.destroy',
       ]);
+      Route::put('/course/lectures/update', [CourseLecturesController::class, 'update'])->name('course.lectures.update-test');
     });
 
     Route::view('/', 'dashboard.home')->name('index');
@@ -68,15 +68,6 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     Route::post('dashboard/role/', 'showRole')->name('roles.showRole');
     Route::get('dashboard/role/users', 'users')->name('roles.users');
     Route::post('dashboard/role/user/change', 'changeRoleUser')->name('roles.users.change');
-  });
-
-  Route::get('files', function () {
-    // $file = Yaza\LaravelGoogleDriveStorage\Gdrive::get('Video eLumos/filename.png');
-    // $readStream = Yaza\LaravelGoogleDriveStorage\Gdrive::readStream("");
-    // $meta = Yaza\LaravelGoogleDriveStorage\Gdrive::all('/', true);
-    // $files = \App\Classes\GoogleDriveService::searchFolder("UU8Ir51jZM.png", 'all');
-
-    return (\Tes\LaravelGoogleDriveStorage\GoogleDriveService::delete("1jGhj2nX2MNbH5VPwe8SqTsKSUu0U-S-VX", 'testing.png'));
   });
 });
 

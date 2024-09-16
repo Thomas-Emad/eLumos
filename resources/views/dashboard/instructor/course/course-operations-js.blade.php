@@ -85,7 +85,7 @@
                           <div class="flex gap-4 text-gray-600">
                             <i data-lecture-id="${lecture.id}" data-lecture-content="${lecture.content}" data-lecture-title="${lecture.title}" class="showModal fa-solid fa-pen-to-square hover:text-amber-700 duration-300 cursor-pointer"
                               data-modal-target="edit-lecture-modal" data-modal-toggle="edit-lecture-modal"></i>
-                            <i data-lecture-id="${lecture.id}" class="showModal fa-solid fa-trash hover:text-amber-700 duration-300 cursor-pointer"
+                            <i data-lecture-id="${lecture.id}"  class="showModal delete fa-solid fa-trash hover:text-amber-700 duration-300 cursor-pointer"
                               data-modal-target="delete-lecture-modal" data-modal-toggle="delete-lecture-modal"></i>
                           </div>
                         </div>`;
@@ -101,19 +101,23 @@
 
         // Event delegation for dynamic elements Show info modal
         $(".sections").on("click", ".showModal", function() {
-            $('.modal input[name=id]').val($(this).data("section-id"));
-            $('.modal input[name=title]').val($(this).data("section-title"));
+            let nameModal = "#" + $(this).attr("data-modal-toggle");
+            $(`${nameModal} form input[name=id]`).val($(this).data("section-id"));
+            $(`${nameModal} form input[name=title]`).val($(this).data("section-title"));
         });
         $(".sections").on("click", ".lectures .showModal", async function() {
-            $('.modal input[name=id]').val($(this).data("lecture-id"));
+            let nameModal = "#" + $(this).attr("data-modal-toggle");
+            $(`${nameModal} form input[name=id]`).val($(this).data("lecture-id"));
             let lectureId = $(this).data("lecture-id");
 
             // Get Lecture By api
             try {
                 let lecture = await getLecture(lectureId);
                 if (lecture.title.length > 0) {
-                    $('.modal input[name=title]').val(lecture.title);
-                    $('.modal textarea[name=content]').val(lecture.content);
+                    $(`${nameModal} form input[name=id]`).val(lecture.id);
+                    $(`${nameModal} form input[name=title]`).val(lecture.title);
+                    $(`${nameModal} form input[name=content]`).val(lecture.content);
+
                     // display exams lecture.exams
                 } else {
                     $(" #edit-lecture-modal .close").click()
@@ -122,6 +126,10 @@
                 console.error("Error fetching lecture:", error);
             }
 
+        });
+        $(".sections").on("click", ".lectures .showModal.delete", function() {
+            let nameModal = "#" + $(this).attr("data-modal-toggle");
+            $(`${nameModal} form input[name=id]`).val($(this).data("lecture-id"));
         });
 
         function getLecture(lectureId) {
@@ -160,8 +168,10 @@
 
         // initializeResponse
         function initializeResponse() {
-            $('.modal input[name=id]').val('');
-            $('.modal input[name=title]').val('');
+            $('form input[name=id]').val('');
+            $('form input[name=title]').val('');
+            $('form textarea[name=content]').val('');
+            $('form input[name=video]').val('');
             $('#loader').addClass('hidden');
         }
 
@@ -196,12 +206,14 @@
                 url: "{{ route('dashboard.course.sections.store') }}",
                 data: JSON.stringify(data),
                 contentType: 'application/json',
-            }).done((data) => {
-                sections.push(...data.section);
+            }).done((response) => {
+                sections.push(...response.section);
                 displaySections(sections);
-            }).fail((data) => {
-                $('.notifications').append(`@include('components.notifications.fail', ['message' => '${data.responseJSON.message}'])`);
-            }).always((data) => {
+            }).fail((response) => {
+                $('.notifications').append(`@include('components.notifications.fail', [
+                    'message' => '${displayErrorMessage(response)}',
+                ])`);
+            }).always(() => {
                 initializeResponse();
             })
         })
@@ -233,8 +245,10 @@
                     return section;
                 })
                 displaySections(sections);
-            }).fail((data) => {
-                $('.notifications').append(`@include('components.notifications.fail', ['message' => '${data.responseJSON.message}'])`);
+            }).fail((response) => {
+                $('.notifications').append(`@include('components.notifications.fail', [
+                    'message' => '${displayErrorMessage(response)}',
+                ])`);
             }).always((data) => {
                 initializeResponse();
             })
@@ -293,25 +307,24 @@
                 $('#loader').removeClass('hidden');
                 $('.notifications').empty();
 
+                let formData = new FormData();
                 let video = $(`#${formId} input[name=video]`)[0].files[0];
-                let form = {
-                    title: $(`#${formId} input[name=title]`).val(),
-                    content: $(`#${formId} textarea[name=content]`).val(),
-                    video: video,
-                    _token: "{{ csrf_token() }}",
-                    _method: requestType,
+                formData.append('title', $(`#${formId} input[name=title]`).val());
+                formData.append('content', $(`#${formId} textarea[name=content]`).val());
+                formData.append('video', video);
+                formData.append('_method', requestType == 'store' ? 'POST' : 'PUT');
+
+                if (formId == 'add-lecture') {
+                    formData.append('section_id', $(`#${formId} input[name=id]`).val());
+                } else if (formId == 'edit-lecture') {
+                    formData.append('id', $(`#${formId} input[name=id]`).val());
                 }
 
-                if (formId === 'add-lecture') {
-                    form.section_id = $(`#${formId} input[name=id]`).val();
-                } else if (formId === 'edit-lecture') {
-                    form.lecture_id = $(`#${formId} input[name=id]`).val();
-                }
 
                 if ((video !== undefined && video.size <= (40 * 1024 * 1024) && video.type ===
                         'video/mp4') ||
                     video === undefined) {
-                    uploadLectureRequest(form, 'update');
+                    uploadLectureRequest(formData, requestType);
                 } else {
                     $('.notifications').append(`@include('components.notifications.fail', [
                         'message' => 'Your Video Is Bigger Than 40MB',
@@ -325,23 +338,26 @@
         handleLectureFormSubmit('add-lecture', 'store');
         handleLectureFormSubmit('edit-lecture', 'update');
 
-
-        function uploadLectureRequest(formData, typeRequest = 'store') {
-            let url = typeRequest === 'store' ?
+        function uploadLectureRequest(formData, requestType) {
+            let url = requestType === 'store' ?
                 "{{ route('dashboard.course.lectures.store') }}" :
-                "{{ route('dashboard.course.lectures.update', 'lecture') }}";
+                "{{ route('dashboard.course.lectures.update-test', 'lecture') }}";
 
             // Send Request Save Lecture
             $.ajax({
-                type: typeRequest === 'store' ? 'POST' : 'PATCH',
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 url: url,
-                data: JSON.stringify(formData),
-                contentType: "application/json",
+                data: formData,
+                contentType: false,
                 processData: false,
                 cache: false,
             }).done((response) => {
-                $('.notifications').append(`@include('components.notifications.success', ['message' => '${response.message}'])`);
-
+                $('.notifications').append(`@include('components.notifications.success', [
+                    'message' => '${response.notification.message}',
+                ])`);
                 // replace section with new one
                 sections = sections.map(section => {
                     if (section.section_id == response.section.section_id) {
@@ -351,14 +367,51 @@
                 })
                 displaySections(sections);
             }).fail((response) => {
-                let errorMessage = response.responseJSON?.message ||
-                    'An error occurred. Please try again.';
-                $('.notifications').append(`@include('components.notifications.fail', ['message' => '${errorMessage}'])`);
+                $('.notifications').append(`@include('components.notifications.fail', [
+                    'message' => '${displayErrorMessage(response)}',
+                ])`);
             }).always(() => {
                 initializeResponse();
             })
         }
 
+        // Delete Section
+        $("#delete-lecture").on('submit', function(e) {
+            e.preventDefault();
+            $('#loader').removeClass('hidden');
+            const data = {
+                _token: "{{ csrf_token() }}",
+                _method: "DELETE",
+                id: $("#delete-lecture input[name=id]").val(),
+            }
 
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('dashboard.course.lectures.destroy', 'lecture') }}",
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+            }).done((response) => {
+                // Remove Setion from array sections and redisplay it again
+                initializeResponse();
+                $('.notifications').append(`@include('components.notifications.success', ['message' => '${response.message}'])`);
+                sections = sections.filter(section => {
+                    if (section.section_id == response.section_id) {
+                        section.lectures = section.lectures.filter(lecture => lecture
+                            .id != response.lecture_id);
+                    }
+                    return section;
+                });
+
+                displaySections(sections);
+            })
+        })
+
+        function displayErrorMessage(response) {
+            let message = response.responseJSON && response.responseJSON.notification && response.responseJSON
+                .notification.message ?
+                response.responseJSON.notification.message :
+                'Something is wrong, please try again';
+            return message
+        }
     });
 </script>

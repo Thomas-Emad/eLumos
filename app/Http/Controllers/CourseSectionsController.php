@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Http\Resources\SectionsCourseResource;
 use App\Models\CourseSections;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class CourseSectionsController extends Controller
 {
@@ -123,7 +124,14 @@ class CourseSectionsController extends Controller
 
     $course = Course::findOrFail($request->course_id);
     $sections = $course->sections()->get();
-    $sections->where('id', $request->section_id)->first()->delete();
+    $section = $sections->where('id', $request->section_id)->first();
+
+    // delete videos Lectures of this section
+    foreach ($section->lectures as $lecture) {
+      if ($lecture->video) Cloudinary::destroy(json_decode($lecture->video)->public_id, ['resource_type' => 'video']);
+    }
+
+    $section->delete();
 
     // Change Order Sort => order_sort - 1 for every section
     foreach ($sections as $section) {

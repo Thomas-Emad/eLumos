@@ -18,7 +18,7 @@ class SectionsCourseResource extends JsonResource
       'section_id' => $this->id,
       'title' => $this->title,
       'order_sort' => $this->order_sort,
-      'lectures' => LectureCourseResource::collection($this->lectures),
+      'lectures' => LectureCourseResource::collection($this->lectures()->get()),
     ];
   }
 }

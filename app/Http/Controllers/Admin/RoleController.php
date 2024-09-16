@@ -65,13 +65,20 @@ class RoleController extends Controller implements HasMiddleware
       'permissions' => 'required',
     ]);
     if ($validator->fails()) {
-      return back()->with('message.error', 'Validation Error => ' . $validator->errors()->first());
+      return redirect()->back()
+        ->withInput()->with('notification', [
+          'type' => 'fail',
+          'message' => "Error in verifying data (" . $validator->errors()->count() . "): " . $validator->errors()->first()
+        ]);
     }
 
     $role = Role::create(['name' => $request->input('name')]);
     $permissionIds = array_map('intval', $request->permissions);
     $role->syncPermissions($permissionIds);
-    return back()->with('message.success', 'Created Role Has Been Done Successfully.');
+    return redirect()->back()->with('notification', [
+      'type' => 'success',
+      'message' => "Role Created Successfully"
+    ]);
   }
 
   /**
@@ -101,7 +108,11 @@ class RoleController extends Controller implements HasMiddleware
       'permissions' => 'required',
     ]);
     if ($validator->fails()) {
-      return back()->with('message.error', 'Validation Error => ' . $validator->errors()->first());
+      return redirect()->back()
+        ->withInput()->with('notification', [
+          'type' => 'fail',
+          'message' => "Error in verifying data (" . $validator->errors()->count() . "): " . $validator->errors()->first()
+        ]);
     }
 
     $role = Role::where('id', $request->id)->firstOrFail();
@@ -111,7 +122,10 @@ class RoleController extends Controller implements HasMiddleware
     $permissionIds = array_map('intval', $request->permissions);
     $role->syncPermissions($permissionIds);
 
-    return back()->with('message.success', 'Updated Role Has Been Done Successfully.');
+    return redirect()->back()->with('notification', [
+      'type' => 'success',
+      'message' => "Role Updated Successfully"
+    ]);
   }
 
   /**
@@ -121,7 +135,10 @@ class RoleController extends Controller implements HasMiddleware
   {
     Role::destroy($request->input('id'));
 
-    return back()->with('message.success', 'Deleted Role Has Been Done Successfully.');
+    return redirect()->back()->with('notification', [
+      'type' => 'success',
+      'message' => "Deleted Role Has Been Done Successfully."
+    ]);
   }
 
   /**
@@ -154,6 +171,10 @@ class RoleController extends Controller implements HasMiddleware
   {
     $user = User::where('id', $request->input('id'))->firstOrFail();
     $user->syncRoles($request->input('role'));
-    return back()->with('message.success', 'Changed Role User Has Been Done Successfully.');
+
+    return redirect()->back()->with('notification', [
+      'type' => 'success',
+      'message' => "Changed Role User Has Been Done Successfully."
+    ]);
   }
 }

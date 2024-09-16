@@ -188,7 +188,7 @@
         </form>
     </x-modal>
     <x-modal id="edit-lecture-modal">
-        <form id="edit-lecture" class="modal" enctype="multipart/form-data">
+        <form id="edit-lecture" enctype="multipart/form-data">
             <!-- Modal header -->
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                 <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-50">
@@ -227,7 +227,7 @@
                     <div id="edit-lecture-content" class="mt-2">
                         <div class="hidden " id="edit-video" role="tabpanel" aria-labelledby="video-tab">
                             <div class="flex items-center justify-center w-full my-2">
-                                <label for="dropzone-file"
+                                <label for="change-video"
                                     class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500">
                                     <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                         <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-100 " aria-hidden="true"
@@ -242,7 +242,7 @@
                                         <p class="text-xs text-gray-500 dark:text-gray-100 ">Video (MAX.
                                             40MB)</p>
                                     </div>
-                                    <input id="dropzone-file" type="file" name="video" accept="video/mp4"
+                                    <input id="change-video" type="file" name="video" accept="video/mp4"
                                         class="hidden" />
                                 </label>
                             </div>
@@ -284,20 +284,23 @@
         </form>
     </x-modal>
     <x-modal-info id="delete-lecture-modal">
-        <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-        </svg>
-        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-100 ">Are you sure you want
-            to delete
-            this Lecture?</h3>
-        <button data-modal-hide="delete-lecture-modal" type="button"
-            class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-            Yes, I'm sure
-        </button>
-        <button data-modal-hide="delete-lecture-modal" type="button"
-            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No,
-            cancel</button>
+        <form id="delete-lecture">
+            <input type="hidden" name="id">
+            <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-100 ">Are you sure you want
+                to delete
+                this Lecture?</h3>
+            <button data-modal-hide="delete-lecture-modal" type="submit"
+                class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                Yes, I'm sure
+            </button>
+            <button data-modal-hide="delete-lecture-modal" type="button"
+                class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No,
+                cancel</button>
+        </form>
     </x-modal-info>
 @endif

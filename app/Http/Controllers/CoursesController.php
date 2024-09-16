@@ -10,7 +10,6 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use App\Http\Resources\CoursesDashboardResource;
 use Illuminate\Support\Facades\Cache;
 
-
 class CoursesController extends Controller implements HasMiddleware
 {
   protected array $getStatus = [
@@ -54,17 +53,22 @@ class CoursesController extends Controller implements HasMiddleware
     }
 
     try {
+      // Cache Courses
       $type = in_array(request()->input('type'), array_keys($this->getStatus)) ? request()->input('type') : 'published';
-      $courses = Course::with('user')->where('user_id', auth()->user()->id)
-        ->whereIn('status', $this->getStatus[$type])
-        ->paginate(10);
+
+      $courses = Cache::remember("courses.$type", 60 * 60 * 24 * 30, function () use ($type) {
+        $courses = Course::with('user')->where('user_id', auth()->user()->id)
+          ->whereIn('status', $this->getStatus[$type])
+          ->paginate(10);
+        return CoursesDashboardResource::collection($courses);
+      });
     } catch (\Exception $e) {
       return response()->json(['error' => $e->getMessage()], 500);
     }
 
     return response()->json([
       'count' => $courses->total(),
-      'courses' =>  CoursesDashboardResource::collection($courses),
+      'courses' =>  $courses,
       'pagination' =>  [
         'first_page' => 1,
         'current_page' => $courses->currentPage(),
