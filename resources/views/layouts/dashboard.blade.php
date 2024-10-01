@@ -18,13 +18,15 @@
                 <div class="p-3">
                     <div class="flex items-center gap-1 flex-col">
                         <h2 class="font-bold text-xl text-gray-900 dark:text-white hover:text-amber-600 duration-200">
-                            <a href="{{ route('dashboard.profile') }}">Thomas Emad</a>
+                            <a href="{{ route('dashboard.profile') }}">{{ auth()->user()->name }}</a>
                         </h2>
-                        <span class="text-gray-800 dark:text-gray-300">Instructor</span>
+                        <span class="text-gray-800 dark:text-gray-300">{{ auth()->user()->roles()->first()->name }}</span>
                     </div>
-                    <a href="{{ route('dashboard.add-course') }}"
-                        class="block border border-amber-600 text-amber-600 font-bold hover:text-white hover:bg-amber-600 duration-300 text-center px-1 py-2 rounded-xl mt-2 text-sm">Add
-                        New Course</a>
+                    @haspermission('instructors-control-courses')
+                        <a href="{{ route('dashboard.add-course') }}"
+                            class="block border border-amber-600 text-amber-600 font-bold hover:text-white hover:bg-amber-600 duration-300 text-center px-1 py-2 rounded-xl mt-2 text-sm">Add
+                            New Course</a>
+                    @endhaspermission
                 </div>
             </div>
             <div class='rounded-xl border border-gray-200 overflow-hidden bg-white dark:bg-gray-700 p-3 mt-3'>
@@ -58,6 +60,26 @@
                             </a>
                         </li>
                     @endhaspermission
+                    @haspermission('control-courses')
+                        <hr class="mx-6 my-1">
+                        <li class="flex justify-between items-center gap-2">
+                            <a href="{{ route('dashboard.admin.courses') }}"
+                                class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.admin.courses')) text-amber-600 @endif hover:text-amber-600 duration-200">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                                <span>Courses</span>
+                            </a>
+                            <span
+                                class="bg-gray-600/70 px-2 py-1 rounded-xl text-xs text-white">({{ \App\Models\Course::where('status', 'pending')->count() }})</span>
+                        </li>
+                        <hr class="mx-6 my-1">
+                    @endhaspermission
+                    <li>
+                        <a href="{{ route('dashboard.wishlist') }}"
+                            class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.wishlist')) text-amber-600 @endif hover:text-amber-600 duration-200">
+                            <i class="fa-solid fa-heart"></i>
+                            <span>Wishlist</span>
+                        </a>
+                    </li>
                     {{-- <li><a href="{{ route('dashboard.index') }}/wishlist"
                             class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/wishlist')) @endif hover:text-amber-600 duration-200">
                             <i class="fa-solid fa-heart"></i>
@@ -89,12 +111,12 @@
                         </a>
                     </li> --}}
                 </ul>
-                @haspermission('control-courses')
+                @haspermission('instructors-control-courses')
                     <hr class="mx-6 my-4">
                     <h2 class="font-bold text-gray-900 text-lg dark:text-gray-50">Instructor</h2>
                     <ul class="mt-2 text-gray-800 dark:text-gray-300">
                         <li><a href="{{ route('dashboard.courses') }}"
-                                class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.dashboard.courses'))  @endif hover:text-amber-600 duration-200">
+                                class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.courses'))  @endif hover:text-amber-600 duration-200">
                                 <i class="fa-solid fa-graduation-cap"></i>
                                 <span>My Courses</span>
                             </a>

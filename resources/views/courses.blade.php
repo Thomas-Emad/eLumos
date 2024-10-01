@@ -31,253 +31,56 @@
                 </select>
             </form>
             <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4 mt-4 text-gray-800 dark:text-gray-100">
-                <div class="p-2 bg-white dark:bg-gray-700  border border-gray-200 rounded-xl">
-                    <a href="{{ route('course-details') }}" class="block rounded-xl overflow-hidden">
-                        <img src="{{ asset('assets/images/article.png') }}"
-                            class="w-full h-[150px] hover:scale-125 duration-300" alt="photo course">
-                    </a>
-                    <div class="py-2 flex justify-between gap-2 items-center">
-                        <div class="flex gap-2">
-                            <img src="{{ asset('assets/images/user-1.png') }}" class="w-10 h-10 rounded-full"
-                                alt="photo Instructor">
+                @foreach ($courses as $course)
+                    <div class="p-2 bg-white dark:bg-gray-700  border border-gray-200 rounded-xl">
+                        <a href="{{ route('course-details', $course->id) }}" class="block rounded-xl overflow-hidden">
+                            <img src="{{ asset('assets/images/article.png') }}"
+                                class="w-full h-[150px] hover:scale-125 duration-300" alt="photo course">
+                        </a>
+                        <div class="py-2 flex justify-between gap-2 items-center">
+                            <div class="flex gap-2">
+                                <img src="{{ $course->user->photo ? asset('storage/' . $course->user->photo) : asset('assets/images/user-1.png') }}"
+                                    class="w-10 h-10 rounded-full" alt="photo Instructor">
+                                <div>
+                                    <h3 class=" font-bold hover:text-amber-600 duration-200">
+                                        <a href="{{ route('dashboard.profile', $course->user->id) }}">
+                                            {{ $course->user->name }}
+                                        </a>
+                                    </h3>
+                                    <span class="text-sm">{{ $course->user->headline }}</span>
+                                </div>
+                            </div>
+                            <a href="#"><i
+                                    class="fa-solid fa-heart text-lg text-gray-300 hover:text-amber-400 duration-200"></i></a>
+                        </div>
+                        <a href="{{ route('course-details', $course->id) }}"
+                            class="block pb-2 text-xl font-bold hover:text-amber-600 duration-200">
+                            {{ Str::limit($course->title, 20) }}
+                        </a>
+                        <hr>
+                        <div class="text-sm py-2 flex justify-between gap-2">
                             <div>
-                                <h3 class=" font-bold hover:text-amber-600 duration-200"><a
-                                        href="{{ route('profile') }}">Thomas
-                                        E.</a></h3>
-                                <span class="text-sm">Software developer</span>
+                                <i class="fa-solid fa-star text-amber-400"></i>
+                                <i class="fa-solid fa-star text-amber-400"></i>
+                                <i class="fa-solid fa-star text-amber-400"></i>
+                                <i class="fa-solid fa-star text-amber-400"></i>
+                                <i class="fa-solid fa-star text-gray-400"></i>
+                                <span>4.0 (15)</span>
+                            </div>
+                            <div class="font-bold">
+                                {{ $course->price }}$
                             </div>
                         </div>
-                        <a href="#"><i
-                                class="fa-solid fa-heart text-lg text-gray-300 hover:text-amber-400 duration-200"></i></a>
+                        <a href="#"
+                            class="block  font-bold text-sm text-center py-1 px-2  rounded-full border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white duration-300">Add
+                            To Cart</a>
                     </div>
-                    <a href="{{ route('course-details') }}"
-                        class="block pb-2 text-xl font-bold hover:text-amber-600 duration-200">
-                        Learn Angular Fundamentals From...
-                    </a>
-                    <hr>
-                    <div class="text-sm py-2 flex justify-between gap-2">
-                        <div>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-gray-400"></i>
-                            <span>4.0 (15)</span>
-                        </div>
-                        <div class="font-bold">
-                            50$
-                        </div>
-                    </div>
-                    <a href="#"
-                        class="block  font-bold text-sm text-center py-1 px-2  rounded-full border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white duration-300">Add
-                        To Cart</a>
-                </div>
-                <div class="p-2 bg-white dark:bg-gray-700 border border-gray-200 rounded-xl">
-                    <a href="{{ route('course-details') }}" class="block rounded-xl overflow-hidden">
-                        <img src="{{ asset('assets/images/article.png') }}"
-                            class="w-full h-[150px] hover:scale-125 duration-300" alt="photo course">
-                    </a>
-                    <div class="py-2 flex justify-between gap-2 items-center">
-                        <div class="flex gap-2">
-                            <img src="{{ asset('assets/images/user-1.png') }}" class="w-10 h-10 rounded-full"
-                                alt="photo Instructor">
-                            <div>
-                                <h3 class=" font-bold hover:text-amber-600 duration-200"><a
-                                        href="{{ route('profile') }}">Thomas
-                                        E.</a></h3>
-                                <span class="text-sm">Software developer</span>
-                            </div>
-                        </div>
-                        <a href="#"><i
-                                class="fa-solid fa-heart text-lg text-gray-300 hover:text-amber-400 duration-200"></i></a>
-                    </div>
-                    <a href="{{ route('course-details') }}"
-                        class="block pb-2 text-xl font-bold hover:text-amber-600 duration-200">
-                        Learn Angular Fundamentals From...
-                    </a>
-                    <hr>
-                    <div class="text-sm py-2 flex justify-between gap-2">
-                        <div>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-gray-400"></i>
-                            <span>4.0 (15)</span>
-                        </div>
-                        <div class="font-bold">
-                            50$
-                        </div>
-                    </div>
-                    <a href="#"
-                        class="block  font-bold text-sm text-center py-1 px-2  rounded-full border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white duration-300">Add
-                        To Cart</a>
-                </div>
-                <div class="p-2 bg-white dark:bg-gray-700 border border-gray-200 rounded-xl">
-                    <a href="{{ route('course-details') }}" class="block rounded-xl overflow-hidden">
-                        <img src="{{ asset('assets/images/article.png') }}"
-                            class="w-full h-[150px] hover:scale-125 duration-300" alt="photo course">
-                    </a>
-                    <div class="py-2 flex justify-between gap-2 items-center">
-                        <div class="flex gap-2">
-                            <img src="{{ asset('assets/images/user-1.png') }}" class="w-10 h-10 rounded-full"
-                                alt="photo Instructor">
-                            <div>
-                                <h3 class=" font-bold hover:text-amber-600 duration-200"><a
-                                        href="{{ route('profile') }}">Thomas
-                                        E.</a></h3>
-                                <span class="text-sm">Software developer</span>
-                            </div>
-                        </div>
-                        <a href="#"><i
-                                class="fa-solid fa-heart text-lg text-gray-300 hover:text-amber-400 duration-200"></i></a>
-                    </div>
-                    <a href="{{ route('course-details') }}"
-                        class="block pb-2 text-xl font-bold hover:text-amber-600 duration-200">
-                        Learn Angular Fundamentals From...
-                    </a>
-                    <hr>
-                    <div class="text-sm py-2 flex justify-between gap-2">
-                        <div>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-gray-400"></i>
-                            <span>4.0 (15)</span>
-                        </div>
-                        <div class="font-bold">
-                            50$
-                        </div>
-                    </div>
-                    <a href="#"
-                        class="block  font-bold text-sm text-center py-1 px-2  rounded-full border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white duration-300">Add
-                        To Cart</a>
-                </div>
-                <div class="p-2 bg-white dark:bg-gray-700 border border-gray-200 rounded-xl">
-                    <a href="{{ route('course-details') }}" class="block rounded-xl overflow-hidden">
-                        <img src="{{ asset('assets/images/article.png') }}"
-                            class="w-full h-[150px] hover:scale-125 duration-300" alt="photo course">
-                    </a>
-                    <div class="py-2 flex justify-between gap-2 items-center">
-                        <div class="flex gap-2">
-                            <img src="{{ asset('assets/images/user-1.png') }}" class="w-10 h-10 rounded-full"
-                                alt="photo Instructor">
-                            <div>
-                                <h3 class=" font-bold hover:text-amber-600 duration-200"><a
-                                        href="{{ route('profile') }}">Thomas
-                                        E.</a></h3>
-                                <span class="text-sm">Software developer</span>
-                            </div>
-                        </div>
-                        <a href="#"><i
-                                class="fa-solid fa-heart text-lg text-gray-300 hover:text-amber-400 duration-200"></i></a>
-                    </div>
-                    <a href="{{ route('course-details') }}"
-                        class="block pb-2 text-xl font-bold hover:text-amber-600 duration-200">
-                        Learn Angular Fundamentals From...
-                    </a>
-                    <hr>
-                    <div class="text-sm py-2 flex justify-between gap-2">
-                        <div>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-gray-400"></i>
-                            <span>4.0 (15)</span>
-                        </div>
-                        <div class="font-bold">
-                            50$
-                        </div>
-                    </div>
-                    <a href="#"
-                        class="block  font-bold text-sm text-center py-1 px-2  rounded-full border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white duration-300">Add
-                        To Cart</a>
-                </div>
-                <div class="p-2 bg-white dark:bg-gray-700 border border-gray-200 rounded-xl">
-                    <a href="{{ route('course-details') }}" class="block rounded-xl overflow-hidden">
-                        <img src="{{ asset('assets/images/article.png') }}"
-                            class="w-full h-[150px] hover:scale-125 duration-300" alt="photo course">
-                    </a>
-                    <div class="py-2 flex justify-between gap-2 items-center">
-                        <div class="flex gap-2">
-                            <img src="{{ asset('assets/images/user-1.png') }}" class="w-10 h-10 rounded-full"
-                                alt="photo Instructor">
-                            <div>
-                                <h3 class=" font-bold hover:text-amber-600 duration-200"><a
-                                        href="{{ route('profile') }}">Thomas
-                                        E.</a></h3>
-                                <span class="text-sm">Software developer</span>
-                            </div>
-                        </div>
-                        <a href="#"><i
-                                class="fa-solid fa-heart text-lg text-gray-300 hover:text-amber-400 duration-200"></i></a>
-                    </div>
-                    <a href="{{ route('course-details') }}"
-                        class="block pb-2 text-xl font-bold hover:text-amber-600 duration-200">
-                        Learn Angular Fundamentals From...
-                    </a>
-                    <hr>
-                    <div class="text-sm py-2 flex justify-between gap-2">
-                        <div>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-gray-400"></i>
-                            <span>4.0 (15)</span>
-                        </div>
-                        <div class="font-bold">
-                            50$
-                        </div>
-                    </div>
-                    <a href="#"
-                        class="block  font-bold text-sm text-center py-1 px-2  rounded-full border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white duration-300">Add
-                        To Cart</a>
-                </div>
-                <div class="p-2 bg-white dark:bg-gray-700 border border-gray-200 rounded-xl">
-                    <a href="{{ route('course-details') }}" class="block rounded-xl overflow-hidden">
-                        <img src="{{ asset('assets/images/article.png') }}"
-                            class="w-full h-[150px] hover:scale-125 duration-300" alt="photo course">
-                    </a>
-                    <div class="py-2 flex justify-between gap-2 items-center">
-                        <div class="flex gap-2">
-                            <img src="{{ asset('assets/images/user-1.png') }}" class="w-10 h-10 rounded-full"
-                                alt="photo Instructor">
-                            <div>
-                                <h3 class=" font-bold hover:text-amber-600 duration-200"><a
-                                        href="{{ route('profile') }}">Thomas
-                                        E.</a></h3>
-                                <span class="text-sm">Software developer</span>
-                            </div>
-                        </div>
-                        <a href="#"><i
-                                class="fa-solid fa-heart text-lg text-gray-300 hover:text-amber-400 duration-200"></i></a>
-                    </div>
-                    <a href="{{ route('course-details') }}"
-                        class="block pb-2 text-xl font-bold hover:text-amber-600 duration-200">
-                        Learn Angular Fundamentals From...
-                    </a>
-                    <hr>
-                    <div class="text-sm py-2 flex justify-between gap-2">
-                        <div>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-amber-400"></i>
-                            <i class="fa-solid fa-star text-gray-400"></i>
-                            <span>4.0 (15)</span>
-                        </div>
-                        <div class="font-bold">
-                            50$
-                        </div>
-                    </div>
-                    <a href="#"
-                        class="block  font-bold text-sm text-center py-1 px-2  rounded-full border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white duration-300">Add
-                        To Cart</a>
-                </div>
+                @endforeach
+                {{ $courses->links() }}
             </div>
+            @if ($courses->count() === 0)
+                <p class="text-center italic my-8">Sorry, it look we Don't have any course, back later Please.</p>
+            @endif
         </div>
         <div class="w-full md:w-1/3 flex gap-4 flex-col">
             <div

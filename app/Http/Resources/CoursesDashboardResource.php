@@ -17,9 +17,9 @@ class CoursesDashboardResource extends JsonResource
     return [
       'data' => [
         'id' => $this->id,
-        'title' => $this->title,
+        'title' => \Str::limit($this->title, 20),
         'status' => $this->status,
-        'image' => $this->image
+        'mockup' => json_decode($this->mockup)->url ?? null,
       ],
       'user' => [
         'id' => $this->user->id,

@@ -8,25 +8,25 @@ use Spatie\Permission\Models\Role;
 
 class RoleTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
-    {
-        $roles = [
-            ['name' => 'owner'], ['name' => 'instructor'], ['name' => 'student']
-        ];
+  /**
+   * Run the database seeds.
+   */
+  public function run(): void
+  {
+    $roles = [
+      ['name' => 'owner'], ['name' => 'instructor'], ['name' => 'student']
+    ];
 
-        foreach ($roles as $role) {
-            $role = Role::create($role);
+    foreach ($roles as $role) {
+      $role = Role::create($role);
 
-            $permissionsAsRole = match ($role->name) {
-                'owner' => ['users', 'roles'],
-                'instructor' => ['control-courses'],
-                'student' => ['buy-courses'],
-                $role->name => abort(404)
-            };
-            $role->givePermissionTo($permissionsAsRole);
-        }
+      $permissionsAsRole = match ($role->name) {
+        'owner' => ['users', 'roles', 'control-courses'],
+        'instructor' => ['instructors-control-courses'],
+        'student' => ['buy-courses'],
+        $role->name => abort(404)
+      };
+      $role->givePermissionTo($permissionsAsRole);
     }
+  }
 }

@@ -10,6 +10,7 @@ class PermissionTableSeeder extends Seeder
   private array $permissions = [
     'users',
     'roles',
+    'instructors-control-courses',
     'control-courses',
     'buy-courses',
   ];

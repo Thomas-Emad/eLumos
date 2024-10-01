@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\View\View;
+
 
 class StepsForwardController extends Controller
 {
@@ -13,14 +14,14 @@ class StepsForwardController extends Controller
    *
    * @return View
    */
-  public function index(): View
+  public function index()
   {
     if (
       Auth::user()->steps_forward != 'complate' || session('notification') != null
     ) {
       return view('steps-forward.index');
     } else {
-      return redirect()->route('dashboard');
+      return redirect()->route('dashboard.index');
     }
   }
 

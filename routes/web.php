@@ -2,18 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\CoursesController;
-use App\Http\Controllers\CourseSectionsController;
 use App\Http\Controllers\StepsForwardController;
-use App\Http\Controllers\CourseLecturesController;
+use App\Http\Controllers\Admin\{RoleController, CourseController as DashboardCoursesController};
+use App\Http\Controllers\Dashboard\{CoursesController, CourseSectionsController, CourseLecturesController};
+use App\Http\Controllers\Student\{CourseStudentController, WishlistController};
 
 // Basic Pages
 Route::view('/', 'home')->name('home');
 Route::view('privacy', 'privacy')->name('privacy');
 Route::view('terms', 'terms')->name('terms');
-Route::view("courses", 'courses')->name("courses");
-Route::view("course-details/{id?}", 'course-details')->name("course-details");
 
 
 Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
@@ -24,7 +21,6 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
   });
 
   // Check From Steps Forward to get executed information
-
   Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
     // Course For Admin
     Route::controller(CoursesController::class)->group(function () {
@@ -32,6 +28,8 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
       Route::get('/add-course',  'create')->name('add-course');
       Route::post('/add-course',  'store')->name('add-course.store');
       Route::get('/course/{course}/edit',  'edit')->name('course.edit');
+      Route::patch('/course/{course}/update',  [CoursesController::class, 'update'])->name('courses.update');
+      Route::delete('/course/destroy',  [CoursesController::class, 'destroy'])->name('courses.destroy');
     });
     Route::prefix('api')->group(function () {
       Route::get('/show/courses/{type?}',  [CoursesController::class, 'getCourses'])->name('courses.show');
@@ -61,6 +59,15 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     Route::view('/courses-list', 'dashboard.courses-list')->name('courses-list');
   });
 
+  // Student Controllers 
+  Route::get("courses", [CourseStudentController::class, 'index'])->name("courses");
+  Route::get("course-details/{id?}", [CourseStudentController::class, 'show'])->name("course-details");
+  Route::controller(WishlistController::class)->group(function () {
+    Route::get('dashboard/wishlist', "index")->name('dashboard.wishlist');
+    Route::post('course-details/{id?}/wishlist', "actionWishlist")->name('wishlist.controll'); 
+  });
+
+
 
   // Role Pages for owner role
   Route::resource('dashboard/roles', RoleController::class);
@@ -68,6 +75,12 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     Route::post('dashboard/role/', 'showRole')->name('roles.showRole');
     Route::get('dashboard/role/users', 'users')->name('roles.users');
     Route::post('dashboard/role/user/change', 'changeRoleUser')->name('roles.users.change');
+  });
+
+  // Course Pages for Admin
+  Route::controller(DashboardCoursesController::class)->group(function () {
+    Route::get('dashboard/admin/courses', 'index')->name('dashboard.admin.courses');
+    Route::post('dashboard/admin/courses/review-course', 'reviewStatusCourse')->name('dashboard.admin.courses.review-course');
   });
 });
 
@@ -81,6 +94,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
 //         return abort(404);
 //     }
 // })->name('dashboard');
+
 
 
 require __DIR__ . '/auth.php';

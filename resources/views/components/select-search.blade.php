@@ -1,5 +1,5 @@
 <!-- Select -->
-<select {{ $name }}
+<select name="{{ $name }}"
     data-hs-select='{
     "hasSearch": true,
     "searchPlaceholder": "{{ $placeholderSearch }}",
@@ -15,66 +15,11 @@
   }'
     class="hidden">
     <option value="">Choose</option>
-    <option value="de"
-        data-hs-select-option='{
-  "icon": "<img class=\"inline-block size-4 rounded-full\" src=\"{{ asset('path/to/flags/de.png') }}\" alt=\"German\" />"}'>
-        German
-    </option>
-    <option value="fr"
-        data-hs-select-option='{
-  "icon": "<img class=\"inline-block size-4 rounded-full\" src=\"{{ asset('path/to/flags/fr.png') }}\" alt=\"French\" />"}'>
-        French
-    </option>
-    <option value="es"
-        data-hs-select-option='{
-  "icon": "<img class=\"inline-block size-4 rounded-full\" src=\"{{ asset('path/to/flags/es.png') }}\" alt=\"Spanish\" />"}'>
-        Spanish
-    </option>
-    <option value="it"
-        data-hs-select-option='{
-  "icon": "<img class=\"inline-block size-4 rounded-full\" src=\"{{ asset('path/to/flags/it.png') }}\" alt=\"Italian\" />"}'>
-        Italian
-    </option>
-    <option value="pt"
-        data-hs-select-option='{
-  "icon": "<img class=\"inline-block size-4 rounded-full\" src=\"{{ asset('path/to/flags/pt.png') }}\" alt=\"Portuguese\" />"}'>
-        Portuguese
-    </option>
-    <option value="el"
-        data-hs-select-option='{
-  "icon": "<img class=\"inline-block size-4 rounded-full\" src=\"{{ asset('path/to/flags/gr.png') }}\" alt=\"Greek\" />"}'>
-        Greek
-    </option>
-    <option value="ru"
-        data-hs-select-option='{
-  "icon": "<img class=\"inline-block size-4 rounded-full\" src=\"{{ asset('../assets/vendor/svg-country-flags/png100px/ru.png') }}\" alt=\"Russian\" />"}'>
-        Russian
-    </option>
-    <option value="zh"
-        data-hs-select-option='{
-  "icon": "<img class=\"inline-block size-4 rounded-full\" src=\"{{ asset('path/to/flags/cn.png') }}\" alt=\"Chinese\" />"}'>
-        Chinese
-    </option>
-    <option value="ja"
-        data-hs-select-option='{
-  "icon": "<img class=\"inline-block size-4 rounded-full\" src=\"{{ asset('path/to/flags/jp.png') }}\" alt=\"Japanese\" />"}'>
-        Japanese
-    </option>
-    <option value="ko"
-        data-hs-select-option='{
-  "icon": "<img class=\"inline-block size-4 rounded-full\" src=\"{{ asset('path/to/flags/kr.png') }}\" alt=\"Korean\" />"}'>
-        Korean
-    </option>
-    <option value="tr"
-        data-hs-select-option='{
-  "icon": "<img class=\"inline-block size-4 rounded-full\" src=\"{{ asset('path/to/flags/tr.png') }}\" alt=\"Turkish\" />"}'>
-        Turkish
-    </option>
-    <option value="fa"
-        data-hs-select-option='{
-  "icon": "<img class=\"inline-block size-4 rounded-full\" src=\"{{ asset('path/to/flags/ir.png') }}\" alt=\"Persian\" />"}'>
-        Persian
-    </option>
+    {{ $slot }}
 
 </select>
+@error($name)
+    <span class="text-red-700 text-sm font-bold mt-1">- {{ $message }}</span>
+@enderror
+
 <!-- End Select -->

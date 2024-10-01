@@ -20,7 +20,7 @@
             $(".sections").empty();
             if (sections.length == 0) {
                 $(".sections").append(
-                    `<p class="text-gray-500 dark:text-gray-100 text-center mt-5 italic">No Sections Found</p>`
+                    `<p class="text-gray-500 text-center italic">Hmm, it looks like there are no sections. Add one!</p>`
                 )
             } else {
                 sections.forEach((section, index) => {

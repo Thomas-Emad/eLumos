@@ -13,7 +13,7 @@
                 </svg>
                 <span class="sr-only">Close modal</span>
             </button>
-            <div class="p-4 md:p-5 text-center">
+            <div class="p-4 md:p-5 text-center text-gray-900 dark:text-gray-100">
                 {{ $slot }}
             </div>
         </div>

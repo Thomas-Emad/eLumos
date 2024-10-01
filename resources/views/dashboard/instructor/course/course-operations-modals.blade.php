@@ -1,4 +1,4 @@
-@if (request()->input('step') == '2')
+@if (request()->input('step') == '4')
     <x-modal id="add-section-modal">
         <form id='add-section'>
             <!-- Modal header -->
@@ -114,8 +114,8 @@
             </div>
             <!-- Modal body -->
             <div class="p-4 md:p-5 space-y-4">
-                <x-input type="text" name='title' nameInput="Title lecture"
-                    placeholder="Title of this lecture.." value='' required />
+                <x-input type="text" name='title' label="Title lecture" placeholder="Title of this lecture.."
+                    value='' required />
                 <input type="hidden" name="id">
                 <hr>
                 <div>

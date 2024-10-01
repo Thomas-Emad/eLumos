@@ -11,11 +11,11 @@ return new class extends Migration
    */
   public function up(): void
   {
-    Schema::create('languages', function (Blueprint $table) {
+    Schema::create('wishlists', function (Blueprint $table) {
       $table->id();
-      $table->string('name', 15);
-      $table->string('code', 3);
-      $table->string('img', 255)->nullable();
+      $table->foreignId("user_id")->on('users')->cascadeOnDelete();
+      $table->foreignUuid("course_id")->on('courses')->cascadeOnDelete();
+      $table->softDeletes();
       $table->timestamps();
     });
   }
@@ -25,6 +25,6 @@ return new class extends Migration
    */
   public function down(): void
   {
-    Schema::dropIfExists('languages');
+    Schema::dropIfExists('wishlists');
   }
 };

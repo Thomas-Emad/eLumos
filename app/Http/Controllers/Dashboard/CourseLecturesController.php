@@ -1,18 +1,23 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Traits\UploadAttachmentTrait;
+use App\Http\Traits\UpdateStepsStatusTrait;
+use App\Http\Resources\SectionsCourseResource;
 use App\Models\CourseSections;
 use App\Models\CourseLectures;
-use App\Http\Resources\SectionsCourseResource;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rules\File;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+
 
 class CourseLecturesController extends Controller
 {
+  use UploadAttachmentTrait, UpdateStepsStatusTrait;
+
   /**
    * Display a listing of the resource.
    */
@@ -35,13 +40,13 @@ class CourseLecturesController extends Controller
 
     if (!$validation->failed()) {
       try {
-        $section = CourseSections::findOrFail($request->section_id);
+        $section = CourseSections::with(['course', 'lectures'])->findOrFail($request->section_id);
 
         if ($section->lectures()->count() < 10) {
 
           // upload video
           if ($request->hasFile('video')) {
-            $videoJson =  $this->uploadVideo($request);
+            $videoJson = static::uploadVideo($request->file('video'), 'videos', 'video');
           }
 
           // Store data
@@ -49,11 +54,17 @@ class CourseLecturesController extends Controller
             'course_id' => $section->course_id,
             'title' => $request->title,
             'video' => $videoJson ?? null,
+            'video_duartion' => json_decode($videoJson)->duration ?? null,
             'content' => $request->content ?? null,
             'order_sort' => $section->lectures()->count() + 1
           ]);
 
+          if ($section->lectures()->count() === 3) {
+            static::updateStepsStatusWithIncrementStep('stepFour', $section->course);
+          }
+
           return response()->json([
+            'tst' => $videoJson,
             'section' => new SectionsCourseResource($section->get()->last()),
             'notification' => [
               'type' => 'success',
@@ -86,26 +97,7 @@ class CourseLecturesController extends Controller
     }
   }
 
-  /**
-   * Uploads a video to Cloudinary and returns the public ID and secure URL of the uploaded video.
-   *
-   * @param Request $request The HTTP request object containing the video file to be uploaded.
-   * @return string The JSON-encoded video information including the public ID and secure URL.
-   */
-  protected function uploadVideo(Request $request): string
-  {
-    $video = Cloudinary::uploadVideo($request->video->getRealPath(), [
-      "asset_folder" => "videos/",
-      'resource_type' => "video",
-      "chunk_size" => 6000000,
-    ]);
-    $videoJson = [
-      'public_id' => $video->getPublicId(),
-      'url' => $video->getSecurePath(),
-    ];
 
-    return json_encode($videoJson);
-  }
 
   /**
    * Display the specified resource.
@@ -128,7 +120,7 @@ class CourseLecturesController extends Controller
   {
     $validator = Validator::make($request->all(), [
       'id' => ['required', 'exists:course_lectures,id'],
-      'title' => ['required', 'min:5', 'max:50'],
+      'title' => ['required', 'min:5', 'max:49'],
       'content' => ['nullable', 'max:5000', 'string'],
       'video' => ['exclude_unless:video,null', 'max:40000', 'mimetypes:video/mp4'],
     ]);
@@ -150,7 +142,7 @@ class CourseLecturesController extends Controller
         Cloudinary::destroy(json_decode($lecture->video)->public_id, ['resource_type' => 'video']);
       }
 
-      $videoJson =  $this->uploadVideo($request);
+      $videoJson =  static::uploadVideo($request->file('video'), 'videos', 'video');
     } else {
       $videoJson = $lecture->video ?? null;
     }
@@ -159,6 +151,7 @@ class CourseLecturesController extends Controller
     $lecture->update([
       'title' => $request->title,
       'video' => $videoJson ?? null,
+      'video_duartion' => json_decode($videoJson)->duration ?? null,
       'content' => $request->content ?? null,
     ]);
 

@@ -3,29 +3,24 @@ import forms from '@tailwindcss/forms';
 
 /** @type {import('tailwindcss').Config} */
 export default {
-    content: [
-        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-        './storage/framework/views/*.php',
-        "./resources/**/*.blade.php",
-        "./resources/**/**/*.blade.php",
-        "./resources/**/*.js",
-        "./node_modules/flowbite/**/*.js",
-        'node_modules/preline/dist/*.js',
+  content: [
+    "./resources/**/*.blade.php",
+    "./resources/**/**/*.blade.php",
+    "./resources/**/*.js",
+    "./node_modules/flowbite/**/*.js",
+    './node_modules/preline/dist/*.js',
+  ],
 
-    ],
-
-    theme: {
-        extend: {
-            fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-            },
-        },
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+      },
     },
+  },
 
-    plugins: [
-        forms,
-        require('flowbite/plugin'),
-        require('preline/plugin'),
-
-    ],
+  plugins: [
+    forms,
+    require('flowbite/plugin'),
+  ],
 };

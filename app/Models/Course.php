@@ -7,9 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Observers\Dashboard\CoursesObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+
+use Illuminate\Contracts\Database\Eloquent\Builder;
+
 
 #[ObservedBy([CoursesObserver::class])]
 class Course extends Model
@@ -17,18 +21,21 @@ class Course extends Model
   use HasFactory, SoftDeletes, HasUuids;
 
   protected $fillable = [
+    'user_id',
     'title',
     'headline',
     'description',
-    'image',
+    'mockup',
     'preview_video',
     'language_id',
     'price',
     'learn',
     'requirements',
+    'steps',
+    'steps_status',
     'status',
     'level',
-    'user_id',
+    'message'
   ];
 
 
@@ -40,7 +47,10 @@ class Course extends Model
   {
     return $this->hasMany(CourseSections::class, 'course_id', 'id');
   }
-
+  public function lectures(): HasMany
+  {
+    return $this->hasMany(CourseLectures::class, 'course_id', 'id');
+  }
 
   public function changeSortOrderSection(int $section_id, bool $up = true)
   {
@@ -53,5 +63,10 @@ class Course extends Model
       $section->increment('order_sort', 1);
     }
     return $this;
+  }
+
+  public function tags(): BelongsToMany
+  {
+    return $this->BelongsToMany(Tag::class, "course_tags", 'course_id', 'tag_id');
   }
 }
