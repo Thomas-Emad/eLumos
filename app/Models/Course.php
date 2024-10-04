@@ -69,4 +69,9 @@ class Course extends Model
   {
     return $this->BelongsToMany(Tag::class, "course_tags", 'course_id', 'tag_id');
   }
+
+  public function wishlist(): HasMany
+  {
+    return $this->hasMany(Wishlist::class, 'course_id', 'id')->withTrashed();
+  }
 }

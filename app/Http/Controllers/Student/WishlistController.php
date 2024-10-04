@@ -14,7 +14,8 @@ class WishlistController extends Controller
    */
   public function index()
   {
-    //
+    $wishlists = Auth::user()->wishlist()->with('course')->withoutTrashed()->paginate(10);
+    return view('dashboard.wishlists', compact('wishlists'));
   }
 
   /**
@@ -27,11 +28,14 @@ class WishlistController extends Controller
       ['user_id' => Auth::user()->id]
     );
 
-
-    if ($request->type == 'add') {
-      $wishlist->delete();
-    } elseif ($request->type == 'remove') {
-      $wishlist->restore();
+    if ($wishlist->exists) {
+      if (!is_null($wishlist->deleted_at)) {
+        $wishlist->restore();
+      } else {
+        $wishlist->delete();
+      }
+    } else {
+      $wishlist->save();
     }
 
     return redirect()->back()->with('notification', [

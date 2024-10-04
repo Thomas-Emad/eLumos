@@ -275,16 +275,14 @@
                     <div class="text-sm text-amber-700 flex justify-between items-center gap-2">
                         <form action="{{ route('wishlist.controll', $course->id) }}" method='POST'>
                             @csrf
-                            @if (auth()->user()->wishlist()->where('course_id', $course->id)->whereNotNull('deleted_at')->first())
-                                <button type="submit"
+                            @if (auth()->user()->wishlist()->where('course_id', $course->id)->whereNull('deleted_at')->exists())
+                                <button type="submit" name="type" value="remove"
                                     class="whitespace-nowrap w-full transition duration-300 px-4 py-2 border border-amber-700 rounded-full hover:bg-amber-700 hover:text-white ">
                                     <i class="fa-solid fa-heart mr-1"></i>
                                     <span>Remove from Wishlist</span>
                                 </button>
-                                <input type="hidden" name="type" value="remove">
                             @else
-                                <input type="hidden" name="type" value="add">
-                                <button type="submit"
+                                <button type="submit" name="type" value="add"
                                     class="whitespace-nowrap w-full transition duration-300 px-4 py-2 border border-amber-700 rounded-full hover:bg-amber-700 hover:text-white ">
                                     <i class="fa-regular fa-heart mr-1"></i>
                                     <span>Add To Wishlist</span>

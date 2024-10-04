@@ -50,8 +50,22 @@
                                     <span class="text-sm">{{ $course->user->headline }}</span>
                                 </div>
                             </div>
-                            <a href="#"><i
-                                    class="fa-solid fa-heart text-lg text-gray-300 hover:text-amber-400 duration-200"></i></a>
+
+                            <form action="{{ route('wishlist.controll', $course->id) }}" method='POST'>
+                                @csrf
+                                @if (Auth::check() &&
+                                        $course->wishlist()->where('user_id', auth()->user()->id)->whereNull('deleted_at')->exists())
+                                    <button type="submit" name="type" value="remove">
+                                        <i
+                                            class="fa-solid fa-heart text-lg  text-amber-400 hover:text-gray-300 duration-200"></i>
+                                    </button>
+                                @else
+                                    <button type="submit" name="type" value="add">
+                                        <i
+                                            class="fa-solid fa-heart text-lg  text-gray-300 hover:text-amber-400 duration-200"></i>
+                                    </button>
+                                @endif
+                            </form>
                         </div>
                         <a href="{{ route('course-details', $course->id) }}"
                             class="block pb-2 text-xl font-bold hover:text-amber-600 duration-200">
@@ -71,9 +85,17 @@
                                 {{ $course->price }}$
                             </div>
                         </div>
-                        <a href="#"
-                            class="block  font-bold text-sm text-center py-1 px-2  rounded-full border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white duration-300">Add
-                            To Cart</a>
+
+                        @php
+                            $isInCart = Auth::check()
+                                ? $course->basket->exsits()
+                                : in_array($course->id, unserialize(request()->cookie('baskets')));
+                            $textButton = $isInCart ? 'Remove Cart' : 'Add To Cart';
+                        @endphp
+                        <button type="button" data-id="{{ $course->id }}" data-type='add'
+                            class="add-to-cart block w-full font-bold text-sm text-center py-1 px-2  rounded-full border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white duration-300">
+                            {{ $textButton }}
+                        </button>
                     </div>
                 @endforeach
                 {{ $courses->links() }}

@@ -50,8 +50,8 @@
     </div>
 
     {{-- Script JS --}}
-    <script src="{{ asset('assets/js/jquery.js') }}"></script>
-    @yield('js')
+    @include('layouts.scripts')
+    
 
 </body>
 

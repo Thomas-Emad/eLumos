@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StepsForwardController;
 use App\Http\Controllers\Admin\{RoleController, CourseController as DashboardCoursesController};
+use App\Http\Controllers\BasketController;
 use App\Http\Controllers\Dashboard\{CoursesController, CourseSectionsController, CourseLecturesController};
 use App\Http\Controllers\Student\{CourseStudentController, WishlistController};
 
@@ -11,6 +12,15 @@ use App\Http\Controllers\Student\{CourseStudentController, WishlistController};
 Route::view('/', 'home')->name('home');
 Route::view('privacy', 'privacy')->name('privacy');
 Route::view('terms', 'terms')->name('terms');
+
+// Baskets 
+Route::get('/baskets', [BasketController::class, 'baskets'])->name('baskets');
+Route::get('/baskets-get-data', [BasketController::class, 'getData'])->name('basket.getData');
+Route::post('/baskets-set-data', [BasketController::class, 'setData'])->name('basket.setData');
+
+// Student Controllers 
+Route::get("courses", [CourseStudentController::class, 'index'])->name("courses");
+Route::get("course-details/{id?}", [CourseStudentController::class, 'show'])->name("course-details");
 
 
 Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
@@ -60,13 +70,10 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
   });
 
   // Student Controllers 
-  Route::get("courses", [CourseStudentController::class, 'index'])->name("courses");
-  Route::get("course-details/{id?}", [CourseStudentController::class, 'show'])->name("course-details");
   Route::controller(WishlistController::class)->group(function () {
     Route::get('dashboard/wishlist', "index")->name('dashboard.wishlist');
-    Route::post('course-details/{id?}/wishlist', "actionWishlist")->name('wishlist.controll'); 
+    Route::post('course-details/{id?}/wishlist', "actionWishlist")->name('wishlist.controll');
   });
-
 
 
   // Role Pages for owner role
