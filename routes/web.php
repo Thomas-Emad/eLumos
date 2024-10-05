@@ -14,9 +14,9 @@ Route::view('privacy', 'privacy')->name('privacy');
 Route::view('terms', 'terms')->name('terms');
 
 // Baskets 
-Route::get('/baskets', [BasketController::class, 'baskets'])->name('baskets');
-Route::get('/baskets-get-data', [BasketController::class, 'getData'])->name('basket.getData');
-Route::post('/baskets-set-data', [BasketController::class, 'setData'])->name('basket.setData');
+Route::get('/cart', [BasketController::class, 'index'])->name('baskets');
+Route::get('/cart-get-data', [BasketController::class, 'getData'])->name('basket.getData');
+Route::post('/cart-set-data', [BasketController::class, 'setData'])->name('basket.setData');
 
 // Student Controllers 
 Route::get("courses", [CourseStudentController::class, 'index'])->name("courses");

@@ -275,7 +275,8 @@
                     <div class="text-sm text-amber-700 flex justify-between items-center gap-2">
                         <form action="{{ route('wishlist.controll', $course->id) }}" method='POST'>
                             @csrf
-                            @if (auth()->user()->wishlist()->where('course_id', $course->id)->whereNull('deleted_at')->exists())
+                            @if (Auth::check() &&
+                                    auth()->user()->wishlist()->where('course_id', $course->id)->whereNull('deleted_at')->exists())
                                 <button type="submit" name="type" value="remove"
                                     class="whitespace-nowrap w-full transition duration-300 px-4 py-2 border border-amber-700 rounded-full hover:bg-amber-700 hover:text-white ">
                                     <i class="fa-solid fa-heart mr-1"></i>
@@ -305,9 +306,17 @@
                         </div>
                     </div>
                     <div class="mt-2">
-                        <a href="#"
-                            class="block rounded-full py-2 px-4 bg-green-500 text-sm text-center font-bold text-white hover:bg-green-700 transition duration-300">Enroll
-                            Now</a>
+                        @if (!checkCourseInBasket($course->id))
+                            <button type="button" data-id="{{ $course->id }}"
+                                class="block w-full change-cart rounded-full py-2 px-4 bg-green-500 text-sm text-center font-bold text-white hover:bg-green-700 transition duration-300">
+                                Enroll Now
+                            </button>
+                        @else
+                            <button type="button" data-id="{{ $course->id }}"
+                                class="block w-full change-cart rounded-full py-2 px-4 text-sm text-center font-bold text-amber-700 hover:text-white border border-amber-700 hover:bg-amber-700 transition duration-300">
+                                Remove form Basket
+                            </button>
+                        @endif
                     </div>
                 </div>
                 <div class="p-4 bg-white dark:bg-gray-700 rounded-xl border border-gray-200">

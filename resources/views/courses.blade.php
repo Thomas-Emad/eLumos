@@ -87,13 +87,11 @@
                         </div>
 
                         @php
-                            $isInCart = Auth::check()
-                                ? $course->basket->exsits()
-                                : in_array($course->id, unserialize(request()->cookie('baskets')));
+                            $isInCart = checkCourseInBasket($course->id);
                             $textButton = $isInCart ? 'Remove Cart' : 'Add To Cart';
                         @endphp
-                        <button type="button" data-id="{{ $course->id }}" data-type='add'
-                            class="add-to-cart block w-full font-bold text-sm text-center py-1 px-2  rounded-full border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white duration-300">
+                        <button type="button" data-id="{{ $course->id }}"
+                            class="change-cart block w-full font-bold text-sm text-center py-1 px-2  rounded-full border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white duration-300">
                             {{ $textButton }}
                         </button>
                     </div>

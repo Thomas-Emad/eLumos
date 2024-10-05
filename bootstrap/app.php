@@ -15,10 +15,12 @@ return Application::configure(basePath: dirname(__DIR__))
     $middleware->redirectGuestsTo(fn (Request $request) => route('join'));
 
     $middleware->alias([
+      'check-baskets' => \App\Http\Middleware\SyncBasketWithAuthMiddleware::class,
       'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
       'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
       'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
       'step-forward' => \App\Http\Middleware\StepForwardMiddleware::class
+
     ]);
   })
   ->withExceptions(function (Exceptions $exceptions) {

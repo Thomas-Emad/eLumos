@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserTags extends Model
 {
-    use HasFactory;
+  use HasFactory;
 
-    protected $timestamps = false;
+  protected $timestamp = false;
 
-    protected $fillable = [
-        'user_id',
-        'tag_id',
-    ];
+  protected $fillable = [
+    'user_id',
+    'tag_id',
+  ];
 }

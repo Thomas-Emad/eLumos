@@ -4,7 +4,7 @@
 <script>
     // get basket after load page 2s
     $(document).ready(() => {
-        setBasket('.add-to-cart');
+        setBasket('.change-cart');
         setTimeout(() => {
             getBasket();
         }, 2000);
