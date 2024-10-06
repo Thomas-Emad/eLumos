@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\BasketCoursesResource;
-use App\Models\Basket;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +18,8 @@ class BasketController extends Controller
   public function index()
   {
     $baskets = Auth::check() ? $this->getAuthBasket() : $this->getCookiesBasket();
-    return view('basket', compact('baskets'));
+    $courses = Course::with(['lectures', 'user'])->where('status', 'active')->whereIn('id', $baskets)->select('id', 'title', 'price', 'level', 'mockup', 'user_id')->get();
+    return view('basket', compact('courses'));
   }
 
   /**
@@ -68,5 +68,21 @@ class BasketController extends Controller
     } else {
       return response()->json($jsonResponse)->cookie('baskets', serialize($baskets), 60 * 24 * 6);
     }
+  }
+
+  /**
+   * Destroy the specified resource in storage.
+   *
+   * @param  string  $id
+   * @return \Illuminate\Http\RedirectResponse
+   */
+  public function destory(string $id)
+  {
+    Auth::user()->baskets()->where('course_id', $id)->delete();
+
+    return redirect()->back()->with('notification', [
+      'type' => 'success',
+      'message' => 'Course removed successfully from Your Cart..'
+    ]);
   }
 }

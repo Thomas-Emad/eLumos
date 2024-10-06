@@ -137,8 +137,9 @@
                                 {{ 1 }}
                             </td>
                             <td class="px-6 py-4">
-                                <img src="{{ $course->mockup ?? asset('assets/images/course.png') }}" alt="photo course"
-                                    class="w-12 h-8 rounded-xl">
+                                <img src="{{ !is_null($course->mockup) ? json_decode($course->mockup)->url : '' }}"
+                                    onerror="this.onerror=null;this.src='{{ asset('assets/images/course.png') }}';"
+                                    alt="photo course" class="w-12 h-8 rounded-xl">
                             </td>
                             <th scope="row"
                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">

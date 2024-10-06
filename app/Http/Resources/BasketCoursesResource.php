@@ -17,7 +17,7 @@ class BasketCoursesResource extends JsonResource
     return [
       'id' => $this->id,
       'title' => $this->title,
-      'image' => $this->mockup,
+      'image' => !is_null($this->mockup) ? json_decode($this->mockup)->url : '',
       'price' => $this->price,
     ];
   }

@@ -54,7 +54,7 @@ class CourseLecturesController extends Controller
             'course_id' => $section->course_id,
             'title' => $request->title,
             'video' => $videoJson ?? null,
-            'video_duartion' => json_decode($videoJson)->duration ?? null,
+            'video_duartion' => isset($videoJson) ? json_decode($videoJson)->duration : null,
             'content' => $request->content ?? null,
             'order_sort' => $section->lectures()->count() + 1
           ]);
@@ -64,7 +64,6 @@ class CourseLecturesController extends Controller
           }
 
           return response()->json([
-            'tst' => $videoJson,
             'section' => new SectionsCourseResource($section->get()->last()),
             'notification' => [
               'type' => 'success',

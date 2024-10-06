@@ -17,6 +17,7 @@ Route::view('terms', 'terms')->name('terms');
 Route::get('/cart', [BasketController::class, 'index'])->name('baskets');
 Route::get('/cart-get-data', [BasketController::class, 'getData'])->name('basket.getData');
 Route::post('/cart-set-data', [BasketController::class, 'setData'])->name('basket.setData');
+Route::delete('/cart/destory/{id}', [BasketController::class, 'destory'])->name('basket.destory');
 
 // Student Controllers 
 Route::get("courses", [CourseStudentController::class, 'index'])->name("courses");

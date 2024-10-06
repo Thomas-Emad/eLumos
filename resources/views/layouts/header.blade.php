@@ -208,10 +208,9 @@
                 <div class="flex gap-4 border-b border-b-gray-200 py-2">
                     <p class="text-gray-400">Your cart is empty</p>
                 </div>
-
             </div>
 
-            <a href="#" class="inline-block   text-sm p-2 w-full bg-gray-50">
+            <a href="{{ route('baskets') }}" class="inline-block text-sm p-2 w-full bg-gray-50">
                 <span
                     class="inline-block w-full  p-2  text-green-600 border border-green-600 hover:text-white hover:bg-green-600 transition duration-300 rounded-xl ">
                     Open Cart
