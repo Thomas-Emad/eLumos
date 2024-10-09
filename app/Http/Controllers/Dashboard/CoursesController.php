@@ -5,21 +5,16 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Http\Resources\CoursesDashboardResource;
-use App\Http\Traits\UploadAttachmentTrait;
-use App\Http\Traits\UpdateStepsStatusTrait;
+use App\Http\Traits\CoursesUpdateTrait;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Validation\Rules\File;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
-
-
 
 class CoursesController extends Controller implements HasMiddleware
 {
-  use UploadAttachmentTrait, UpdateStepsStatusTrait;
+  use CoursesUpdateTrait;
 
   protected array $getStatus = [
     'published' => ['active'],
@@ -55,6 +50,12 @@ class CoursesController extends Controller implements HasMiddleware
     return view('dashboard.courses', ['countCourses' => $countCourses]);
   }
 
+  /**
+   * Return the courses of the user according to the type given in the request
+   *
+   * @param string $type The type of courses to retrieve. It can be 'published', 'draft' or 'pending'
+   * @return JsonResponse The courses of the user with the given type
+   */
   public function getCourses(): JsonResponse
   {
     if (!request()->ajax()) {
@@ -65,7 +66,7 @@ class CoursesController extends Controller implements HasMiddleware
       // Cache Courses
       $type = in_array(request()->input('type'), array_keys($this->getStatus)) ? request()->input('type') : 'published';
 
-      $courses = Cache::remember("courses.$type", 60 * 60 * 24 * 30, function () use ($type) {
+      $courses = Cache::remember("courses.$type." . auth()->id(), 60 * 60 * 24 * 30, function () use ($type) {
         $courses = Course::with('user')->where('user_id', auth()->user()->id)
           ->whereIn('status', $this->getStatus[$type])
           ->paginate(10);
@@ -170,101 +171,6 @@ class CoursesController extends Controller implements HasMiddleware
       '6' => self::stepSixUpdate($request, $course),
       default => abort(404),
     };
-  }
-
-  protected static function stepOneUpdate(Request $request, Course $course)
-  {
-    $validated =  $request->validate([
-      'title' => 'required|min:10|max:50',
-      'headline' => 'required|min:50|max:255',
-      'description' => 'required|min:50|max:1000',
-      'language' => 'required|exists:languages,id',
-      'tags' => 'required|array',
-      'tags.*' => 'required|exists:tags,id',
-    ]);
-
-    $course->update($validated);
-    static::updateStepsStatusWithIncrementStep('stepOne', $course);
-
-    return redirect()->route('dashboard.course.edit', ['course' => $course->id, 'step' => $request->input('step') + 1])->with('success', 'Course updated successfully');
-  }
-
-  protected static function stepTwoUpdate(Request $request, Course $course)
-  {
-    $request->validate([
-      'mockup' => ['required', File::image()->max(2 * 1024)],
-      'video-persentation' => ['required', File::types(['mp4'])->max(5 * 1024)],
-    ]);
-
-    // delete old attachments
-    if ($course->mockup) {
-      Cloudinary::destroy(json_decode($course->image)->public_id, ['resource_type' => 'image']);
-      Cloudinary::destroy(json_decode($course->preview_video)->public_id, ['resource_type' => 'video']);
-    }
-    $imageJson = static::uploadAttachment($request->file('mockup'), 'images', 'image');
-    $videoPresentationJson = static::uploadVideo($request->file('video-persentation'), 'videos', 'video');
-
-    $course->update([
-      'mockup' => $imageJson,
-      'preview_video' => $videoPresentationJson,
-    ]);
-
-    static::updateStepsStatusWithIncrementStep('stepTwo', $course);
-
-    return redirect()->route('dashboard.course.edit', ['course' => $course->id, 'step' => $request->input('step') + 1])->with('success', 'Course updated successfully');
-  }
-
-  protected static function stepThreeUpdate(Request $request, Course $course)
-  {
-    $request->validate([
-      'learn' => ['required', 'min:50', 'max:2000'],
-      'requirements' => ['required', 'min:50', 'max:2000'],
-      'level' => ['required', 'in:beginner,intermediate,advanced']
-    ]);
-
-    $course->update($request->only('learn', 'requirements', 'level'));
-
-    static::updateStepsStatusWithIncrementStep('stepThree', $course);
-
-    return redirect()->route('dashboard.course.edit', ['course' => $course->id, 'step' => $request->input('step') + 1])->with('success', 'Course updated successfully');
-  }
-  protected static function stepFiveUpdate(Request $request, Course $course)
-  {
-    $request->validate([
-      'message-before-start' => ['required', 'min:50', 'max:2000'],
-      'message-complete' => ['required', 'min:50', 'max:2000'],
-    ]);
-
-    $message = json_encode([
-      'before_start' => $request->input('message-before-start'),
-      'complete' => $request->input('message-complete'),
-    ]);
-
-    $course->update([
-      'message' => $message
-    ]);
-
-    static::updateStepsStatusWithIncrementStep('stepFive', $course);
-
-    return redirect()->route('dashboard.course.edit', ['course' => $course->id, 'step' => $request->input('step') + 1])->with('success', 'Course updated successfully');
-  }
-  protected static function stepSixUpdate(Request $request, Course $course)
-  {
-    if ($course->steps == 6) {
-      $request->validate([
-        'price' => ['required', 'decimal:1,2', 'min:0.0', 'max:10000.0'],
-      ]);
-
-      $course->update([
-        'price' => $request->price,
-        'status' => 'pending'
-      ]);
-
-      static::updateStepsStatusWithIncrementStep('stepSix', $course);
-      return redirect()->route('dashboard.courses')->with('success', 'The course has been sent for review, please wait for it.');
-    }
-
-    return redirect()->back();
   }
 
   /**

@@ -4,19 +4,18 @@
 @section('content-dashboard')
     <div class="container mx-auto min-h-auto-xl p-4 rounded-xl border border-gray-200 bg-white dark:bg-gray-700">
         <h2 class="font-bold text-xl mb-2 border-b border-gray-200 pb-2">Enrolled Courses</h2>
-        <nav class="flex gap-x-2" aria-label="Tabs" role="tablist" aria-orientation="horizontal">
-            <button type="button" class="py-2 px-4 rounded-xl text-white bg-amber-500 hs-tab-active:bg-amber-700 active"
-                id="published-item" aria-selected="true" data-hs-tab="#published" aria-controls="published" role="tab"
+        <nav class="flex gap-x-2">
+            <button type="button"
+                class="tab-courses py-2 px-4 rounded-xl text-white bg-amber-500 hs-tab-active:bg-amber-700 active"
                 data-type-courses='published'>
                 Published ({{ $countCourses['published'] }})
             </button>
-            <button type="button" class="py-2 px-4 rounded-xl text-white bg-amber-500 hs-tab-active:bg-amber-700"
-                id="pending-item" aria-selected="false" data-hs-tab="#pending" aria-controls="pending" role="tab"
+            <button type="button" class="tab-courses py-2 px-4 rounded-xl text-white bg-amber-500 hs-tab-active:bg-amber-700"
                 data-type-courses='pending'>
                 Pending ({{ $countCourses['pending'] }})
             </button>
-            <button type="button" class="py-2 px-4 rounded-xl text-white bg-amber-500 hs-tab-active:bg-amber-700"
-                id="draft-item" aria-selected="false" data-hs-tab="#draft" aria-controls="draft" role="tab"
+            <button type="button"
+                class="tab-courses py-2 px-4 rounded-xl text-white bg-amber-500 hs-tab-active:bg-amber-700"
                 data-type-courses='draft'>
                 Draft ({{ $countCourses['draft'] }})
             </button>
@@ -35,27 +34,14 @@
                 </svg>
                 <span class="sr-only">Loading...</span>
             </div>
-            <div id="published" role="tabpanel" aria-labelledby="published-item-1">
+            <div>
                 <div
                     class="courses grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4 mt-2 text-gray-800 dark:text-gray-100">
 
                 </div>
                 <div class="message text-center font-bold text-xl italic text-gray-500"></div>
             </div>
-            <div id="pending" class="hidden" role="tabpanel" aria-labelledby="pending-item">
-                <div
-                    class="courses grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4 mt-4 text-gray-800 dark:text-gray-100">
 
-                </div>
-                <div class="message text-center font-bold text-xl italic text-gray-500"></div>
-
-            </div>
-            <div id="draft" class="hidden" role="tabpanel" aria-labelledby="draft-item">
-                <div
-                    class="courses grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4 mt-4 text-gray-800 dark:text-gray-100">
-                </div>
-                <div class="message text-center font-bold text-xl italic text-gray-500"></div>
-            </div>
 
             <div class="pagination mt-4 flex justify-end">
 
@@ -99,7 +85,7 @@
             getCoursesByType(typeCourses, pageCourses);
 
             // Get Courses when open tab by his type
-            $('[data-type-courses]').each(function() {
+            $('.tab-courses').each(function() {
                 $(this).on('click', function() {
                     var typeTab = $(this).data('type-courses');
                     if (typeTab !== typeCourses) {
@@ -114,15 +100,15 @@
             function getCoursesByType(typeCourses, pageCourses = pageCourses) {
                 // Show Loader, initialize courses and message content
                 $('.loader-courses').removeClass('hidden');
-                $(`#${typeCourses} .courses`).empty();
-                $(`#${typeCourses} .message`).empty();
+                $(`.courses`).empty();
+                $(`.message`).empty();
                 $('.pagination').empty();
 
                 $.ajax({
                     url: `{{ route('dashboard.courses.show') }}?type=${typeCourses}&page=${pageCourses}`,
                     type: 'GET',
                     success: function(response) {
-                        buildCoursesHTML(response, typeCourses);
+                        buildCoursesHTML(response);
                         $('.loader-courses').addClass('hidden');
                     }
                 });
@@ -140,13 +126,13 @@
             }
 
             // Display Courses
-            function buildCoursesHTML(response, typeCourses) {
+            function buildCoursesHTML(response) {
                 if (response.count > 0) {
                     response.courses.map((course) => {
                         let editRoute = `{{ route('dashboard.course.edit', ':id') }}`
                             .replace(':id', course.data.id);
 
-                        $(`#${typeCourses} .courses`).append(`
+                        $(`.courses`).append(`
               <div class="p-2 bg-white dark:bg-gray-600  border border-gray-200 rounded-xl">
                   <a href="{{ route('course-details') }}" class="block rounded-xl overflow-hidden">
                       <img src="${course.data.mockup ? `${course.data.mockup}` : `{{ asset('assets/images/course.png') }}` }"
@@ -208,7 +194,7 @@
                         customizeDeleteCourse();
                     }
                 } else {
-                    $(`#${typeCourses} .message`).append(`
+                    $(`.message`).append(`
                   <p>You Dosen't Have Any Course</p>
               `);
                 }

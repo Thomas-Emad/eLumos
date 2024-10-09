@@ -27,8 +27,13 @@
                 <div class="bg-white p-4 rounded-xl shadow-sm">
                     <p class="font-bold">Total</p>
                     <p class="text-amber-800 font-bold text-2xl my-2">{{ $courses->sum('price') }}$</p>
-                    <a href="#" @disabled($courses->count() == 0)
-                        class="block w-full bg-amber-600 text-center text-white font-bold p-2 rounded-xl hover:bg-amber-800 duration-300 @if ($courses->count() == 0) bg-gray-600 @endif">Checkout</a>
+                    <form action="{{route('checkout.saveCourses')}}" method='POST'>
+                      @csrf
+                      <button type="submit" @disabled($courses->count() == 0)
+                      class="block w-full bg-amber-600 text-center text-white font-bold p-2 rounded-xl hover:bg-amber-800 duration-300 @if ($courses->count() == 0) bg-gray-600 @endif">
+                        Checkout
+                      </button>
+                    </form> 
                     <hr class="my-4">
                     <p class="font-bold">Promotions</p>
                     <div class="flex flex-row  text-sm">

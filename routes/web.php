@@ -2,10 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\StepsForwardController;
 use App\Http\Controllers\Admin\{RoleController, CourseController as DashboardCoursesController};
-use App\Http\Controllers\BasketController;
-use App\Http\Controllers\Dashboard\{CoursesController, CourseSectionsController, CourseLecturesController};
+use App\Http\Controllers\{StepsForwardController, BasketController, CheckoutController};
+use App\Http\Controllers\Dashboard\{CoursesController, CourseSectionsController, CourseLecturesController, CoursesEnrolledController};
 use App\Http\Controllers\Student\{CourseStudentController, WishlistController};
 
 // Basic Pages
@@ -67,7 +66,11 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     Route::view('/', 'dashboard.home')->name('index');
     Route::view('/profile/{id?}', 'dashboard.profile')->name('profile');
 
-    Route::view('/courses-list', 'dashboard.courses-list')->name('courses-list');
+    // Course Pages for Student Courses
+    Route::controller(CoursesEnrolledController::class)->group(function () {
+      Route::get('/courses-list',  'index')->name('courses-list');
+      Route::get('/courses-list/show/courses/{type?}',  'getCourses')->name('courses-list.show');
+    });
   });
 
   // Student Controllers 
@@ -75,6 +78,9 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     Route::get('dashboard/wishlist', "index")->name('dashboard.wishlist');
     Route::post('course-details/{id?}/wishlist', "actionWishlist")->name('wishlist.controll');
   });
+
+  // CheckOut Courses
+  Route::post('/checkout', [CheckoutController::class, 'saveCourses'])->name('checkout.saveCourses');
 
 
   // Role Pages for owner role
@@ -88,7 +94,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
   // Course Pages for Admin
   Route::controller(DashboardCoursesController::class)->group(function () {
     Route::get('dashboard/admin/courses', 'index')->name('dashboard.admin.courses');
-    Route::post('dashboard/admin/courses/review-course', 'reviewStatusCourse')->name('dashboard.admin.courses.review-course');
+    Route::post('dashboard/admin/courses', 'reviewStatusCourse')->name('dashboard.admin.courses.review-course');
   });
 });
 

@@ -30,7 +30,9 @@ class BasketController extends Controller
   public function getData()
   {
     $baskets = Auth::check() ? $this->getAuthBasket() : $this->getCookiesBasket();
-    $courses = Course::whereIn('id', $baskets)->get();
+    $courses = Course::where('status', 'active')
+      ->whereIn('id', $baskets)->select('id', 'title', 'price', 'mockup')->get();
+
     return response()->json([
       'courses' => BasketCoursesResource::collection($courses)
     ]);

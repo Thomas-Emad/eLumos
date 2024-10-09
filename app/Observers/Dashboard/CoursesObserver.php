@@ -12,7 +12,7 @@ class CoursesObserver
    */
   public function created(Course $course): void
   {
-    Cache::forget("courses.draft");
+    Cache::forget("courses.draft." . auth()->id());
   }
 
   /**
@@ -20,7 +20,9 @@ class CoursesObserver
    */
   public function updated(Course $course): void
   {
-    Cache::forget("courses.draft");
+    Cache::forget("courses.draft." . auth()->id());
+    Cache::forget("courses.pending." . auth()->id());
+    Cache::forget("courses.published." . auth()->id());
   }
 
   /**
@@ -28,7 +30,7 @@ class CoursesObserver
    */
   public function deleted(Course $course): void
   {
-    Cache::forget("courses.draft");
+    Cache::forget("courses.draft." . auth()->id());
   }
 
   /**

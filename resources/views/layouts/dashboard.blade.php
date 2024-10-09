@@ -44,35 +44,12 @@
                             <span>My Profile</span>
                         </a>
                     </li>
-                    @hasrole('student')
-                        <li><a href="{{ route('dashboard.courses-list') }}"
-                                class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.courses-list')) text-amber-600 @endif hover:text-amber-600 duration-200">
-                                <i class="fa-solid fa-graduation-cap"></i>
-                                <span>Enrolled Courses</span>
-                            </a>
-                        </li>
-                    @endhasrole
-                    @haspermission('roles')
-                        <li><a href="{{ route('roles.index') }}"
-                                class="mt-2 flex items-center gap-2 @if (Route::is('roles.index')) text-amber-600 @endif hover:text-amber-600 duration-200">
-                                <i class="fa-solid fa-user-gear"></i>
-                                <span>Roles</span>
-                            </a>
-                        </li>
-                    @endhaspermission
-                    @haspermission('control-courses')
-                        <hr class="mx-6 my-1">
-                        <li class="flex justify-between items-center gap-2">
-                            <a href="{{ route('dashboard.admin.courses') }}"
-                                class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.admin.courses')) text-amber-600 @endif hover:text-amber-600 duration-200">
-                                <i class="fa-solid fa-graduation-cap"></i>
-                                <span>Courses</span>
-                            </a>
-                            <span
-                                class="bg-gray-600/70 px-2 py-1 rounded-xl text-xs text-white">({{ \App\Models\Course::where('status', 'pending')->count() }})</span>
-                        </li>
-                        <hr class="mx-6 my-1">
-                    @endhaspermission
+                    <li><a href="{{ route('dashboard.courses-list') }}"
+                            class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.courses-list')) text-amber-600 @endif hover:text-amber-600 duration-200">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>Enrolled Courses</span>
+                        </a>
+                    </li>
                     <li>
                         <a href="{{ route('dashboard.wishlist') }}"
                             class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.wishlist')) text-amber-600 @endif hover:text-amber-600 duration-200">
@@ -110,20 +87,48 @@
                             <span>Support Tickets</span>
                         </a>
                     </li> --}}
+                    @haspermission('instructors-control-courses')
+                        <div>
+                            <hr class="mx-6 my-4">
+                            <h2 class="font-bold text-gray-900 text-lg dark:text-gray-50">Instructor</h2>
+                            <li><a href="{{ route('dashboard.courses') }}"
+                                    class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.courses'))  @endif hover:text-amber-600 duration-200">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                    <span>My Courses</span>
+                                </a>
+                            </li>
+                            <hr class="mx-6 my-4">
+                        </div>
+                    @endhaspermission
+                    <div>
+                        @can(['roles', 'control-courses'])
+                            <hr class="mx-6 my-4">
+                            <h2 class="font-bold text-gray-900 text-lg dark:text-gray-50">Mangement</h2>
+                        @endcan
+                        @haspermission('roles')
+                            <li><a href="{{ route('roles.index') }}"
+                                    class="mt-2 flex items-center gap-2 @if (Route::is('roles.index')) text-amber-600 @endif hover:text-amber-600 duration-200">
+                                    <i class="fa-solid fa-user-gear"></i>
+                                    <span>Roles</span>
+                                </a>
+                            </li>
+                        @endhaspermission
+                        @haspermission('control-courses')
+                            <li class="flex justify-between items-center gap-2">
+                                <a href="{{ route('dashboard.admin.courses') }}"
+                                    class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.admin.courses')) text-amber-600 @endif hover:text-amber-600 duration-200">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                    <span>Courses</span>
+                                </a>
+                                <span
+                                    class="bg-gray-600/70 px-2 py-1 rounded-xl text-xs text-white">({{ \App\Models\Course::where('status', 'pending')->count() }})</span>
+                            </li>
+                        @endhaspermission
+                        @can(['roles', 'control-courses'])
+                            <hr class="mx-6 my-4">
+                        @endcan
+                    </div>
                 </ul>
-                @haspermission('instructors-control-courses')
-                    <hr class="mx-6 my-4">
-                    <h2 class="font-bold text-gray-900 text-lg dark:text-gray-50">Instructor</h2>
-                    <ul class="mt-2 text-gray-800 dark:text-gray-300">
-                        <li><a href="{{ route('dashboard.courses') }}"
-                                class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.courses'))  @endif hover:text-amber-600 duration-200">
-                                <i class="fa-solid fa-graduation-cap"></i>
-                                <span>My Courses</span>
-                            </a>
-                        </li>
-                    </ul>
-                @endhaspermission
-                <hr class="mx-6 my-4">
                 <h2 class="font-bold text-gray-900 text-lg dark:text-gray-50">Account Settings</h2>
                 <ul class="mt-2 text-gray-800 dark:text-gray-300">
                     <li><a href="#" class="mt-2 flex items-center gap-2 hover:text-amber-600 duration-200">
