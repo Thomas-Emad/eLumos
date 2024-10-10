@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Dashboard\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\CoursesEnrolled;
@@ -34,7 +34,7 @@ class CoursesEnrolledController extends Controller
       }
     }
 
-    return view('dashboard.courses-list', ['countCourses' => $countCourses]);
+    return view('pages.dashboard.student.courses-list', ['countCourses' => $countCourses]);
   }
 
   public function getCourses()
@@ -68,5 +68,13 @@ class CoursesEnrolledController extends Controller
         'last_page' => $courses->lastPage(),
       ],
     ]);
+  }
+
+  public function show(string $id = null)
+  {
+
+    // $course = CoursesEnrolled::with(['user', 'course'])->select('course_id', 'user_id', 'progress_lectures')->where('id', $id)->firstOrFail();
+
+    return view('pages.dashboard.student.courses.playlist');
   }
 }

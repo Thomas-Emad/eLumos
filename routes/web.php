@@ -1,26 +1,52 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\{RoleController, CourseController as DashboardCoursesController};
-use App\Http\Controllers\{StepsForwardController, BasketController, CheckoutController};
-use App\Http\Controllers\Dashboard\{CoursesController, CourseSectionsController, CourseLecturesController, CoursesEnrolledController};
-use App\Http\Controllers\Student\{CourseStudentController, WishlistController};
+use App\Http\Controllers\Dashboard\Admin\{RoleController, CourseController as DashboardCoursesController};
+use App\Http\Controllers\{StepsForwardController};
+use App\Http\Controllers\Dashboard\Instructor\{CoursesController, CourseSectionsController, CourseLecturesController};
+use App\Http\Controllers\Dashboard\Student\{CoursesEnrolledController};
+use App\Http\Controllers\Student\{CourseStudentController, BasketController, CheckoutController, WishlistController};
+
+
+
 
 // Basic Pages
-Route::view('/', 'home')->name('home');
-Route::view('privacy', 'privacy')->name('privacy');
-Route::view('terms', 'terms')->name('terms');
+Route::view('/', 'pages.home')->name('home');
+Route::view('privacy', 'pages.privacy')->name('privacy');
+Route::view('terms', 'pages.terms')->name('terms');
 
-// Baskets 
-Route::get('/cart', [BasketController::class, 'index'])->name('baskets');
-Route::get('/cart-get-data', [BasketController::class, 'getData'])->name('basket.getData');
-Route::post('/cart-set-data', [BasketController::class, 'setData'])->name('basket.setData');
-Route::delete('/cart/destory/{id}', [BasketController::class, 'destory'])->name('basket.destory');
 
+/* *******************Student************************* */
 // Student Controllers 
 Route::get("courses", [CourseStudentController::class, 'index'])->name("courses");
 Route::get("course-details/{id?}", [CourseStudentController::class, 'show'])->name("course-details");
+
+// Wishlist 
+Route::controller(WishlistController::class)->group(function () {
+  Route::get('dashboard/wishlist', "index")->name('dashboard.wishlist');
+  Route::post('course-details/{id?}/wishlist', "actionWishlist")->name('wishlist.controll');
+});
+
+// Baskets 
+Route::controller(BasketController::class)->group(function () {
+  Route::get('/cart',  'index')->name('baskets');
+  Route::get('/cart-get-data', 'getData')->name('basket.getData');
+  Route::post('/cart-set-data', 'setData')->name('basket.setData');
+  Route::delete('/cart/destory/{id}', 'destory')->name('basket.destory');
+});
+
+Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
+  // Checkout
+  Route::post('/checkout', [CheckoutController::class, 'saveCourses'])->name('checkout.saveCourses');
+
+  // Course Pages for Student Courses
+  Route::controller(CoursesEnrolledController::class)->group(function () {
+    Route::get('/courses-list',  'index')->name('courses-list');
+    Route::get('/courses-list/show/courses/{type?}',  'getCourses')->name('courses-list.show');
+    Route::get('/course/{id?}/show',  'show')->name('student.show');
+  });
+});
+
 
 
 Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
@@ -32,57 +58,26 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
 
   // Check From Steps Forward to get executed information
   Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
-    // Course For Admin
-    Route::controller(CoursesController::class)->group(function () {
-      Route::get('/courses', 'index')->name('courses');
-      Route::get('/add-course',  'create')->name('add-course');
-      Route::post('/add-course',  'store')->name('add-course.store');
-      Route::get('/course/{course}/edit',  'edit')->name('course.edit');
-      Route::patch('/course/{course}/update',  [CoursesController::class, 'update'])->name('courses.update');
-      Route::delete('/course/destroy',  [CoursesController::class, 'destroy'])->name('courses.destroy');
-    });
-    Route::prefix('api')->group(function () {
-      Route::get('/show/courses/{type?}',  [CoursesController::class, 'getCourses'])->name('courses.show');
+    Route::view('/', 'pages.dashboard.home')->name('index');
+    Route::view('/profile/{id?}', 'pages.dashboard.profile')->name('profile');
 
-      // Api CRUD Operations for Course Sections
-      Route::put('/course/sections/changeSortSection', [CourseSectionsController::class, 'changeSortSection'])->name('course.sections.changeSortSection');
-      Route::apiResource('/course/sections', CourseSectionsController::class)->names([
-        'index' => 'course.sections.index',
-        'store' => 'course.sections.store',
-        'update' => 'course.sections.update',
-        'destroy' => 'course.sections.destroy',
-      ]);
 
-      // Api CRUD Operations for Course Lectures
-      Route::apiResource('/course/lectures', CourseLecturesController::class)->names([
-        'index' => 'course.lectures.index',
-        'store' => 'course.lectures.store',
-        'show' => 'course.lectures.show',
-        'destroy' => 'course.lectures.destroy',
-      ]);
-      Route::put('/course/lectures/update', [CourseLecturesController::class, 'update'])->name('course.lectures.update-test');
-    });
+    /* *******************instructor************************* */
+    // instructor Controllers
+    Route::resource('/courses', CoursesController::class)->names('instructor.courses');
+    Route::get('/api/courses/show/{type?}',  [CoursesController::class, 'getCourses'])->name('api.instructor.courses.show');
 
-    Route::view('/', 'dashboard.home')->name('index');
-    Route::view('/profile/{id?}', 'dashboard.profile')->name('profile');
+    // Api CRUD Operations for Course Sections
+    Route::apiResource('/api/courses/sections', CourseSectionsController::class)->names('api.instructor.courses.sections');
+    Route::put('/api/courses/sections/change-sort-section', [CourseSectionsController::class, 'changeSortSection'])->name('api.instructor.courses.sections.changeSortSection');
 
-    // Course Pages for Student Courses
-    Route::controller(CoursesEnrolledController::class)->group(function () {
-      Route::get('/courses-list',  'index')->name('courses-list');
-      Route::get('/courses-list/show/courses/{type?}',  'getCourses')->name('courses-list.show');
-    });
+    // Api CRUD Operations for Course Lectures
+    Route::apiResource('/api/courses/lectures', CourseLecturesController::class)->names('api.instructor.courses.lectures');;
   });
 
-  // Student Controllers 
-  Route::controller(WishlistController::class)->group(function () {
-    Route::get('dashboard/wishlist', "index")->name('dashboard.wishlist');
-    Route::post('course-details/{id?}/wishlist', "actionWishlist")->name('wishlist.controll');
-  });
-
-  // CheckOut Courses
-  Route::post('/checkout', [CheckoutController::class, 'saveCourses'])->name('checkout.saveCourses');
 
 
+  /* *******************Admin************************* */
   // Role Pages for owner role
   Route::resource('dashboard/roles', RoleController::class);
   Route::controller(RoleController::class)->group(function () {
@@ -97,17 +92,6 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     Route::post('dashboard/admin/courses', 'reviewStatusCourse')->name('dashboard.admin.courses.review-course');
   });
 });
-
-
-
-
-// Route::get('dashboard/{page?}', function ($page = 'home') {
-//     if (view()->exists('dashboard.' . $page)) {
-//         return  view('dashboard.' . $page);
-//     } else {
-//         return abort(404);
-//     }
-// })->name('dashboard');
 
 
 

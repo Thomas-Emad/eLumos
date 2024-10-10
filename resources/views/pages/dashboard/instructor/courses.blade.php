@@ -51,7 +51,7 @@
     </div>
 
     <x-modal-info id="delete-course-modal">
-        <form action="{{ route('dashboard.courses.destroy', 'destroy') }}" method="POST">
+        <form action="{{ route('dashboard.instructor.courses.destroy', 'destroy') }}" method="POST">
             @csrf
             @method('DELETE')
             <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true"
@@ -105,7 +105,7 @@
                 $('.pagination').empty();
 
                 $.ajax({
-                    url: `{{ route('dashboard.courses.show') }}?type=${typeCourses}&page=${pageCourses}`,
+                    url: `{{ route('dashboard.api.instructor.courses.show') }}?type=${typeCourses}&page=${pageCourses}`,
                     type: 'GET',
                     success: function(response) {
                         buildCoursesHTML(response);
@@ -129,7 +129,7 @@
             function buildCoursesHTML(response) {
                 if (response.count > 0) {
                     response.courses.map((course) => {
-                        let editRoute = `{{ route('dashboard.course.edit', ':id') }}`
+                        let editRoute = `{{ route('dashboard.instructor.courses.edit', ':id') }}`
                             .replace(':id', course.data.id);
 
                         $(`.courses`).append(`

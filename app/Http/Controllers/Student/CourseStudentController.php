@@ -5,20 +5,14 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class CourseStudentController extends Controller
 {
-
-
-
   public function index(Request $request)
   {
-
     $courses = Course::with(['user', 'wishlist'])->paginate(9);
-    return view('courses', compact('courses'));
+    return view('pages.courses', compact('courses'));
   }
-
 
 
   public function show(String $id = null)
@@ -29,6 +23,6 @@ class CourseStudentController extends Controller
       return abort(403);
     }
 
-    return view('course-details', compact('course'));
+    return view('pages.course-details', compact('course'));
   }
 }

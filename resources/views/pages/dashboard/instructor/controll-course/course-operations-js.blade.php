@@ -137,7 +137,8 @@
                 $('#loader').removeClass('hidden');
                 $.ajax({
                     type: 'GET',
-                    url: `{{ route('dashboard.course.lectures.show', '') }}/` + lectureId,
+                    url: `{{ route('dashboard.api.instructor.courses.lectures.show', '') }}/` +
+                        lectureId,
                     async: true,
                     data: {
                         _token: "{{ csrf_token() }}",
@@ -179,7 +180,7 @@
         let sections = [];
         $.ajax({
             type: 'GET',
-            url: "{{ route('dashboard.course.sections.index') }}",
+            url: "{{ route('dashboard.api.instructor.courses.sections.index') }}",
             data: {
                 course_id: "{{ $course->id ?? 0 }}",
             }
@@ -203,7 +204,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: "{{ route('dashboard.course.sections.store') }}",
+                url: "{{ route('dashboard.api.instructor.courses.sections.store') }}",
                 data: JSON.stringify(data),
                 contentType: 'application/json',
             }).done((response) => {
@@ -233,7 +234,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: "{{ route('dashboard.course.sections.update', 'section') }}",
+                url: "{{ route('dashboard.api.instructor.courses.sections.update', 'section') }}",
                 data: JSON.stringify(data),
                 contentType: 'application/json',
             }).done((data) => {
@@ -268,7 +269,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: "{{ route('dashboard.course.sections.destroy', 'section') }}",
+                url: "{{ route('dashboard.api.instructor.courses.sections.destroy', 'section') }}",
                 data: JSON.stringify(data),
                 contentType: 'application/json',
             }).done((data) => {
@@ -286,7 +287,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: "{{ route('dashboard.course.sections.changeSortSection') }}",
+                url: "{{ route('dashboard.api.instructor.courses.sections.changeSortSection') }}",
                 data: {
                     _method: "PUT",
                     _token: "{{ csrf_token() }}",
@@ -340,8 +341,8 @@
 
         function uploadLectureRequest(formData, requestType) {
             let url = requestType === 'store' ?
-                "{{ route('dashboard.course.lectures.store') }}" :
-                "{{ route('dashboard.course.lectures.update-test', 'lecture') }}";
+                "{{ route('dashboard.api.instructor.courses.lectures.store') }}" :
+                "{{ route('dashboard.api.instructor.courses.lectures.update', 'lecture') }}";
 
             // Send Request Save Lecture
             $.ajax({
@@ -387,7 +388,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: "{{ route('dashboard.course.lectures.destroy', 'lecture') }}",
+                url: "{{ route('dashboard.api.instructor.courses.lectures.destroy', 'lecture') }}",
                 data: JSON.stringify(data),
                 contentType: 'application/json',
             }).done((response) => {

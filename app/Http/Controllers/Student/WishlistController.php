@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Student;
 
-use App\Models\Wishlist;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +14,7 @@ class WishlistController extends Controller
   public function index()
   {
     $wishlists = Auth::user()->wishlist()->with('course')->withoutTrashed()->paginate(10);
-    return view('dashboard.wishlists', compact('wishlists'));
+    return view('pages.student.wishlists', compact('wishlists'));
   }
 
   /**

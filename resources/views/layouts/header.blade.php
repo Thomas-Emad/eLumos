@@ -140,7 +140,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('dashboard.add-course') }}"
+                <a href="{{ route('dashboard.instructor.courses.create') }}"
                     class="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                     <div class="font-semibold">Add New Course</div>
                     <span class="text-sm text-gray-500 dark:text-gray-400">Connect with third-party tools that

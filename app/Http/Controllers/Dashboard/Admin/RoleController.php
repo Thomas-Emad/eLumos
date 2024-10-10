@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Dashboard\Admin;
 
 use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Role;
@@ -28,7 +28,7 @@ class RoleController extends Controller implements HasMiddleware
   {
     $roles = Role::with('permissions')->paginate(10);
     $permissions = Permission::all();
-    return view('dashboard.admin.roles', compact('roles', 'permissions'));
+    return view('pages.dashboard.admin.roles', compact('roles', 'permissions'));
   }
 
   /**

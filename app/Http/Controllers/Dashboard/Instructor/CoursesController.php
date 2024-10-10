@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Dashboard\Instructor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
@@ -47,7 +47,7 @@ class CoursesController extends Controller implements HasMiddleware
       }
     }
 
-    return view('dashboard.courses', ['countCourses' => $countCourses]);
+    return view('pages.dashboard.instructor.courses', ['countCourses' => $countCourses]);
   }
 
   /**
@@ -93,7 +93,7 @@ class CoursesController extends Controller implements HasMiddleware
   public function create(): View
   {
     if (empty(request()->input('step')) || request()->input('step') == '1') {
-      return view('dashboard.instructor.course.course-operations');
+      return view('pages.dashboard.instructor.controll-course.course-operations');
     } else {
       return abort(404);
     }
@@ -134,15 +134,7 @@ class CoursesController extends Controller implements HasMiddleware
 
     $course->tags()->attach($request->tags);
 
-    return redirect()->route('dashboard.course.edit', ['course' => $course->id, 'step' => 2])->with('success', 'Course added successfully');
-  }
-
-  /**
-   * Display the specified resource.
-   */
-  public function show(string $id)
-  {
-    //
+    return redirect()->route('dashboard.instructor.courses.edit', ['course' => $course->id, 'step' => 2])->with('success', 'Course added successfully');
   }
 
   /**
@@ -155,7 +147,7 @@ class CoursesController extends Controller implements HasMiddleware
       return abort(404);
     }
 
-    return view('dashboard.instructor.course.course-operations', ['course' => $course]);
+    return view('pages.dashboard.instructor.controll-course.course-operations', ['course' => $course]);
   }
 
   /**
@@ -180,6 +172,6 @@ class CoursesController extends Controller implements HasMiddleware
   {
     $course = Course::findOrFail($request->id);
     $course->delete();
-    return redirect()->route('dashboard.courses')->with('success', 'Course deleted successfully');
+    return redirect()->route('dashboard.instructor.courses')->with('success', 'Course deleted successfully');
   }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Dashboard\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -30,7 +30,7 @@ class CourseController extends Controller
       ->with('lectures')->select('id', 'title', 'mockup', 'status', 'price')
       ->orderBy('status', 'ASC')->paginate(20);
 
-    return view('dashboard.admin.courses', compact('courses'));
+    return view('pages.dashboard.admin.courses', compact('courses'));
   }
 
   public function reviewStatusCourse(Request $request)

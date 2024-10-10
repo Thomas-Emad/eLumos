@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Student;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\BasketCoursesResource;
 use App\Models\Course;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class BasketController extends Controller
   {
     $baskets = Auth::check() ? $this->getAuthBasket() : $this->getCookiesBasket();
     $courses = Course::with(['lectures', 'user'])->where('status', 'active')->whereIn('id', $baskets)->select('id', 'title', 'price', 'level', 'mockup', 'user_id')->get();
-    return view('basket', compact('courses'));
+    return view('student.basket', compact('courses'));
   }
 
   /**

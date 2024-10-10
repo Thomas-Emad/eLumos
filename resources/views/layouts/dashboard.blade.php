@@ -23,7 +23,7 @@
                         <span class="text-gray-800 dark:text-gray-300">{{ auth()->user()->roles()->first()->name }}</span>
                     </div>
                     @haspermission('instructors-control-courses')
-                        <a href="{{ route('dashboard.add-course') }}"
+                        <a href="{{ route('dashboard.instructor.courses.create') }}"
                             class="block border border-amber-600 text-amber-600 font-bold hover:text-white hover:bg-amber-600 duration-300 text-center px-1 py-2 rounded-xl mt-2 text-sm">Add
                             New Course</a>
                     @endhaspermission
@@ -33,7 +33,7 @@
                 <h2 class="font-bold text-gray-900 text-lg dark:text-gray-50">Dashboard</h2>
                 <ul class="mt-2 text-gray-800 dark:text-gray-300">
                     <li><a href="{{ route('dashboard.index') }}"
-                            class="flex items-center gap-2 @if (Route::is('dashboard')) text-amber-600 @endif  hover:text-amber-600 duration-200">
+                            class="flex items-center gap-2 @if (Route::is('dashboard.index')) text-amber-600 @endif  hover:text-amber-600 duration-200">
                             <i class="fa-solid fa-chart-simple "></i>
                             <span>Dashboard</span>
                         </a>
@@ -91,8 +91,8 @@
                         <div>
                             <hr class="mx-6 my-4">
                             <h2 class="font-bold text-gray-900 text-lg dark:text-gray-50">Instructor</h2>
-                            <li><a href="{{ route('dashboard.courses') }}"
-                                    class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.courses'))  @endif hover:text-amber-600 duration-200">
+                            <li><a href="{{ route('dashboard.instructor.courses.index') }}"
+                                    class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.instructor.courses.index'))  @endif hover:text-amber-600 duration-200">
                                     <i class="fa-solid fa-graduation-cap"></i>
                                     <span>My Courses</span>
                                 </a>

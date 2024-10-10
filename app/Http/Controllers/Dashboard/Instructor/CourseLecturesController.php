@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Dashboard\Instructor;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\UploadAttachmentTrait;
@@ -17,14 +17,6 @@ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 class CourseLecturesController extends Controller
 {
   use UploadAttachmentTrait, UpdateStepsStatusTrait;
-
-  /**
-   * Display a listing of the resource.
-   */
-  public function index()
-  {
-    //
-  }
 
   /**
    * Store a newly created resource in storage.
