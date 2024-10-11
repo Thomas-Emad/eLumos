@@ -43,7 +43,7 @@ Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => '
   Route::controller(CoursesEnrolledController::class)->group(function () {
     Route::get('/courses-list',  'index')->name('courses-list');
     Route::get('/courses-list/show/courses/{type?}',  'getCourses')->name('courses-list.show');
-    Route::get('/course/{id?}/show',  'show')->name('student.show');
+    Route::get('/courses-list/{course}/{lecture?}',  'show')->name('student.show');
   });
 });
 

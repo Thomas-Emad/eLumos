@@ -16,7 +16,7 @@ class CourseLectures extends Model
     'title',
     'content',
     'video',
-    'video_duartion',
+    'video_duration',
     'order_sort'
   ];
 

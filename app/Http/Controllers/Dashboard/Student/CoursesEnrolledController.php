@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Dashboard\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\CoursesEnrolled;
+use App\Models\Course;
 use App\Http\Resources\CoursesEnrolledResource;
-
+use App\Models\CourseLectures;
 use Illuminate\Support\Facades\Cache;
 
 
@@ -70,11 +71,22 @@ class CoursesEnrolledController extends Controller
     ]);
   }
 
-  public function show(string $id = null)
+  public function show(string $course, string $lecture)
   {
+    $courseStudent = CoursesEnrolled::with(['course:id,title,mockup', 'course.sections:id,course_id,title',  'course.sections.lectures:id,section_id,title,video_duration'])
+      ->where("course_id", $course)->where('user_id', auth()->user()->id)
+      ->select('course_id')->firstOrFail();
 
-    // $course = CoursesEnrolled::with(['user', 'course'])->select('course_id', 'user_id', 'progress_lectures')->where('id', $id)->firstOrFail();
+    $contentLecture = CourseLectures::where('course_id', $course)->where('id', $lecture)
+      ->select('id', 'title', 'video', 'content')->first();
 
-    return view('pages.dashboard.student.courses.playlist');
+    $nextLecture = CourseLectures::where('course_id', $course)
+      ->where('id', '>', $contentLecture->id)->select('id')
+      ->orderBy('order_sort', 'asc')
+      ->first();
+
+    $nextLectureId = $nextLecture ? $nextLecture->id : null;
+
+    return view('pages.dashboard.student.playlist', compact('courseStudent', 'contentLecture', 'nextLectureId'));
   }
 }
