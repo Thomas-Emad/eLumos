@@ -13,6 +13,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
+use App\Http\Requests\CourseLectureRequest;
+
 
 class CourseLecturesController extends Controller
 {
@@ -21,74 +23,46 @@ class CourseLecturesController extends Controller
   /**
    * Store a newly created resource in storage.
    */
-  public function store(Request $request)
+  public function store(CourseLectureRequest $request)
   {
-    $validation =  Validator::make($request->all(), [
-      'section_id' => ['required', 'exists:course_sections,id'],
-      'title' => ['required', 'min:5', 'max:50'],
-      'content' => ['nullable', 'max:5000', 'string'],
-      'video' => ['nullable', 'max:40000', 'mimeTypes:video/mp4'],
-    ]);
+    try {
+      $section = $request->section();
 
-    if (!$validation->failed()) {
-      try {
-        $section = CourseSections::with(['course', 'lectures'])->findOrFail($request->section_id);
-
-        if ($section->lectures()->count() < 10) {
-
-          // upload video
-          if ($request->hasFile('video')) {
-            $videoJson = static::uploadVideo($request->file('video'), 'videos', 'video');
-          }
-
-          // Store data
-          $section->lectures()->create([
-            'course_id' => $section->course_id,
-            'title' => $request->title,
-            'video' => $videoJson ?? null,
-            'video_duartion' => isset($videoJson) ? json_decode($videoJson)->duration : null,
-            'content' => $request->content ?? null,
-            'order_sort' => $section->lectures()->count() + 1
-          ]);
-
-          if ($section->lectures()->count() === 3) {
-            static::updateStepsStatusWithIncrementStep('stepFour', $section->course);
-          }
-
-          return response()->json([
-            'section' => new SectionsCourseResource($section->get()->last()),
-            'notification' => [
-              'type' => 'success',
-              'message' => 'Lecture Added Successfully.'
-            ]
-          ], 200);
-        } else {
-          return response()->json([
-            'notification' => [
-              'type' => 'fail',
-              'message' => 'You Can\'t Add More Than 10 Lectures in one Section.'
-            ]
-          ], 400);
-        }
-      } catch (\Exception $e) {
-        return response()->json([
-          'notification' => [
-            'type' => 'fail',
-            'message' => 'Something Went Wrong.' . $e->getMessage()
-          ]
-        ], 400);
+      // upload video
+      if ($request->hasFile('video')) {
+        $videoJson = static::uploadVideo($request->file('video'), 'videos', 'video');
       }
-    } else {
+
+      // Store data
+      $section->lectures()->create([
+        'course_id' => $section->course_id,
+        'title' => $request->title,
+        'video' => $videoJson ?? null,
+        'video_duartion' => isset($videoJson) ? json_decode($videoJson)->duration : null,
+        'content' => $request->content ?? null,
+        'order_sort' => $section->lectures()->count() + 1
+      ]);
+
+      if ($section->lectures()->count() === 3) {
+        static::updateStepsStatusWithIncrementStep('stepFour', $section->course);
+      }
+
+      return response()->json([
+        'section' => new SectionsCourseResource($section->get()->last()),
+        'notification' => [
+          'type' => 'success',
+          'message' => 'Lecture Added Successfully.'
+        ]
+      ], 200);
+    } catch (\Exception $e) {
       return response()->json([
         'notification' => [
           'type' => 'fail',
-          'message' => "Error in verifying data (" . $validation->errors()->count() . "): " . $validation->errors()->first()
+          'message' => 'Something Went Wrong.' . $e->getMessage()
         ]
       ], 400);
     }
   }
-
-
 
   /**
    * Display the specified resource.
@@ -107,24 +81,8 @@ class CourseLecturesController extends Controller
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request)
+  public function update(CourseLectureRequest $request)
   {
-    $validator = Validator::make($request->all(), [
-      'id' => ['required', 'exists:course_lectures,id'],
-      'title' => ['required', 'min:5', 'max:49'],
-      'content' => ['nullable', 'max:5000', 'string'],
-      'video' => ['exclude_unless:video,null', 'max:40000', 'mimetypes:video/mp4'],
-    ]);
-
-    if ($validator->fails()) {
-      return response()->json([
-        'notification' =>  [
-          'type' => 'fail',
-          'message' => "Error in verifying data (" . $validator->errors()->count() . "): " . $validator->errors()->first()
-        ]
-      ], 400);
-    }
-
     $lecture = CourseLectures::findOrFail($request->id);
 
     // upload video

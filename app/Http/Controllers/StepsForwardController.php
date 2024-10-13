@@ -19,7 +19,7 @@ class StepsForwardController extends Controller
     if (
       Auth::user()->steps_forward != 'complate' || session('notification') != null
     ) {
-      return view('steps-forward.index');
+      return view('pages.steps-forward.index');
     } else {
       return redirect()->route('dashboard.index');
     }

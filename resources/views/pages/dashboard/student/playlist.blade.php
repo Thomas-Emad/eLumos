@@ -20,8 +20,8 @@
                         <h1 class="font-bold text-2xl m-0">{{ $contentLecture->title }}</h1>
                         <span class="text-sm">{{ $courseStudent->course->title }}</span>
                     </div>
-                    @if (!is_null($nextLectureId))
-                        <a href="{{ route('dashboard.student.show', ['course' => $courseStudent->course_id, 'lecture' => $nextLectureId]) }}"
+                    @if (!is_null($nextLecture))
+                        <a href="{{ route('dashboard.student.show', ['course' => $courseStudent->course_id, 'lecture' => $nextLecture->id]) }}"
                             class="rounded-lg py-2 px-4 text-white bg-amber-500 hover:bg-amber-600 duration-200">
                             Next Lecture
                         </a>
@@ -47,13 +47,29 @@
                     @foreach ($courseStudent->course->sections as $section)
                         <div class="p-2 border-b-2 border-white">
                             <h3 class="font-bold text-md mb-1">{{ $section->title }}</h3>
-
                             @foreach ($section->lectures as $lecture)
-                                <a href='@if ($contentLecture->id !== $lecture->id) {{ route('dashboard.student.show', ['course' => $courseStudent->course_id, 'lecture' => $lecture->id]) }} @else # @endif'
-                                    class="mb-1 flex gap-2 justify-between p-2 hover:bg-gray-800 duration-200 cursor-pointer rounded-lg @if ($contentLecture->id === $lecture->id) bg-amber-700 @else bg-gray-950 @endif">
-                                    <h4 class="font-bold text-sm">{{ $lecture->title }}</h4>
-                                    <span class="text-sm">{{ $lecture->video_duration }}</span>
-                                </a>
+                                @php
+                                    $isLocked = true;
+                                    if (
+                                        $contentLecture->id === $lecture->id ||
+                                        $contentLecture->order_sort + 1 >= $lecture->order_sort
+                                    ) {
+                                        $isLocked = false;
+                                    }
+                                @endphp
+                                @if ($isLocked == true)
+                                    <button type="button"
+                                        class="w-full mb-1 flex gap-2 justify-between p-2 bg-gray-400 opacity-25 hover:bg-gray-800 duration-200 cursor-pointer rounded-lg ">
+                                        <h4 class="font-bold text-sm">{{ $lecture->title }}</h4>
+                                        <span class="text-sm">{{ $lecture->video_duration }}</span>
+                                    </button>
+                                @else
+                                    <a href='@if ($contentLecture->id !== $lecture->id) {{ route('dashboard.student.show', ['course' => $courseStudent->course_id, 'lecture' => $lecture->id]) }} @else # @endif'
+                                        class="mb-1 flex gap-2 justify-between p-2 hover:bg-gray-800 duration-200 cursor-pointer rounded-lg @if ($contentLecture->id === $lecture->id) bg-amber-700 @else bg-gray-950 @endif">
+                                        <h4 class="font-bold text-sm">{{ $lecture->title }}</h4>
+                                        <span class="text-sm">{{ $lecture->video_duration }}</span>
+                                    </a>
+                                @endif
                             @endforeach
                         </div>
                     @endforeach

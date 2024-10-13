@@ -21,6 +21,12 @@ class CourseController extends Controller
     };
   }
 
+  /**
+   * Show the admin courses index page.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Contracts\View\View
+   */
   public function index(Request $request)
   {
     $filterBy =  $request->date ?? 'last_month';
@@ -33,6 +39,12 @@ class CourseController extends Controller
     return view('pages.dashboard.admin.courses', compact('courses'));
   }
 
+  /**
+   * Review Status Of Course
+   *
+   * @param \Illuminate\Http\Request $request
+   * @return \Illuminate\Http\RedirectResponse
+   */
   public function reviewStatusCourse(Request $request)
   {
     $request->validate([

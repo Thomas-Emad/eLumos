@@ -16,13 +16,7 @@
         @endif
         <div
             class="w-11/12 md:w-2/3  rounded-xl bg-white dark:bg-gray-700 border border-gray-200  dark:border-gray-200/25 p-2 my-2 mx-auto">
-            @if (Auth::user()->steps_forward == 'new')
-                @include('steps-forward.new')
-            @elseif (Auth::user()->steps_forward == 'info')
-                @include('steps-forward.info')
-            @elseif (Auth::user()->steps_forward == 'complate')
-                @include('steps-forward.complate')
-            @endif
+            @include('pages.steps-forward.' . Auth::user()->steps_forward)
         </div>
     </div>
 

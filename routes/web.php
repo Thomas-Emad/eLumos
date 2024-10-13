@@ -72,7 +72,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     Route::put('/api/courses/sections/change-sort-section', [CourseSectionsController::class, 'changeSortSection'])->name('api.instructor.courses.sections.changeSortSection');
 
     // Api CRUD Operations for Course Lectures
-    Route::apiResource('/api/courses/lectures', CourseLecturesController::class)->names('api.instructor.courses.lectures');;
+    Route::apiResource('/api/courses/lectures', CourseLecturesController::class)->names('api.instructor.courses.lectures');
   });
 
 

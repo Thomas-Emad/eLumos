@@ -409,14 +409,13 @@
                 @endif
             </div>
         @endif
-
     </div>
 
     {{-- Modals --}}
-    @include('dashboard.instructor.course.course-operations-modals')
+    @include('pages.dashboard.instructor.controll-course.course-operations-modals')
 @endsection
 @section('js')
     @if (isset($course))
-        @include('dashboard.instructor.course.course-operations-js')
+        @include('pages.dashboard.instructor.controll-course.course-operations-js')
     @endif
 @endsection

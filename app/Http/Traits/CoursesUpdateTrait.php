@@ -35,7 +35,7 @@ trait CoursesUpdateTrait
     $course->update($validated);
     static::updateStepsStatusWithIncrementStep('stepOne', $course);
 
-    return redirect()->route('dashboard.course.edit', ['course' => $course->id, 'step' => $request->input('step') + 1])->with('success', 'Course updated successfully');
+    return redirect()->route('dashboard.instructor.courses.edit', ['course' => $course->id, 'step' => $request->input('step') + 1])->with('success', 'Course updated successfully');
   }
 
 
@@ -50,14 +50,16 @@ trait CoursesUpdateTrait
   protected static function stepTwoUpdate(Request $request, Course $course)
   {
     $request->validate([
-      'mockup' => ['required', File::image()->max(2 * 1024)],
+      'mockup' => ['required', File::types(['png', 'jpg', 'jpeg'])->max(2 * 1024)],
       'video-persentation' => ['required', File::types(['mp4'])->max(5 * 1024)],
     ]);
 
     // delete old attachments
-    if ($course->mockup) {
-      Cloudinary::destroy(json_decode($course->image)->public_id, ['resource_type' => 'image']);
-      Cloudinary::destroy(json_decode($course->preview_video)->public_id, ['resource_type' => 'video']);
+    if ($request->hasFile('mockup') || $request->hasFile('video-persentation')) {
+      $imageJson = !is_null($course->image) ? json_decode($course->image)->public_id : null;
+      $videoJson = !is_null($course->preview_video) ? json_decode($course->preview_video)->public_id : null;
+      @Cloudinary::destroy($imageJson, ['resource_type' => 'image']);
+      @Cloudinary::destroy($videoJson, ['resource_type' => 'video']);
     }
     $imageJson = static::uploadAttachment($request->file('mockup'), 'images', 'image');
     $videoPresentationJson = static::uploadVideo($request->file('video-persentation'), 'videos', 'video');
@@ -69,7 +71,7 @@ trait CoursesUpdateTrait
 
     static::updateStepsStatusWithIncrementStep('stepTwo', $course);
 
-    return redirect()->route('dashboard.course.edit', ['course' => $course->id, 'step' => $request->input('step') + 1])->with('success', 'Course updated successfully');
+    return redirect()->route('dashboard.instructor.courses.edit', ['course' => $course->id, 'step' => $request->input('step') + 1])->with('success', 'Course updated successfully');
   }
 
   /**
@@ -92,7 +94,7 @@ trait CoursesUpdateTrait
 
     static::updateStepsStatusWithIncrementStep('stepThree', $course);
 
-    return redirect()->route('dashboard.course.edit', ['course' => $course->id, 'step' => $request->input('step') + 1])->with('success', 'Course updated successfully');
+    return redirect()->route('dashboard.instructor.courses.edit', ['course' => $course->id, 'step' => $request->input('step') + 1])->with('success', 'Course updated successfully');
   }
 
 
@@ -122,7 +124,7 @@ trait CoursesUpdateTrait
 
     static::updateStepsStatusWithIncrementStep('stepFive', $course);
 
-    return redirect()->route('dashboard.course.edit', ['course' => $course->id, 'step' => $request->input('step') + 1])->with('success', 'Course updated successfully');
+    return redirect()->route('dashboard.instructor.courses.edit', ['course' => $course->id, 'step' => $request->input('step') + 1])->with('success', 'Course updated successfully');
   }
 
 
