@@ -45,8 +45,8 @@
                 </div>
                 <div class="overflow-y-auto h-96">
                     @php
-                        $isLocked = false;
-                        $nextLecturelocked = false;
+                        $firstLectureOpen = true;
+                        $allowForOneTimeAfterWatched = true;
                     @endphp
                     @foreach ($courseStudent->course->sections as $section)
                         <div class="p-2 border-b-2 border-white">
@@ -54,28 +54,34 @@
 
                             @foreach ($section->lectures as $lecture)
                                 @php
-                                    $isWatched = !is_null($lecture->watchedLecture);
-
-                                    $isLocked = $isWatched || $nextLecturelocked;
-
-                                    // If the current lecture has been watched
-                                    if (!$isWatched) {
-                                        $nextLecturelocked = true;
+                                    $isOpen = true;
+                                    if (is_null($lecture->watchedLecture)) {
+                                        $isOpen = false;
+                                    }
+                                    if ($allowForOneTimeAfterWatched) {
+                                        $isOpen = true;
                                     }
                                 @endphp
-                                @if ($isLocked)
-                                    <button type="button"
-                                        class="w-full mb-1 flex gap-2 justify-between p-2 bg-gray-400 opacity-25 hover:bg-gray-800 duration-200 cursor-pointer rounded-lg ">
-                                        <h4 class="font-bold text-sm">{{ $lecture->title }}</h4>
-                                        <span class="text-sm">{{ $lecture->video_duration }}</span>
-                                    </button>
-                                @else
+                                @if ($isOpen || $firstLectureOpen)
                                     <a href='@if ($contentLecture->id !== $lecture->id) {{ route('dashboard.student.show', ['course' => $courseStudent->course_id, 'lecture' => $lecture->id]) }} @else # @endif'
                                         class="mb-1 flex gap-2 justify-between p-2 hover:bg-gray-800 duration-200 cursor-pointer rounded-lg @if ($contentLecture->id === $lecture->id) bg-amber-700 @else bg-gray-950 @endif">
                                         <h4 class="font-bold text-sm">{{ $lecture->title }}</h4>
                                         <span class="text-sm">{{ $lecture->video_duration }}</span>
                                     </a>
+                                @else
+                                    <button type="button"
+                                        class="w-full mb-1 flex gap-2 justify-between p-2 bg-gray-400 opacity-25 hover:bg-gray-800 duration-200 cursor-pointer rounded-lg ">
+                                        <h4 class="font-bold text-sm">{{ $lecture->title }}</h4>
+                                        <span class="text-sm">{{ $lecture->video_duration }}</span>
+                                    </button>
                                 @endif
+                                @php
+                                    if ($firstLectureOpen) {
+                                        $firstLectureOpen = false;
+                                    } else {
+                                        $allowForOneTimeAfterWatched = is_null($lecture->watchedLecture) ? false : true;
+                                    }
+                                @endphp
                             @endforeach
                         </div>
                     @endforeach
