@@ -29,4 +29,9 @@ class CourseLectures extends Model
   {
     return $this->belongsTo(CourseSections::class, 'section_id', 'id');
   }
+
+  public function watchedLecture()
+  {
+    return $this->hasOne(WatchedCourseLecture::class, 'lecture_id', 'id');
+  }
 }

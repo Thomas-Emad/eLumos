@@ -35,19 +35,18 @@ Route::controller(BasketController::class)->group(function () {
   Route::delete('/cart/destory/{id}', 'destory')->name('basket.destory');
 });
 
-Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
-  // Checkout
-  Route::post('/checkout', [CheckoutController::class, 'saveCourses'])->name('checkout.saveCourses');
+// Checkout
+Route::post('/checkout', [CheckoutController::class, 'saveCourses'])->name('checkout.saveCourses');
 
+Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
   // Course Pages for Student Courses
   Route::controller(CoursesEnrolledController::class)->group(function () {
     Route::get('/courses-list',  'index')->name('courses-list');
     Route::get('/courses-list/show/courses/{type?}',  'getCourses')->name('courses-list.show');
-    Route::get('/courses-list/{course}/{lecture?}',  'show')->name('student.show');
+    Route::get('/courses-list/{course}/{lecture?}',  'show')->name('student.show')
+      ->middleware('watch-course-lecture');
   });
 });
-
-
 
 Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
   // Pages steps forward
@@ -61,7 +60,6 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     Route::view('/', 'pages.dashboard.home')->name('index');
     Route::view('/profile/{id?}', 'pages.dashboard.profile')->name('profile');
 
-
     /* *******************instructor************************* */
     // instructor Controllers
     Route::resource('/courses', CoursesController::class)->names('instructor.courses');
@@ -74,8 +72,6 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     // Api CRUD Operations for Course Lectures
     Route::apiResource('/api/courses/lectures', CourseLecturesController::class)->names('api.instructor.courses.lectures');
   });
-
-
 
   /* *******************Admin************************* */
   // Role Pages for owner role

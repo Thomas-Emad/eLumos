@@ -44,20 +44,26 @@
                     <h1 class="text-2xl font-bold border-b-2 border-gray-200/20 pb-2 text-center">Your Playlist</h1>
                 </div>
                 <div class="overflow-y-auto h-96">
+                    @php
+                        $isLocked = false;
+                        $nextLecturelocked = false;
+                    @endphp
                     @foreach ($courseStudent->course->sections as $section)
                         <div class="p-2 border-b-2 border-white">
                             <h3 class="font-bold text-md mb-1">{{ $section->title }}</h3>
+
                             @foreach ($section->lectures as $lecture)
                                 @php
-                                    $isLocked = true;
-                                    if (
-                                        $contentLecture->id === $lecture->id ||
-                                        $contentLecture->order_sort + 1 >= $lecture->order_sort
-                                    ) {
-                                        $isLocked = false;
+                                    $isWatched = !is_null($lecture->watchedLecture);
+
+                                    $isLocked = $isWatched || $nextLecturelocked;
+
+                                    // If the current lecture has been watched
+                                    if (!$isWatched) {
+                                        $nextLecturelocked = true;
                                     }
                                 @endphp
-                                @if ($isLocked == true)
+                                @if ($isLocked)
                                     <button type="button"
                                         class="w-full mb-1 flex gap-2 justify-between p-2 bg-gray-400 opacity-25 hover:bg-gray-800 duration-200 cursor-pointer rounded-lg ">
                                         <h4 class="font-bold text-sm">{{ $lecture->title }}</h4>

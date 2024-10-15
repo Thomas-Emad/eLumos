@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\UploadAttachmentTrait;
 use App\Http\Traits\UpdateStepsStatusTrait;
 use App\Http\Resources\SectionsCourseResource;
-use App\Models\CourseSections;
+use App\Models\Course;
 use App\Models\CourseLectures;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -118,16 +118,31 @@ class CourseLecturesController extends Controller
    */
   public function destroy(Request $request): JsonResponse
   {
-    $lecture = CourseLectures::findOrFail($request->id);
-    if ($lecture->video) {
-      Cloudinary::destroy(json_decode($lecture->video)->public_id, ['resource_type' => 'video']);
-    }
-    $lecture->delete();
+    try {
+      $course = Course::findOrFail($request->course_id);
+      $lectures = $course->lectures()->get();
+      $cturrenLecture = $lectures->where('id', $request->lecture_id)->first();
 
-    return response()->json([
-      'message' => 'Deleted Lecture Has Been Done Successfully.',
-      'lecture_id' => $lecture->id,
-      'section_id' => $lecture->section_id
-    ], 200);
+      if ($cturrenLecture->video) {
+        Cloudinary::destroy(json_decode($cturrenLecture->video)->public_id, ['resource_type' => 'video']);
+      }
+      $cturrenLecture->delete();
+
+      // Change Order Sort => order_sort - 1 for every lecture
+      foreach ($lectures as $lecture) {
+        if ($lecture->id == $request->lecture_id) continue;
+        $course->changeSortOrderLecture($lecture->id, true);
+      }
+
+      return response()->json([
+        'message' => 'Deleted Lecture Has Been Done Successfully.',
+        'lecture_id' => $lecture->id,
+        'section_id' => $lecture->section_id
+      ], 200);
+    } catch (\Throwable $e) {
+      return response()->json([
+        'message' => $e->getMessage()
+      ], 500);
+    }
   }
 }

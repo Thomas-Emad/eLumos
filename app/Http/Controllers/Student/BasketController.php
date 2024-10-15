@@ -20,7 +20,7 @@ class BasketController extends Controller
   {
     $baskets = Auth::check() ? $this->getAuthBasket() : $this->getCookiesBasket();
     $courses = Course::with(['lectures', 'user'])->where('status', 'active')->whereIn('id', $baskets)->select('id', 'title', 'price', 'level', 'mockup', 'user_id')->get();
-    return view('student.basket', compact('courses'));
+    return view('pages.student.basket', compact('courses'));
   }
 
   /**

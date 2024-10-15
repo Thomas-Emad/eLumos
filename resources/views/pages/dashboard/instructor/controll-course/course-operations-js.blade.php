@@ -383,7 +383,8 @@
             const data = {
                 _token: "{{ csrf_token() }}",
                 _method: "DELETE",
-                id: $("#delete-lecture input[name=id]").val(),
+                course_id: "{{ $course->id ?? 0 }}",
+                lecture_id: $("#delete-lecture input[name=id]").val(),
             }
 
             $.ajax({

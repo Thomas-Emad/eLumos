@@ -56,10 +56,8 @@ trait CoursesUpdateTrait
 
     // delete old attachments
     if ($request->hasFile('mockup') || $request->hasFile('video-persentation')) {
-      $imageJson = !is_null($course->image) ? json_decode($course->image)->public_id : null;
-      $videoJson = !is_null($course->preview_video) ? json_decode($course->preview_video)->public_id : null;
-      @Cloudinary::destroy($imageJson, ['resource_type' => 'image']);
-      @Cloudinary::destroy($videoJson, ['resource_type' => 'video']);
+      static::destoryAttachment($course->mockup, 'image');
+      static::destoryAttachment($course->video_preview, 'video');
     }
     $imageJson = static::uploadAttachment($request->file('mockup'), 'images', 'image');
     $videoPresentationJson = static::uploadVideo($request->file('video-persentation'), 'videos', 'video');
@@ -96,7 +94,6 @@ trait CoursesUpdateTrait
 
     return redirect()->route('dashboard.instructor.courses.edit', ['course' => $course->id, 'step' => $request->input('step') + 1])->with('success', 'Course updated successfully');
   }
-
 
   /**
    * Update course message after purchasing and after completing.
@@ -149,7 +146,7 @@ trait CoursesUpdateTrait
       ]);
 
       static::updateStepsStatusWithIncrementStep('stepSix', $course);
-      return redirect()->route('dashboard.courses')->with('success', 'The course has been sent for review, please wait for it.');
+      return redirect()->route('dashboard.instructor.courses.index')->with('success', 'The course has been sent for review, please wait for it.');
     }
 
     return redirect()->back();

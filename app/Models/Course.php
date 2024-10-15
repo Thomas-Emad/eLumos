@@ -65,6 +65,19 @@ class Course extends Model
     return $this;
   }
 
+  public function changeSortOrderLecture(int $lecture_id, bool $up = true)
+  {
+    $lecture = $this->lectures()->findOrFail($lecture_id);
+    if ($up) {
+      if ($lecture->order_sort > 1) {
+        $lecture->decrement('order_sort', 1);
+      }
+    } else {
+      $lecture->increment('order_sort', 1);
+    }
+    return $this;
+  }
+
   public function tags(): BelongsToMany
   {
     return $this->BelongsToMany(Tag::class, "course_tags", 'course_id', 'tag_id');

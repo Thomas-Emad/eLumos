@@ -52,4 +52,42 @@ trait UploadAttachmentTrait
 
     return json_encode($attachmentJson);
   }
+
+
+  /**
+   * Destroys a file on Cloudinary based on the provided JSON and type of attachment.
+   *
+   * @param string $json The JSON string containing the public ID of the attachment to be destroyed.
+   * @param string $typeAttachment The type of attachment being destroyed.
+   *
+   * @throws \Exception If the type of attachment is not supported.
+   */
+  protected static function destoryAttachment($json, $typeAttachment): void
+  {
+    $publicId = static::decodeJsonThenGetAttr($json, 'public_id');
+
+    $type = match ($typeAttachment) {
+      'image' => 'image',
+      'video' => 'video',
+      default => throw new \Exception('Sorry, We not support this type')
+    };
+
+    if (!is_null($publicId)) {
+      Cloudinary::destroy($publicId, ['resource_type' =>  $type]);
+    }
+  }
+
+  /**
+   * Decodes a JSON string and returns the value of the specified attribute.
+   *
+   * @param string $json The JSON string to decode.
+   * @param string $attribute The attribute in the decoded JSON whose value is to be returned.
+   *
+   * @return mixed The value of the specified attribute if the JSON is valid and the attribute exists, null otherwise.
+   */
+  private static function decodeJsonThenGetAttr($json, $attribute): null | string
+  {
+    $filed = json_decode($json);
+    return is_null($filed) ? null : $filed->$attribute;
+  }
 }

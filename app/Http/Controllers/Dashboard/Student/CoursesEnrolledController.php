@@ -72,10 +72,23 @@ class CoursesEnrolledController extends Controller
     ]);
   }
 
-  public function show(string $course, string $lecture)
+  /**
+   * Show the course playlist.
+   *
+   * @param  string  $course
+   * @param  string  $lecture
+   * @return \Illuminate\Http\Response
+   */
+  public function show(string $course, string $lecture = '1')
   {
-    $courseStudent = CoursesEnrolled::with(['course:id,title,mockup', 'course.sections:id,course_id,title',  'course.sections.lectures:id,section_id,title,video_duration,order_sort'])
-      ->where("course_id", $course)->where('user_id', auth()->user()->id)
+    $courseStudent = CoursesEnrolled::with([
+      'course:id,title,mockup',
+      'course.sections:id,course_id,title',
+      'course.sections.lectures:id,course_id,section_id,title,video,order_sort',
+      'course.sections.lectures.watchedLecture' => function ($query) {
+        $query->where('user_id', auth()->user()->id);
+      }
+    ])->where("course_id", $course)->where('user_id', auth()->user()->id)
       ->select('course_id')->firstOrFail();
 
     $contentLecture = CourseLectures::where('course_id', $course)->where('id', $lecture)
