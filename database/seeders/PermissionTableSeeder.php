@@ -11,6 +11,7 @@ class PermissionTableSeeder extends Seeder
     'users',
     'roles',
     'instructors-control-courses',
+    'instructors-control-exams',
     'control-courses',
     'buy-courses',
   ];

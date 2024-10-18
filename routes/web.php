@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\Admin\{RoleController, CourseController as DashboardCoursesController};
 use App\Http\Controllers\{StepsForwardController};
 use App\Http\Controllers\Dashboard\Instructor\{CoursesController, CourseSectionsController, CourseLecturesController};
+use App\Http\Controllers\Dashboard\Instructor\Exams\{ExamController, ExamQuestionController};
 use App\Http\Controllers\Dashboard\Student\{CoursesEnrolledController};
 use App\Http\Controllers\Student\{CourseStudentController, BasketController, CheckoutController, WishlistController};
 
@@ -66,11 +67,16 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     Route::get('/api/courses/show/{type?}',  [CoursesController::class, 'getCourses'])->name('api.instructor.courses.show');
 
     // Api CRUD Operations for Course Sections
-    Route::apiResource('/api/courses/sections', CourseSectionsController::class)->names('api.instructor.courses.sections');
     Route::put('/api/courses/sections/change-sort-section', [CourseSectionsController::class, 'changeSortSection'])->name('api.instructor.courses.sections.changeSortSection');
+    Route::apiResource('/api/courses/sections', CourseSectionsController::class)->names('api.instructor.courses.sections');
 
     // Api CRUD Operations for Course Lectures
     Route::apiResource('/api/courses/lectures', CourseLecturesController::class)->names('api.instructor.courses.lectures');
+
+    // Exams
+    Route::resource('exams', ExamController::class)->names('instructor.exams');
+    Route::resource('exam/questions', ExamQuestionController::class)->names('instructor.exams.questions');
+    Route::get('exam/questions/component/{type?}',  [ExamQuestionController::class, 'getComponent'])->name('instructor.exams.get-component');
   });
 
   /* *******************Admin************************* */

@@ -8,10 +8,19 @@ use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\http\Traits\BasketTrait;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class BasketController extends Controller
+class BasketController extends Controller implements HasMiddleware
 {
   use BasketTrait;
+
+  public static function middleware(): array
+  {
+    return [
+      'permission:buy-courses',
+    ];
+  }
+
 
   /**
    * Display a listing of the resource.

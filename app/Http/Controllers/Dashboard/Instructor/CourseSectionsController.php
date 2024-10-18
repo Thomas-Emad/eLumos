@@ -8,6 +8,7 @@ use App\Models\Course;
 use App\Http\Resources\SectionsCourseResource;
 use App\Models\CourseSections;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use App\Services\CourseSectionService;
 
 class CourseSectionsController extends Controller
 {
@@ -84,7 +85,7 @@ class CourseSectionsController extends Controller
    * @param Request $request The HTTP request containing the course ID, section ID, and direction of the sort order change.
    * @return The updated sections.
    */
-  public function changeSortSection(Request $request)
+  public function changeSortSection(Request $request, CourseSectionService $sectionService)
   {
     $request->validate([
       'section_id' => ['required', 'exists:course_sections,id'],
@@ -97,15 +98,7 @@ class CourseSectionsController extends Controller
     $sections = $course->sections()->get();
     $currentSection = collect($sections)->where('id', $request->section_id)->firstOrFail();
 
-    if ($up) {
-      $previous = collect($sections)->where('order_sort', $currentSection->order_sort - 1)->firstOrFail();
-      $course->changeSortOrderSection($currentSection->id, true); //  order_sort - 1 for every section
-      $course->changeSortOrderSection($previous->id, false); //  Switch
-    } else {
-      $next =  collect($sections)->where('order_sort', $currentSection->order_sort + 1)->first();
-      $course->changeSortOrderSection($currentSection->id, false); //  order_sort + 1 for every section
-      $course->changeSortOrderSection($next->id, true); //  Switch
-    }
+    $sectionService->changeSortOrder($course, $up, $sections, $currentSection);
 
     return $this->index($request);
   }

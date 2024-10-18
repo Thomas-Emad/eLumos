@@ -92,11 +92,19 @@
                             <hr class="mx-6 my-4">
                             <h2 class="font-bold text-gray-900 text-lg dark:text-gray-50">Instructor</h2>
                             <li><a href="{{ route('dashboard.instructor.courses.index') }}"
-                                    class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.instructor.courses.index'))  @endif hover:text-amber-600 duration-200">
+                                    class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.instructor.courses.index')) text-amber-600 @endif hover:text-amber-600 duration-200">
                                     <i class="fa-solid fa-graduation-cap"></i>
                                     <span>My Courses</span>
                                 </a>
                             </li>
+                            @haspermission('instructors-control-exams')
+                                <li><a href="{{ route('dashboard.instructor.exams.index') }}"
+                                        class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.instructor.exams.index')) text-amber-600 @endif hover:text-amber-600 duration-200">
+                                        <i class="fa-solid fa-clipboard-question"></i>
+                                        <span>Exams</span>
+                                    </a>
+                                </li>
+                            @endhaspermission
                             <hr class="mx-6 my-4">
                         </div>
                     @endhaspermission

@@ -12,8 +12,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Observers\Dashboard\CoursesObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
-use Illuminate\Contracts\Database\Eloquent\Builder;
-
 
 #[ObservedBy([CoursesObserver::class])]
 class Course extends Model
