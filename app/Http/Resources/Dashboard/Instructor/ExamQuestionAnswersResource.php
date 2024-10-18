@@ -15,9 +15,6 @@ class ExamQuestionAnswersResource extends JsonResource
   public function toArray(Request $request): array
   {
     return [
-      'id' => $this->id,
-      'title' => $this->title,
-      'type_question' => $this->type_question,
       'answer' => $this->answer,
       'is_true' =>  $this->is_true
     ];

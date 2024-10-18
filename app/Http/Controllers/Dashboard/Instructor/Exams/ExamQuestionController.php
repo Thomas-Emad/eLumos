@@ -105,8 +105,17 @@ class ExamQuestionController extends Controller
   /**
    * Remove the specified resource from storage.
    */
-  public function destroy(string $id)
+  public function destroy(Request $request)
   {
-    //
+    $request->validate([
+      'id' => 'required|exists:exam_questions,id'
+    ]);
+
+    ExamQuestion::findOrFail($request->id)->delete();
+
+    return redirect()->back()->with('notification', [
+      'type' => 'success',
+      'message' => 'Question Delete Successfuly..'
+    ]);
   }
 }

@@ -7,7 +7,7 @@
             New Answer
         </button>
     </div>
-    <div class="answers">
+    <div class="parent">
         <div class="flex gap-4 items-center justify-between mb-2 box" data-id='1'>
             <div class="w-full"><x-input name='answers[1]' required label='Write Title Question'></x-input></div>
             <div class="flex gap-2 items-center justify-between">
@@ -26,7 +26,7 @@
         $("#add-new-option").on('click', function() {
             if (countOptions < 4) {
                 countOptions++;
-                $('.answers').append(`
+                $('.parent').append(`
                   <div class="flex gap-4 items-center justify-between mb-2 box" data-id='${countOptions}'>
                       <div class="w-full"><x-input name='answers[${countOptions}]' required label='Write Title Question'></x-input></div>
                       <div class="flex gap-2 items-center justify-between">
@@ -40,10 +40,10 @@
         });
 
         // Remove option
-        $(".answers").on('click', '.delete-option', function() {
+        $(".parent").on('click', '.delete-option', function() {
             let id = $(this).attr('data-id');
             console.log(id)
-            $('.answers>div[data-id=' + id + ']').remove();
+            $('.parent>div[data-id=' + id + ']').remove();
             countOptions--;
         });
     });
