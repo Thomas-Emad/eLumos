@@ -15,6 +15,7 @@ return new class extends Migration
       $table->uuid('id')->primary();
       $table->foreignId('publisher_id')->constrained('users')->cascadeOnDelete();
       $table->string("title", 100);
+      $table->integer("duration")->nullable();
       $table->timestamps();
     });
   }

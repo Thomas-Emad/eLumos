@@ -5,21 +5,11 @@ namespace App\Http\Controllers\Dashboard\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Course;
+use App\Http\Traits\FilterByDateTrait;
 
 class CourseController extends Controller
 {
-  protected static function filterDateBy($type)
-  {
-    return match ($type) {
-      'today' => [now()->startOfDay(), now()->endOfDay()],
-      'yesterday' => [now()->subDay()->startOfDay(), now()->endOfDay()],
-      'last_week' => [now()->subDays(7)->startOfDay(), now()->endOfDay()],
-      'last_month' => [now()->subMonth()->startOfMonth(), now()->endOfDay()],
-      'this_year' => [now()->startOfYear(), now()->endOfDay()],
-      'last_year' => [now()->subYear()->startOfYear(), now()->endOfDay()],
-      default => [now()->startOfYear(), now()->endOfDay()],
-    };
-  }
+  use FilterByDateTrait;
 
   /**
    * Show the admin courses index page.
@@ -32,7 +22,7 @@ class CourseController extends Controller
     $filterBy =  $request->date ?? 'last_month';
 
     $courses = Course::where('status', '!=', 'draft')
-      ->where('title', "like", "%$request->title%")->whereBetween("created_at", static::filterDateBy($filterBy))
+      ->where('title', "like", "%$request->title%")->whereBetween("created_at", static::filterByDate($filterBy))
       ->with('lectures')->select('id', 'title', 'mockup', 'status', 'price')
       ->orderBy('status', 'ASC')->paginate(20);
 

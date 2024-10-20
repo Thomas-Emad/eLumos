@@ -59,11 +59,11 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($exam->questions as $question)
+                @forelse ($exam->questions as $key=> $question)
                     <tr
                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <td class="w-4 p-4">
-                            1
+                            {{ 1 + $key }}
                         </td>
                         <th title="{{ $question->title }}" scope="row"
                             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -96,7 +96,6 @@
                 @endforelse
             </tbody>
         </table>
-
     </div>
 
     {{-- Question Modals  --}}

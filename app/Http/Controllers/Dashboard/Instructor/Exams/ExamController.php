@@ -3,19 +3,23 @@
 namespace App\Http\Controllers\Dashboard\Instructor\Exams;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Exam;
+use App\Http\Traits\FilterByDateTrait;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ExamController extends Controller
 {
+  use FilterByDateTrait;
+
   /**
    * Display a listing of the resource.
    */
-  public function index()
+  public function index(Request $request)
   {
-    $exams = Exam::paginate(15);
+    $exams = Exam::where('title', 'like', "%$request->title%")->whereBetween('created_at', static::filterByDate($request->filterByDate))
+      ->paginate(15);
     return view('pages.dashboard.instructor.exams.index', compact('exams'));
   }
 
@@ -25,13 +29,15 @@ class ExamController extends Controller
   public function store(Request $request)
   {
     $validation = Validator::make($request->all(), [
-      'title' => 'required|string|min:3|max:100'
+      'title' => 'required|string|min:3|max:100',
+      'duration' => 'nullable|integer|max:240'
     ]);
 
     if (!$validation->fails()) {
       Exam::create([
         'publisher_id' => Auth::user()->id,
-        'title' => $request->title
+        'title' => $request->title,
+        'duration' => $request->duration
       ]);
 
       return redirect()->back()->with('notification', [
