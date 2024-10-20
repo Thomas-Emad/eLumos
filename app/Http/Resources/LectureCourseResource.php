@@ -20,7 +20,7 @@ class LectureCourseResource extends JsonResource
       'order_sort' => $this->order_sort,
       'hasContent' => !is_null($this->content),
       'hasVideo' =>  !is_null($this->video),
-      'hasExam' => false,
+      'hasExam' => !is_null($this->exam),
     ];
   }
 }

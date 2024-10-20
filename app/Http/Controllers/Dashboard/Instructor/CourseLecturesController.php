@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Dashboard\Instructor;
 
+use App\Models\Course;
+use App\Models\CourseLectures;
+use App\Services\CourseLectureService;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\UploadAttachmentTrait;
 use App\Http\Traits\UpdateStepsStatusTrait;
+use App\Http\Requests\CourseLectureRequest;
 use App\Http\Resources\SectionsCourseResource;
-use App\Models\Course;
-use App\Models\CourseLectures;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Validator;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
-
-use App\Http\Requests\CourseLectureRequest;
 
 
 class CourseLecturesController extends Controller
@@ -23,7 +22,7 @@ class CourseLecturesController extends Controller
   /**
    * Store a newly created resource in storage.
    */
-  public function store(CourseLectureRequest $request)
+  public function store(CourseLectureRequest $request, CourseLectureService $lectureService): JsonResponse
   {
     try {
       $section = $request->section();
@@ -34,7 +33,7 @@ class CourseLecturesController extends Controller
       }
 
       // Store data
-      $section->lectures()->create([
+      $lecture =  $section->lectures()->create([
         'course_id' => $section->course_id,
         'title' => $request->title,
         'video' => $videoJson ?? null,
@@ -42,6 +41,8 @@ class CourseLecturesController extends Controller
         'content' => $request->content ?? null,
         'order_sort' => $section->lectures()->count() + 1
       ]);
+
+      $lectureService->syncExam($lecture->exam, $request->exam, $lecture);
 
       if ($section->lectures()->count() === 3) {
         static::updateStepsStatusWithIncrementStep('stepFour', $section->course);
@@ -69,32 +70,24 @@ class CourseLecturesController extends Controller
    */
   public function show(string $lecture_id = null): JsonResponse
   {
-    $lecture = CourseLectures::findOrFail($lecture_id);
+    $lecture = CourseLectures::with('exam')->findOrFail($lecture_id);
     return response()->json([
       'id' => $lecture->id,
       'title' => $lecture->title,
       'content' => $lecture->content,
-      'exams' => [],
+      'exam' => $lecture->exam->exam_id ?? null,
     ]);
   }
 
   /**
    * Update the specified resource in storage.
    */
-  public function update(CourseLectureRequest $request)
+  public function update(CourseLectureRequest $request, CourseLectureService $lectureService): JsonResponse
   {
     $lecture = CourseLectures::findOrFail($request->id);
 
     // upload video
-    if ($request->hasFile('video')) {
-      if ($lecture->video) {
-        Cloudinary::destroy(json_decode($lecture->video)->public_id, ['resource_type' => 'video']);
-      }
-
-      $videoJson =  static::uploadVideo($request->file('video'), 'videos', 'video');
-    } else {
-      $videoJson = $lecture->video ?? null;
-    }
+    $videoJson = $lectureService->updateVideo($request->file('video'), $lecture->video);
 
     // Update data
     $lecture->update([
@@ -103,6 +96,8 @@ class CourseLecturesController extends Controller
       'video_duartion' => json_decode($videoJson)->duration ?? null,
       'content' => $request->content ?? null,
     ]);
+
+    $lectureService->syncExam($lecture->exam, $request->exam, $lecture);
 
     return response()->json([
       'section' => new SectionsCourseResource($lecture->section->get()->first()),
@@ -116,28 +111,24 @@ class CourseLecturesController extends Controller
   /**
    * Remove the specified resource from storage.
    */
-  public function destroy(Request $request): JsonResponse
+  public function destroy(Request $request, CourseLectureService $lectureService): JsonResponse
   {
     try {
       $course = Course::findOrFail($request->course_id);
       $lectures = $course->lectures()->get();
-      $cturrenLecture = $lectures->where('id', $request->lecture_id)->first();
+      $currentLecture = $lectures->where('id', $request->lecture_id)->first();
 
-      if ($cturrenLecture->video) {
-        Cloudinary::destroy(json_decode($cturrenLecture->video)->public_id, ['resource_type' => 'video']);
+      if ($currentLecture->video) {
+        Cloudinary::destroy(json_decode($currentLecture->video)->public_id, ['resource_type' => 'video']);
       }
-      $cturrenLecture->delete();
+      $currentLecture->delete();
 
-      // Change Order Sort => order_sort - 1 for every lecture
-      foreach ($lectures as $lecture) {
-        if ($lecture->id == $request->lecture_id) continue;
-        $course->changeSortOrderLecture($lecture->id, true);
-      }
+      $lectureService->changeOrderLecture($course, $lectures, $request->lecture_id);
 
       return response()->json([
         'message' => 'Deleted Lecture Has Been Done Successfully.',
-        'lecture_id' => $lecture->id,
-        'section_id' => $lecture->section_id
+        'lecture_id' => $currentLecture->id,
+        'section_id' => $currentLecture->section_id
       ], 200);
     } catch (\Throwable $e) {
       return response()->json([

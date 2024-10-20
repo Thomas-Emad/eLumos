@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Dashboard\Instructor;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Course;
-use App\Http\Resources\SectionsCourseResource;
 use App\Models\CourseSections;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use App\Services\CourseSectionService;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\SectionsCourseResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class CourseSectionsController extends Controller
 {
@@ -18,7 +18,7 @@ class CourseSectionsController extends Controller
    * @param Request $request The HTTP request containing the course ID.
    * @return \Illuminate\Http\JsonResponse A JSON response containing the course sections.
    */
-  public function index(Request $request)
+  public function index(Request $request): JsonResponse
   {
     $sections = CourseSections::where('course_id', $request->course_id)->OrderBy('order_sort', 'asc')->get();
     return response()->json([
@@ -33,7 +33,7 @@ class CourseSectionsController extends Controller
    * @param Request $request The HTTP request containing the course ID and section title.
    * @return \Illuminate\Http\JsonResponse A JSON response containing the newly added section and a success message.
    */
-  public function store(Request $request)
+  public function store(Request $request): JsonResponse
   {
     $request->validate([
       'course_id' => ['required', 'exists:courses,id'],
@@ -60,7 +60,7 @@ class CourseSectionsController extends Controller
    * @param Request $request The HTTP request containing the course ID, section ID, and new title.
    * @return \Illuminate\Http\JsonResponse A JSON response containing the updated section and a success message.
    */
-  public function update(Request $request)
+  public function update(Request $request): JsonResponse
   {
     $request->validate([
       'section_id' => ['required', 'exists:course_sections,id'],
@@ -109,7 +109,7 @@ class CourseSectionsController extends Controller
    * @param Request $request The HTTP request containing the section ID and course ID.
    * @return \Illuminate\Http\JsonResponse A JSON response containing a success message and the deleted section ID.
    */
-  public function destroy(Request $request)
+  public function destroy(Request $request, CourseSectionService $sectionService): JsonResponse
   {
     $request->validate([
       'section_id' => ['required', 'exists:course_sections,id'],
@@ -120,12 +120,7 @@ class CourseSectionsController extends Controller
     $sections = $course->sections()->get();
     $section = $sections->where('id', $request->section_id)->first();
 
-    // delete videos Lectures of this section
-    foreach ($section->lectures as $lecture) {
-      if ($lecture->video) Cloudinary::destroy(json_decode($lecture->video)->public_id, ['resource_type' => 'video']);
-    }
-
-    $section->delete();
+    $sectionService->deleteAllVideo($section->lectures);
 
     // Change Order Sort => order_sort - 1 for every section
     foreach ($sections as $section) {

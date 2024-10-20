@@ -40,6 +40,7 @@ class CourseLectureRequest extends FormRequest
       'title' => ['required', 'min:5', 'max:49'],
       'content' => ['nullable', 'max:5000', 'string'],
       'video' => ['exclude_unless:video,null', 'max:40000', 'mimetypes:video/mp4'],
+      'exam' => 'nullable|exists:exams,id'
     ];
   }
 

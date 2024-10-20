@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard\Instructor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Exam;
 use App\Http\Resources\CoursesDashboardResource;
 use App\Http\Traits\CoursesUpdateTrait;
 use Illuminate\Http\Request;
@@ -147,7 +148,9 @@ class CoursesController extends Controller implements HasMiddleware
       return abort(404);
     }
 
-    return view('pages.dashboard.instructor.controll-course.course-operations', ['course' => $course]);
+    $exams = Exam::with('questions')->get();
+
+    return view('pages.dashboard.instructor.controll-course.course-operations', compact('course', 'exams'));
   }
 
   /**

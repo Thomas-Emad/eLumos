@@ -162,16 +162,33 @@
                         </div>
                         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="exam" role="tabpanel"
                             aria-labelledby="exam-tab">
-                            <p class="text-sm text-gray-500 dark:text-gray-100 ">This is some placeholder
-                                content the
-                                <strong class="font-medium text-gray-800  dark:text-white">Settings tab's
-                                    associated
-                                    content</strong>.
-                                Clicking another tab will toggle the visibility of this one for the next. The tab
-                                JavaScript
-                                swaps
-                                classes to control the content visibility and styling.
-                            </p>
+
+                            <h3 class="mb-5 text-lg font-medium text-gray-900 dark:text-white">Choose Exam:</h3>
+                            <ul class="w-full flex gap-4 flex-col overflow-x-auto pr-2 h-[250px]">
+                                <li class="w-full">
+                                    <input type="radio" name='exam' id="add-empty-option" value=""
+                                        class="hidden peer" checked>
+                                    <label for="add-empty-option"
+                                        class="flex items-center justify-between w-full p-4 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                                        <p>- Not Need for Exam In this Lecture</p>
+                                    </label>
+                                </li>
+                                @foreach ($exams as $exam)
+                                    <li class="w-full">
+                                        <input type="radio" name='exam' id="add-{{ $exam->id }}-option"
+                                            value="{{ $exam->id }}" class="hidden peer">
+                                        <label for="add-{{ $exam->id }}-option"
+                                            class="flex items-center justify-between w-full p-4 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                                            <p>* {{ $exam->title }}
+                                                <span
+                                                    class="text-sm text-gray-400">({{ $exam->questions->count() }})</span>
+                                            </p>
+                                            <a href="{{ route('dashboard.instructor.exams.show', $exam->id) }}"
+                                                target="__blank" class="text-blue-600 hover:underline">Preview</a>
+                                        </label>
+                                    </li>
+                                @endforeach
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -258,16 +275,33 @@
                         </div>
                         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="edit-exam" role="tabpanel"
                             aria-labelledby="exam-tab">
-                            <p class="text-sm text-gray-500 dark:text-gray-100 ">This is some placeholder
-                                content the
-                                <strong class="font-medium text-gray-800  dark:text-white">Settings tab's
-                                    associated
-                                    content</strong>.
-                                Clicking another tab will toggle the visibility of this one for the next. The tab
-                                JavaScript
-                                swaps
-                                classes to control the content visibility and styling.
-                            </p>
+
+                            <h3 class="mb-5 text-lg font-medium text-gray-900 dark:text-white">Choose Exam:</h3>
+                            <ul class="w-full flex gap-4 flex-col overflow-x-auto pr-2 h-[250px]">
+                              <li class="w-full">
+                                  <input type="radio" name='exam' id="edit-empty-option" value=""
+                                      class="hidden peer" checked>
+                                  <label for="edit-empty-option"
+                                      class="flex items-center justify-between w-full p-4 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                                      <p>- Not Need for Exam In this Lecture</p>
+                                  </label>
+                              </li>
+                              @foreach ($exams as $exam)
+                                  <li class="w-full">
+                                      <input type="radio" name='exam' id="edit-{{ $exam->id }}-option"
+                                          value="{{ $exam->id }}" class="hidden peer">
+                                      <label for="edit-{{ $exam->id }}-option"
+                                          class="flex items-center justify-between w-full p-4 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                                          <p>* {{ $exam->title }}
+                                              <span
+                                                  class="text-sm text-gray-400">({{ $exam->questions->count() }})</span>
+                                          </p>
+                                          <a href="{{ route('dashboard.instructor.exams.show', $exam->id) }}"
+                                              target="__blank" class="text-blue-600 hover:underline">Preview</a>
+                                      </label>
+                                  </li>
+                              @endforeach
+                          </ul>
                         </div>
                     </div>
                 </div>

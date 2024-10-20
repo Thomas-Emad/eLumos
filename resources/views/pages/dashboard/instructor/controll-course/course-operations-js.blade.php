@@ -70,19 +70,16 @@
                 lectures.forEach((lecture, index) => {
                     lectureContainer.innerHTML += `
                         <div class="px-4 py-2 bg-white dark:bg-gray-600 rounded-xl flex justify-between gap-2 items-center">
-                          <div class="flex gap-2  font-bold text-gray-900 dark:text-gray-50 text-xl">
-                            <div class='flex items-center gap-2  '>
+                          <div class="flex gap-2 items-center font-bold text-gray-900 dark:text-gray-50 text-xl">
                               <i class="fa-solid fa-laptop-file"></i>
                               <h4>${lecture.title}</h4>  
-                            </div>
+                          </div>
+                          <div class="flex gap-4 text-gray-600">
                             <div class='flex gap-2 items-center text-sm text-gray-400 dark:text-ammber-500'>
                               ${lecture.hasContent ? '<i class="fa-solid fa-book"></i>' : ''}
                               ${lecture.hasVideo ? '<i class="fa-solid fa-video"></i>' : ''}
-                              ${lecture.hasExam ? '<i class="fa-solid fa-circle-exclamation"></i>' : ''}
+                              ${lecture.hasExam ? '<i class="fa-solid fa-clipboard-question"></i>' : ''}
                             </div>
-                            
-                          </div>
-                          <div class="flex gap-4 text-gray-600">
                             <i data-lecture-id="${lecture.id}" data-lecture-content="${lecture.content}" data-lecture-title="${lecture.title}" class="showModal fa-solid fa-pen-to-square hover:text-amber-700 duration-300 cursor-pointer"
                               data-modal-target="edit-lecture-modal" data-modal-toggle="edit-lecture-modal"></i>
                             <i data-lecture-id="${lecture.id}"  class="showModal delete fa-solid fa-trash hover:text-amber-700 duration-300 cursor-pointer"
@@ -117,6 +114,10 @@
                     $(`${nameModal} form input[name=id]`).val(lecture.id);
                     $(`${nameModal} form input[name=title]`).val(lecture.title);
                     $(`${nameModal} form input[name=content]`).val(lecture.content);
+
+                    // checkon Exam
+                    $(`${nameModal} form input[name='exam'][value='${lecture.exam}']`).prop(
+                        'checked', true);
 
                     // display exams lecture.exams
                 } else {
@@ -173,6 +174,7 @@
             $('form input[name=title]').val('');
             $('form textarea[name=content]').val('');
             $('form input[name=video]').val('');
+            $(`form input[name='exam'][value='']`).prop('checked', true);
             $('#loader').addClass('hidden');
         }
 
@@ -313,6 +315,7 @@
                 formData.append('title', $(`#${formId} input[name=title]`).val());
                 formData.append('content', $(`#${formId} textarea[name=content]`).val());
                 formData.append('video', video);
+                formData.append('exam', $(`#${formId} input[name='exam']:checked`).val());
                 formData.append('_method', requestType == 'store' ? 'POST' : 'PUT');
 
                 if (formId == 'add-lecture') {
@@ -320,7 +323,6 @@
                 } else if (formId == 'edit-lecture') {
                     formData.append('id', $(`#${formId} input[name=id]`).val());
                 }
-
 
                 if ((video !== undefined && video.size <= (40 * 1024 * 1024) && video.type ===
                         'video/mp4') ||
@@ -376,7 +378,7 @@
             })
         }
 
-        // Delete Section
+        // Delete lecture
         $("#delete-lecture").on('submit', function(e) {
             e.preventDefault();
             $('#loader').removeClass('hidden');

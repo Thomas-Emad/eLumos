@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Dashboard\Instructor\Exams;
 
-use App\Http\Controllers\Controller;
 use App\Models\Exam;
 use App\Http\Traits\FilterByDateTrait;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,7 +18,7 @@ class ExamController extends Controller
   /**
    * Display a listing of the resource.
    */
-  public function index(Request $request)
+  public function index(Request $request): View
   {
     $exams = Exam::where('title', 'like', "%$request->title%")->whereBetween('created_at', static::filterByDate($request->filterByDate))
       ->paginate(15);
@@ -26,7 +28,7 @@ class ExamController extends Controller
   /**
    * Store a newly created resource in storage.
    */
-  public function store(Request $request)
+  public function store(Request $request): JsonResponse
   {
     $validation = Validator::make($request->all(), [
       'title' => 'required|string|min:3|max:100',
@@ -55,7 +57,7 @@ class ExamController extends Controller
   /**
    * Display the specified resource.
    */
-  public function show(string $id)
+  public function show(string $id): View
   {
     $exam = Exam::with('questions')->findOrFail($id);
 
@@ -81,7 +83,7 @@ class ExamController extends Controller
   /**
    * Remove the specified resource from storage.
    */
-  public function destroy(string $id)
+  public function destroy(string $id): JsonResponse
   {
     $exam = Exam::findOrFail($id);
     $exam->delete();

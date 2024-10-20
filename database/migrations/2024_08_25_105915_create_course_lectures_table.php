@@ -21,8 +21,6 @@ return new class extends Migration
       $table->decimal('video_duration', 5, 2)->nullable();
       $table->text('content')->nullable();
 
-      // we will create table for lecture to exams
-
       $table->string('title', 50);
       $table->integer('order_sort')->default(1);
       $table->timestamps();

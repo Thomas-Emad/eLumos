@@ -2,36 +2,21 @@
 
 namespace App\Http\Controllers\Dashboard\Instructor\Exams;
 
+use App\Models\ExamQuestion;
+use App\Services\ExamQuestionService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ExamQuestionRequest;
 use App\Http\Resources\Dashboard\Instructor\ExamQuestionResource;
-use App\Models\ExamQuestion;
-use App\Services\ExamQuestionService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Response;
 
 class ExamQuestionController extends Controller
 {
   /**
-   * Display a listing of the resource.
-   */
-  public function index()
-  {
-    //
-  }
-
-  /**
-   * Show the form for creating a new resource.
-   */
-  public function create()
-  {
-    //
-  }
-
-  /**
    * Store a newly created resource in storage.
    */
-  public function store(ExamQuestionRequest $request, ExamQuestionService $questionsService)
+  public function store(ExamQuestionRequest $request, ExamQuestionService $questionsService): JsonResponse
   {
     // Store Question
     $questionId = $questionsService->storeQuestion($request->exam_id, $request->title, $request->type_question);
@@ -57,7 +42,7 @@ class ExamQuestionController extends Controller
    * @param string $type The type of question, default is 'checkbox'.
    * @return \Illuminate\Http\Response
    */
-  public function getComponent($type = 'checkbox')
+  public function getComponent($type = 'checkbox'): Response
   {
     if (!request()->ajax()) {
       return abort(404);
@@ -76,7 +61,7 @@ class ExamQuestionController extends Controller
   /**
    * Display the specified resource.
    */
-  public function show(string $id)
+  public function show(string $id): JsonResponse
   {
     if (!request()->ajax()) {
       return abort(404);
@@ -87,25 +72,9 @@ class ExamQuestionController extends Controller
   }
 
   /**
-   * Show the form for editing the specified resource.
-   */
-  public function edit(string $id)
-  {
-    //
-  }
-
-  /**
-   * Update the specified resource in storage.
-   */
-  public function update(Request $request, string $id)
-  {
-    //
-  }
-
-  /**
    * Remove the specified resource from storage.
    */
-  public function destroy(Request $request)
+  public function destroy(Request $request): JsonResponse
   {
     $request->validate([
       'id' => 'required|exists:exam_questions,id'
