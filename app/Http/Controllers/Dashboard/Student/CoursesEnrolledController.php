@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Dashboard\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\CoursesEnrolled;
-use App\Models\Course;
-use App\Models\WatchedCourseLecture;
 use App\Http\Resources\CoursesEnrolledResource;
 use App\Models\CourseLectures;
 use Illuminate\Support\Facades\Cache;
@@ -50,7 +48,7 @@ class CoursesEnrolledController extends Controller
       $type = in_array(request()->input('type'), array_keys($this->getStatus)) ? request()->input('type') : 'all';
 
       $courses = Cache::remember("courses.preview.$type." . auth()->id(), 60 * 60 * 60 * 6, function () use ($type) {
-        $data = CoursesEnrolled::with(['user', 'course'])->select('course_id', 'user_id', 'progress_lectures')
+        $data = CoursesEnrolled::with(['user', 'course'])->select('id', 'course_id', 'user_id', 'progress_lectures')
           ->where('courses_enrolleds.user_id', auth()->id())
           ->whereIn('courses_enrolleds.status', $this->getStatus[$type])
           ->orderBy('buyer_at')
@@ -79,7 +77,7 @@ class CoursesEnrolledController extends Controller
    * @param  string  $lecture
    * @return \Illuminate\Http\Response
    */
-  public function show(string $course, string $lecture = '1')
+  public function show(string $course, string $lecture = null)
   {
     $courseStudent = CoursesEnrolled::with([
       'course:id,title,mockup',
@@ -91,11 +89,16 @@ class CoursesEnrolledController extends Controller
     ])->where("course_id", $course)->where('user_id', auth()->user()->id)
       ->select('course_id')->firstOrFail();
 
-    $contentLecture = CourseLectures::where('course_id', $course)->where('id', $lecture)
-      ->select('id', 'title', 'video', 'content', 'order_sort')->firstOrFail();
+    $contentLecture = CourseLectures::where('course_id', $course)
+      ->when($lecture, function ($query, $lecture) {
+        return $query->where('id', $lecture);
+      })
+      ->select('id', 'title', 'video', 'content', 'order_sort')
+      ->firstOrFail();
+
 
     $nextLecture = CourseLectures::where('course_id', $course)
-      ->where('id', '>', $lecture)->select('id', 'order_sort')
+      ->where('id', '>', $contentLecture->id)->select('id', 'order_sort')
       ->orderBy('order_sort', 'asc')
       ->first();
 

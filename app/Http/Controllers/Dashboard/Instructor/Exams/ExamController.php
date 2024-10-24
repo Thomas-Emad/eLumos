@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
 
 class ExamController extends Controller
@@ -28,7 +29,7 @@ class ExamController extends Controller
   /**
    * Store a newly created resource in storage.
    */
-  public function store(Request $request): JsonResponse
+  public function store(Request $request): RedirectResponse
   {
     $validation = Validator::make($request->all(), [
       'title' => 'required|string|min:3|max:100',

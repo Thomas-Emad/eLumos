@@ -9,14 +9,14 @@ use App\Http\Requests\ExamQuestionRequest;
 use App\Http\Resources\Dashboard\Instructor\ExamQuestionResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Http\RedirectResponse;
 
 class ExamQuestionController extends Controller
 {
   /**
    * Store a newly created resource in storage.
    */
-  public function store(ExamQuestionRequest $request, ExamQuestionService $questionsService): JsonResponse
+  public function store(ExamQuestionRequest $request, ExamQuestionService $questionsService): RedirectResponse
   {
     // Store Question
     $questionId = $questionsService->storeQuestion($request->exam_id, $request->title, $request->type_question);
@@ -42,7 +42,7 @@ class ExamQuestionController extends Controller
    * @param string $type The type of question, default is 'checkbox'.
    * @return \Illuminate\Http\Response
    */
-  public function getComponent($type = 'checkbox'): Response
+  public function getComponent($type = 'checkbox'): String
   {
     if (!request()->ajax()) {
       return abort(404);
@@ -54,7 +54,7 @@ class ExamQuestionController extends Controller
       'attachment' => 'attachment',
       default => 'checkbox'
     };
-    return view('components.instructor.exams.answers-' . $type)->render();
+    return view('components.exams.answers-' . $type)->render();
   }
 
 

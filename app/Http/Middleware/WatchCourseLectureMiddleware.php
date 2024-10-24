@@ -10,7 +10,8 @@ use App\Models\CourseLectures;
 
 class WatchCourseLectureMiddleware
 {
-  protected static bool $statusAllowUseTerminate;
+  protected static bool $statusAllowUseTerminate = false;
+  protected static ?string $lectureUri = null;
 
   /**
    * Handle an incoming request.
@@ -28,17 +29,21 @@ class WatchCourseLectureMiddleware
       ])
       ->get();
 
+    $firstLectureInCourse = $lectures->sortBy('order_sort')->first()->id;
+
+    // if we not have lecture in uri, sit one
+    static::$lectureUri = ($request->lecture) ??  $firstLectureInCourse;
+
     $lastLectureWatched = $lectures->filter(function ($lecture) {
-      return $lecture->watchedLecture ?? null;
+      return isset($lecture->watchedLecture);
     })->sortByDesc('watchedLecture.lecture_id')->first();
 
-    $currentLectureWatched = $lectures->where('id', $request->lecture)
+
+    $currentLectureWatched = $lectures->where('id', static::$lectureUri)
       ->first()?->watchedLecture;
 
     $nextLectureCanWatch = $lectures->where('order_sort', ($lastLectureWatched->order_sort ?? 0) + 1)
       ->pluck('id');
-
-    $firstLectureInCourse = $lectures->sortBy('order_sort')->first()->id;
 
     // Compile all open lectures for watching
     $openForWatch = array_filter([
@@ -48,12 +53,12 @@ class WatchCourseLectureMiddleware
       ...$nextLectureCanWatch->toArray(),
     ]);
 
-    if (!in_array($request->lecture, $openForWatch)) {
+    if (!in_array(static::$lectureUri, $openForWatch)) {
       return abort(404); // tell him we should watch prev lectures first
     }
 
     // Pass status for work Terminate or not
-    static::$statusAllowUseTerminate = true;
+    static::$statusAllowUseTerminate = false;
 
     return $next($request);
   }
@@ -71,10 +76,9 @@ class WatchCourseLectureMiddleware
    */
   public function terminate(Request $request, Response $response)
   {
-    if (Auth::check() && static::$statusAllowUseTerminate === true) {
-      $lectureId = $request->route('lecture');
+    if (Auth::check() && !is_null(static::$lectureUri) && static::$statusAllowUseTerminate === true) {
       $courseId = $request->route('course');
-      $this->watchCourseLecture($lectureId, $courseId);
+      $this->watchCourseLecture(static::$lectureUri, $courseId);
     }
   }
 

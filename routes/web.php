@@ -5,7 +5,7 @@ use App\Http\Controllers\Dashboard\Admin\{RoleController, CourseController as Da
 use App\Http\Controllers\{StepsForwardController};
 use App\Http\Controllers\Dashboard\Instructor\{CoursesController, CourseSectionsController, CourseLecturesController};
 use App\Http\Controllers\Dashboard\Instructor\Exams\{ExamController, ExamQuestionController};
-use App\Http\Controllers\Dashboard\Student\{CoursesEnrolledController};
+use App\Http\Controllers\Dashboard\Student\{CoursesEnrolledController, StudentExamController};
 use App\Http\Controllers\Student\{CourseStudentController, BasketController, CheckoutController, WishlistController};
 
 
@@ -47,6 +47,13 @@ Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => '
     Route::get('/courses-list/{course}/{lecture?}',  'show')->name('student.show')
       ->middleware('watch-course-lecture');
   });
+
+  // Exam For Courses
+  Route::controller(StudentExamController::class)->group(function () {
+    Route::get('/student/exams',  'index')->name('student.exams.index');
+    Route::get('/student/exams/{exam}', 'edit')->name('student.exams.test');
+    Route::patch('/student/exams/{exam}/send', 'update')->name('student.exams.update');
+  });
 });
 
 Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
@@ -74,9 +81,9 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     Route::apiResource('/api/courses/lectures', CourseLecturesController::class)->names('api.instructor.courses.lectures');
 
     // Exams
-    Route::resource('exams', ExamController::class)->names('instructor.exams');
-    Route::resource('exam/questions', ExamQuestionController::class)->names('instructor.exams.questions');
-    Route::get('exam/questions/component/{type?}',  [ExamQuestionController::class, 'getComponent'])->name('instructor.exams.get-component');
+    Route::resource('instructor/exams', ExamController::class)->names('instructor.exams');
+    Route::resource('instructor/exam/questions', ExamQuestionController::class)->names('instructor.exams.questions');
+    Route::get('instructor/exam/questions/component/{type?}',  [ExamQuestionController::class, 'getComponent'])->name('instructor.exams.get-component');
   });
 
   /* *******************Admin************************* */

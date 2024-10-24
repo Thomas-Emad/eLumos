@@ -57,6 +57,12 @@
                             <span>Wishlist</span>
                         </a>
                     </li>
+                    <li><a href="{{ route('dashboard.student.exams.index') }}"
+                            class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.student.exams.index')) text-amber-600 @endif hover:text-amber-600 duration-200">
+                            <i class="fa-solid fa-clipboard-question"></i>
+                            <span>Previous Exams</span>
+                        </a>
+                    </li>
                     {{-- <li><a href="{{ route('dashboard.index') }}/wishlist"
                             class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/wishlist')) @endif hover:text-amber-600 duration-200">
                             <i class="fa-solid fa-heart"></i>

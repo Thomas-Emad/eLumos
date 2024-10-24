@@ -10,7 +10,8 @@ class CourseStudentController extends Controller
 {
   public function index(Request $request)
   {
-    $courses = Course::with(['user', 'wishlist'])->paginate(9);
+    $courses = Course::with(['user', 'wishlist'])
+      ->where('status', 'active')->paginate(9);
     return view('pages.courses', compact('courses'));
   }
 

@@ -121,12 +121,14 @@ class CourseSectionsController extends Controller
     $section = $sections->where('id', $request->section_id)->first();
 
     $sectionService->deleteAllVideo($section->lectures);
+    $section->delete();
 
     // Change Order Sort => order_sort - 1 for every section
     foreach ($sections as $section) {
       if ($section->id == $request->section_id) continue;
       $course->changeSortOrderSection($section->id, true);
     }
+
 
     return response()->json([
       'message' => 'Deleted Section Has Been Done Successfully.',

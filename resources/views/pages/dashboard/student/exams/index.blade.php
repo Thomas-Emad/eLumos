@@ -1,14 +1,10 @@
 @extends('layouts.dashboard')
-@section('title', 'Exams')
+@section('title', 'Previous Exams')
 
 @section('content-dashboard')
     <div class="container mx-auto min-h-auto-xl p-4 rounded-xl border border-gray-200 bg-white dark:bg-gray-700">
         <div class="mb-2 border-b border-gray-200 pb-2 flex justify-between items-center gap-2">
-            <h2 class="font-bold text-xl ">Your Exams</h2>
-            <button class="py-2 px-4 text-white bg-green-700 hover:bg-green-900 rounded-lg duration-300 text-sm font-bold"
-                data-modal-target='add-exam-modal' data-modal-toggle='add-exam-modal'>
-                New One
-            </button>
+            <h2 class="font-bold text-xl ">Previous Exams You Join in:</h2>
         </div>
 
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg min-h-[350px]">
@@ -48,48 +44,48 @@
                             Title
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Used
+                            Degree
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Duration
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Questions
+                            Status
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Created
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Action
+                            More
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($exams as $key => $exam)
+                    @forelse ($sessions as $key => $session)
                         <tr
                             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                             <td class="w-4 p-4">
-                                {{ $exams->firstItem() + $key }}
+                                {{ $sessions->firstItem() + $key }}
                             </td>
                             <th scope="row"
                                 class=" px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {{ \Str::limit($exam->title, 10, '...') }}
+                                {{ \Str::limit($session->exam->title, 10, '...') }}
                             </th>
                             <td class="px-6 py-4">
-                                {{ $exam->lectures->count() }}
+                                {{ '' }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ is_null($exam->duration) ? 'No' : $exam->duration . 'M' }}
+                                {{ '' }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $exam->questions->count() }}
+                                {{ '' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                {{ $exam->created_at->diffForHumans() }}
+                                {{ $session->created_at->diffForHumans() }}
                             </td>
                             <td class="px-6 py-4">
-                                <a href="{{ route('dashboard.instructor.exams.show', $exam->id) }}"
-                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Manger</a>
+                                <a href="{{ route('dashboard.instructor.exams.show', $session->id) }}"
+                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Preview</a>
                             </td>
                         </tr>
                     @empty
@@ -106,7 +102,7 @@
             </table>
 
             <div class="p-4 flex gap-4 justify-end items-center">
-                {{ $exams->links() }}
+                {{ $sessions->links() }}
             </div>
         </div>
 
@@ -146,9 +142,9 @@
                         <option value="allow">Put your Duration Exam</option>
                     </x-select>
                 </div>
-                <div class="duration hidden">
+                <div class="duration">
                     <input type="number" min='10' max="240" name="duration"
-                        class='outline-none border-1 border-gray-400 focus:border-gray-600 duration-300 rounded-lg w-full'>
+                        class='hidden outline-none border-1 border-gray-400 focus:border-gray-600 duration-300 rounded-lg w-full'>
                     <p class="text-sm text-gray-700">- For minute</p>
                 </div>
             </div>

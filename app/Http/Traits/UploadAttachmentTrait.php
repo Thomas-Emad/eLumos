@@ -3,7 +3,7 @@
 namespace App\Http\Traits;
 
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
-
+use Exception;
 
 trait UploadAttachmentTrait
 {
@@ -39,18 +39,22 @@ trait UploadAttachmentTrait
    */
   protected static function uploadAttachment($file, string $folder, string $typeResource): string
   {
-    $attachment = Cloudinary::upload($file->getRealPath(), [
-      "asset_folder" => "$folder/",
-      'resource_type' => "$typeResource",
-      "chunk_size" => 6000000,
-      'allowed_formats' => ['png', 'jpg', 'jpeg', 'pdf']
-    ]);
-    $attachmentJson = [
-      'public_id' => $attachment->getPublicId(),
-      'url' => $attachment->getSecurePath(),
-    ];
+    try {
+      $attachment = Cloudinary::upload($file->getRealPath(), [
+        "asset_folder" => "$folder/",
+        'resource_type' => "$typeResource",
+        "chunk_size" => 6000000,
+        'allowed_formats' => ['png', 'jpg', 'jpeg', 'pdf']
+      ]);
+      $attachmentJson = [
+        'public_id' => $attachment->getPublicId(),
+        'url' => $attachment->getSecurePath(),
+      ];
 
-    return json_encode($attachmentJson);
+      return json_encode($attachmentJson);
+    } catch (\Exception $e) {
+      throw new Exception('failed To Upload In Cloudinary, Because: ' . $e->getMessage());
+    }
   }
 
 

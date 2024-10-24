@@ -42,7 +42,7 @@
                 </div>
                 <div class="flex gap-2 items-center">
                     <img src="{{ asset('assets/images/icons/time.png') }}" alt="icon time count" class="w-5 h-5">
-                    <span>{{ explainSecondsToHumans($course->lectures()->sum('video_duartion')) }}</span>
+                    <span>{{ explainSecondsToHumans($course->lectures()->sum('video_duration')) }}</span>
                 </div>
                 <div class="flex gap-2 items-center">
                     <img src="{{ asset('assets/images/icons/students.png') }}" alt="icon students count"

@@ -105,9 +105,13 @@
             function buildCoursesHTML(response, typeCourses) {
                 if (response.count > 0) {
                     response.courses.map((course) => {
+                        console.log(course)
+                        let routePlayCourse = ("{{ route('dashboard.student.show', ':id') }}").replace(
+                            ':id', course.data.course_id);
+
                         $(`.courses`).append(`
                           <div class="p-2 bg-white dark:bg-gray-600 border border-gray-200 rounded-xl">
-                              <a href="{{ route('course-details') }}/${course.data.id}" class="block rounded-xl overflow-hidden">
+                              <a href="{{ route('course-details') }}/${course.data.course_id}" class="block rounded-xl overflow-hidden">
                                   <img src="${course.data.mockup}" onerror='this.onerror=null;this.src="{{ asset('assets/images/course.png') }}"'
                                       class="w-full h-[150px] hover:scale-125 duration-300" alt="photo course">
                               </a>
@@ -124,11 +128,11 @@
                                           <span class="text-sm">${course.user.headline}</span>
                                       </div>
                                   </div>
-                                  <a href="#" class='text-sm text-white font-bold bg-amber-500 p-2 rounded-lg'>
+                                  <a href="${routePlayCourse}" class='text-sm text-white font-bold bg-amber-500 p-2 rounded-lg'>
                                     Play  
                                   </a>
                               </div>
-                              <a href="{{ route('course-details') }}/${course.data.id}"
+                              <a href="{{ route('course-details') }}/${course.data.course_id}"
                                   class="block pb-2 text-xl font-bold hover:text-amber-600 duration-200">
                                   ${course.data.title}
                               </a>

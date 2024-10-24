@@ -37,7 +37,7 @@ class CourseLecturesController extends Controller
         'course_id' => $section->course_id,
         'title' => $request->title,
         'video' => $videoJson ?? null,
-        'video_duartion' => isset($videoJson) ? json_decode($videoJson)->duration : null,
+        'video_duration' => isset($videoJson) ? json_decode($videoJson)->duration : null,
         'content' => $request->content ?? null,
         'order_sort' => $section->lectures()->count() + 1
       ]);
@@ -93,7 +93,7 @@ class CourseLecturesController extends Controller
     $lecture->update([
       'title' => $request->title,
       'video' => $videoJson ?? null,
-      'video_duartion' => json_decode($videoJson)->duration ?? null,
+      'video_duration' => json_decode($videoJson)->duration ?? null,
       'content' => $request->content ?? null,
     ]);
 

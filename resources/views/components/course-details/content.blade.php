@@ -30,7 +30,7 @@
                 <h2 class=" text-xl text-amber-700 mb-3">Course Content</h2>
                 <div>
                     {{ $course->lectures()->count() }} Lectures /
-                    {{ explainSecondsToHumans($course->lectures()->sum('video_duartion')) }}
+                    {{ explainSecondsToHumans($course->lectures()->sum('video_duration')) }}
                 </div>
             </div>
 
@@ -179,7 +179,7 @@
                     <span>
                         <span>Duration:</span>
                         <span
-                            class="font-bold">{{ explainSecondsToHumans($course->lectures()->sum('video_duartion')) }}</span>
+                            class="font-bold">{{ explainSecondsToHumans($course->lectures()->sum('video_duration')) }}</span>
                     </span>
                 </div>
                 <div class="p-2 border-b border-gray-200 last-of-type:border-none">
