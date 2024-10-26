@@ -20,10 +20,16 @@ class StudentCourseExam extends Model
     'status',
   ];
 
+  public function lecture(): BelongsTo
+  {
+    return $this->belongsTo(CourseLectures::class, 'lecture_id', 'id');
+  }
+
   public function exam(): BelongsTo
   {
     return $this->belongsTo(Exam::class, 'exam_id', 'id');
   }
+
 
   public function answerStudent(): HasMany
   {

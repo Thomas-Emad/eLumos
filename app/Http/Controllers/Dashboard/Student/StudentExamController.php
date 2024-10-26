@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\StudentCourseExam;
 use App\Http\Traits\UploadAttachmentTrait;
 use App\Services\StudentExamService;
+use Illuminate\Support\Facades\Auth;
 
 
 class StudentExamController extends Controller
@@ -35,16 +36,19 @@ class StudentExamController extends Controller
    */
   public function store(Request $request)
   {
-    //
+    if ($request->type !== 'join') {
+      $session = Auth::user()->sessionsExam()->create(
+        ['lecture_id' => $request->lecture_id, 'exam_id' => $request->exam_id]
+      );
+    } else {
+      $session = Auth::user()->sessionsExam()->firstOrCreate(
+        ['lecture_id' => $request->lecture_id, 'exam_id' => $request->exam_id],
+        ['lecture_id' => $request->lecture_id, 'exam_id' => $request->exam_id]
+      );
+    }
+    return redirect()->route("dashboard.student.exams.test", ['exam' => $session->id]);
   }
 
-  /**
-   * Display the specified resource.
-   */
-  public function show(string $id)
-  {
-    //
-  }
 
   /**
    * Show the form for editing the specified resource.
@@ -57,6 +61,13 @@ class StudentExamController extends Controller
       'exam.questions.answers:id,question_id,answer,is_true'
     )->findOrFail($id);
 
+    // check from Duration Exam's Session 
+    if ($session->status !== 'processing') {
+      return view('pages.dashboard.student.exams.alerts.done', compact('session'));
+    } elseif (!is_null($session->exam->duration) && (now()->addMinutes($session->exam->duration) <= $session->created_at->addMinutes($session->exam->duration))) {
+      return view('pages.dashboard.student.exams.alerts.expired');
+    }
+
     return view('pages.dashboard.student.exams.exam', compact('session'));
   }
 
@@ -66,34 +77,44 @@ class StudentExamController extends Controller
   public function update(Request $request, StudentExamService $studentExamService, string $id)
   {
     $session = StudentCourseExam::with([
+      'lecture:id,course_id',
       'exam:id,duration',
       'exam.questions:id,exam_id,type_question',
       'exam.questions.answers:id,question_id,is_true'
-    ])->findOrFail($id);
+    ])->where('status', 'processing')->findOrFail($id);
 
     $request->validate([
       'user_id' => 'required|in:0,' . $session->user_id,
-      'questions' => 'array|min:' . $session->exam->questions->count(),
-      'questions.*.typeQuestion' => 'required|in:checkbox,radio,text,attachment',
-      'questions.*.answers' => 'required',
+      'questions' => 'array|max:' . $session->exam->questions->count(),
     ]);
 
     $studentExamService->questionsEngine($session, $request->questions);
 
     $statusExam = $studentExamService->getStatusExam($session->exam->questions->count());
 
+    // Save User Watched this Lecture
+    if ($statusExam === 'sucess') {
+      $studentExamService->markupOnWatchLecture($session->lecture->course_id, $session->lecture_id);
+    }
+
     // After finish from Correct Answers Upload Session
     $session->update([
       'degree' => $studentExamService->getDegree(),
       'status' => $statusExam
     ]);
+
+    return redirect()->route('dashboard.student.exams.done', $session->id);
   }
 
-  /**
-   * Remove the specified resource from storage.
-   */
-  public function destroy(string $id)
+
+  public function report(string $session)
   {
-    //
+    return view('pages.dashboard.student.exams.alerts.report');
+  }
+
+  public function done(string $session)
+  {
+    $session = StudentCourseExam::findOrfail($session);
+    return view('pages.dashboard.student.exams.alerts.done', compact('session'));
   }
 }

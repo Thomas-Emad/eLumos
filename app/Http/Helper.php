@@ -22,3 +22,27 @@ if (!function_exists('explainSecondsToHumans')) {
     ]);
   }
 }
+
+if (!function_exists('getLectureIcons')) {
+  function getLectureIcons($text, $video, $exam)
+  {
+    $iconsHtml = [
+      'text' => '<i class="fa-solid fa-book"></i>',
+      'video' => '<i class="fa-solid fa-video"></i>',
+      'exam' => '<i class="fa-solid fa-clipboard-question"></i>'
+    ];
+    $html = '';
+
+    if ($text) {
+      $html .= $iconsHtml['text'];
+    }
+    if ($video) {
+      $html .= $iconsHtml['video'];
+    }
+    if ($exam) {
+      $html .= $iconsHtml['exam'];
+    }
+
+    return $html;
+  }
+}

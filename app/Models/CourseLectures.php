@@ -25,6 +25,10 @@ class CourseLectures extends Model
   {
     return $this->hasOne(ExamCourseLecture::class, 'lecture_id', 'id');
   }
+  public function examStudent(): HasMany
+  {
+    return $this->hasMany(StudentCourseExam::class, 'lecture_id', 'id');
+  }
 
   public function attachments(): HasMany
   {

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CoursesEnrolled;
 use App\Http\Resources\CoursesEnrolledResource;
 use App\Models\CourseLectures;
+use App\Services\CoursesEnrolledService;
 use Illuminate\Support\Facades\Cache;
 
 
@@ -77,33 +78,13 @@ class CoursesEnrolledController extends Controller
    * @param  string  $lecture
    * @return \Illuminate\Http\Response
    */
-  public function show(string $course, string $lecture = null)
+  public function show(CoursesEnrolledService $courseService, string $course, string $lecture = null)
   {
-    $courseStudent = CoursesEnrolled::with([
-      'course:id,title,mockup',
-      'course.sections:id,course_id,title',
-      'course.sections.lectures:id,course_id,section_id,title,video,order_sort',
-      'course.sections.lectures.watchedLecture' => function ($query) {
-        $query->where('user_id', auth()->user()->id);
-      }
-    ])->where("course_id", $course)->where('user_id', auth()->user()->id)
-      ->select('course_id')->firstOrFail();
+    $courseStudent = $courseService->getCourseEnrolled($course);
+    $currentLecture =  $courseService->getCurrentLectureFromAll($courseStudent, $lecture);
+    $nextLecture =  $courseService->getNextLectureFromAll($courseStudent, $currentLecture->id);
+    $setTimeOutForWatchLecture = $courseService->setTimeOutForWatchLecture($currentLecture);
 
-    $contentLecture = CourseLectures::where('course_id', $course)
-      ->when($lecture, function ($query, $lecture) {
-        return $query->where('id', $lecture);
-      })
-      ->select('id', 'title', 'video', 'content', 'order_sort')
-      ->firstOrFail();
-
-
-    $nextLecture = CourseLectures::where('course_id', $course)
-      ->where('id', '>', $contentLecture->id)->select('id', 'order_sort')
-      ->orderBy('order_sort', 'asc')
-      ->first();
-
-    $nextLecture = $nextLecture ?? null;
-
-    return view('pages.dashboard.student.playlist', compact('courseStudent', 'contentLecture', 'nextLecture'));
+    return view('pages.dashboard.student.playlist', compact('courseStudent', 'currentLecture', 'nextLecture', 'setTimeOutForWatchLecture'));
   }
 }

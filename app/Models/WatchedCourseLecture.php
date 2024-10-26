@@ -14,6 +14,7 @@ class WatchedCourseLecture extends Model
     'user_id',
     'course_id',
     'lecture_id',
+    'updated_at',
   ];
 
   public function lecture(): BelongsTo

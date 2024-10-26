@@ -7,7 +7,14 @@
         <div class="flex gap-4 justify-between items-center mb-4">
             <span></span>
             <h2 class="font-bold text-2xl  text-center">{{ $session->exam->title }}</h2>
-            <span>{{ $session->exam->duration }}</span>
+            <div>
+                @if (!is_null($session->exam->duration))
+                    <img id='icon-timer' class="w-8" src="{{ asset('assets/images/icons/clock.png') }}" alt="icon timer">
+                    <span id="timer" class="hidden font-xl font-bold">{{ $session->exam->duration }}</span>
+                @else
+                    <span class="text-sm font-bold text-green-800">Take Your Time</span>
+                @endif
+            </div>
         </div>
         <x-stepper>
             <x-slot name='steps'>
@@ -38,7 +45,7 @@
             </x-slot>
             <x-slot name='content'>
                 <form action="{{ route('dashboard.student.exams.update', $session->id) }}" method="POST"
-                    enctype="multipart/form-data">
+                    enctype="multipart/form-data" class="form-exam">
                     @csrf
                     @method('PATCH')
 
@@ -84,4 +91,70 @@
             </x-slot>
         </x-stepper>
     </div>
+@endsection
+
+@section('js')
+    <script>
+        function startTimer(iconTimer, duration, display) {
+            let timer = duration,
+                minutes, seconds;
+            const halfTime = duration / 2;
+            const quarterTime = duration / 4;
+
+            // Hidden icon timer
+            setTimeout(() => {
+                display.classList.remove("hidden");
+                iconTimer.classList.add("hidden");
+            }, 1000);
+
+            const interval = setInterval(() => {
+                // Calculate minutes and seconds
+                minutes = Math.floor(timer / 60);
+                seconds = timer % 60;
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                // Update the display
+                display.textContent = minutes + ":" + seconds;
+
+                // Change class based on remaining time
+                if (timer <= quarterTime) {
+                    display.classList.remove("text-yellow-500", "text-green-500");
+                    display.classList.add("text-red-500"); // Last quarter: red
+                } else if (timer <= halfTime) {
+                    display.classList.remove("text-green-500");
+                    display.classList.add("text-yellow-500"); // Halfway mark: yellow
+                } else {
+                    display.classList.remove("text-yellow-500", "text-red-500");
+                    display.classList.add("text-green-500"); // Initial stage: green
+                }
+
+                // Stop the timer when it reaches zero
+                if (--timer < 0) {
+                    clearInterval(interval);
+                    display.textContent = "Time's up!";
+                }
+            }, 1000);
+        }
+
+        // Start the timer with 10 minutes (600 seconds)
+        window.onload = function() {
+            const iconTimer = document.getElementById("icon-timer");
+            const display = document.getElementById("timer");
+
+            startTimer(iconTimer, display.innerHTML * 60, display);
+        };
+    </script>
+
+    {{-- check if this exam have time, and it out now, Send form --}}
+    @if (!is_null($session->exam->duration))
+        <script>
+            const display = document.getElementById("timer");
+
+            setTimeout(() => {
+                $('.form-exam').submit();
+            }, display.innerHTML * 1000 * 60);
+        </script>
+    @endif
 @endsection

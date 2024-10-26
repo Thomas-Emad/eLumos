@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use App\Http\Traits\UploadAttachmentTrait;
+use Illuminate\Support\Facades\App;
+
+
 
 class StudentExamService
 {
@@ -28,14 +31,16 @@ class StudentExamService
         $questionStudent = $userQuestionRequested[$question->id];
         $rightAnswersQuestion = $question->answers->where('is_true', true)->pluck('id')->toArray();
 
-        foreach ($questionStudent['answers'] as $answer) {
-          $this->answerEngine(
-            $session,
-            $question->id,
-            $question->type_question,
-            $answer,
-            $rightAnswersQuestion
-          );
+        if (sizeof($questionStudent) > 0 && isset($questionStudent['answers'])) {
+          foreach ($questionStudent['answers'] as $answer) {
+            $this->answerEngine(
+              $session,
+              $question->id,
+              $question->type_question,
+              $answer,
+              $rightAnswersQuestion
+            );
+          }
         }
       }
     }
@@ -108,7 +113,7 @@ class StudentExamService
   protected function evaluateAnswer(string $typeQuestion, $answerStudent, array $rightAnswersQuestion): bool|null
   {
     // For text and attachment questions, manual correction is needed
-    if (in_array($typeQuestion, ['text', 'attachment'])) {
+    if (in_array($typeQuestion, ['text', 'attachment']) && !empty($answerStudent)) {
       // Assign the first correct answer, but manual correction needed
       $answerStudent = $rightAnswersQuestion[0];
       return null;
@@ -195,5 +200,21 @@ class StudentExamService
   public function isManuallyCorrect(): Bool
   {
     return $this->needManuallyCorrect;
+  }
+
+
+  /**
+   * Marks a lecture as watched by the user, and updates the progress of the course.
+   *
+   * @param int $courseId The ID of the course.
+   * @param int $lectureId The ID of the lecture.
+   * @return void
+   */
+  public function markupOnWatchLecture($courseId, $lectureId)
+  {
+    return App::call([new \App\Actions\WatchCourseLectureAction, 'markupLecture'], [
+      'courseId' => $courseId,
+      'lectureId' => $lectureId,
+    ]);
   }
 }

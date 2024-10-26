@@ -5,7 +5,7 @@ use App\Http\Controllers\Dashboard\Admin\{RoleController, CourseController as Da
 use App\Http\Controllers\{StepsForwardController};
 use App\Http\Controllers\Dashboard\Instructor\{CoursesController, CourseSectionsController, CourseLecturesController};
 use App\Http\Controllers\Dashboard\Instructor\Exams\{ExamController, ExamQuestionController};
-use App\Http\Controllers\Dashboard\Student\{CoursesEnrolledController, StudentExamController};
+use App\Http\Controllers\Dashboard\Student\{CoursesEnrolledController, StudentExamController, WatchCourseLectureController};
 use App\Http\Controllers\Student\{CourseStudentController, BasketController, CheckoutController, WishlistController};
 
 
@@ -44,15 +44,19 @@ Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => '
   Route::controller(CoursesEnrolledController::class)->group(function () {
     Route::get('/courses-list',  'index')->name('courses-list');
     Route::get('/courses-list/show/courses/{type?}',  'getCourses')->name('courses-list.show');
-    Route::get('/courses-list/{course}/{lecture?}',  'show')->name('student.show')
-      ->middleware('watch-course-lecture');
+    Route::get('/courses-list/{course}/{lecture?}',  'show')->name('student.show');
   });
+  Route::post('/courses-list/lecture/watch',  [WatchCourseLectureController::class, '__invoke'])->name('student.lecture.watch');
 
   // Exam For Courses
   Route::controller(StudentExamController::class)->group(function () {
     Route::get('/student/exams',  'index')->name('student.exams.index');
     Route::get('/student/exams/{exam}', 'edit')->name('student.exams.test');
+    Route::post('/student/exams/store', 'store')->name('student.exams.store');
     Route::patch('/student/exams/{exam}/send', 'update')->name('student.exams.update');
+    Route::get('/student/exams/{session}/report', 'report')->name('student.exams.report');
+    Route::get('/student/exams/{session}/done', 'done')->name('student.exams.done');
+    Route::view('/student/exams/{session}/expired', 'pages.dashboard.student.exams.alerts.expired')->name('student.exams.expired');
   });
 });
 

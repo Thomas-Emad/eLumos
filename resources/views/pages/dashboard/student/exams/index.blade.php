@@ -72,13 +72,13 @@
                                 {{ \Str::limit($session->exam->title, 10, '...') }}
                             </th>
                             <td class="px-6 py-4">
-                                {{ '' }}
+                                {{ $session->degree }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ '' }}
+                                {{ $session->created_at->diffInMinutes($session->updated_at) . '/' . $session->exam->duration }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ '' }}
+                              {{ $session->status }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 {{ $session->created_at->diffForHumans() }}
