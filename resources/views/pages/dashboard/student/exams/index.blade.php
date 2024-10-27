@@ -8,7 +8,7 @@
         </div>
 
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg min-h-[350px]">
-            <form action="{{ route('dashboard.instructor.exams.index') }}" method="GET"
+            <form action="{{ route('dashboard.student.exams.index') }}" method="GET"
                 class="flex flex-row sm:flex-column gap-2 items-center justify-between pb-4">
                 <x-select name='filterByDate' placeholder="Select Filter Exams By Date">
                     <option value="today" @selected(request()->get('filterByDate') === 'today')>Today</option>
@@ -72,19 +72,19 @@
                                 {{ \Str::limit($session->exam->title, 10, '...') }}
                             </th>
                             <td class="px-6 py-4">
-                                {{ $session->degree }}
+                                {{ $session->degree . '/' . $session->exam->questions->count() }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $session->created_at->diffInMinutes($session->updated_at) . '/' . $session->exam->duration }}
+                                {{ round($session->created_at->diffInMinutes($session->updated_at), 2) . '/' . $session->exam->duration }}
                             </td>
                             <td class="px-6 py-4">
-                              {{ $session->status }}
+                                {{ $session->status }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 {{ $session->created_at->diffForHumans() }}
                             </td>
                             <td class="px-6 py-4">
-                                <a href="{{ route('dashboard.instructor.exams.show', $session->id) }}"
+                                <a href="{{ route('dashboard.student.exams.report', $session->id) }}"
                                     class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Preview</a>
                             </td>
                         </tr>
@@ -93,7 +93,7 @@
                             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                             <td class="w-4 p-4" colspan="7">
                                 <p class="font-bold text-center italic text-gray-600">
-                                    it Look you not Have Any Exam?! Let's Add one for your Lectures..
+                                    it Look you not Have Any Exam?! Let's Solve one Now..
                                 </p>
                             </td>
                         </tr>
@@ -107,74 +107,4 @@
         </div>
 
     </div>
-
-    {{-- Exams Modals  --}}
-    <x-modal id="add-exam-modal">
-        <form action="{{ route('dashboard.instructor.exams.store') }}" method="POST">
-            @csrf
-            <!-- Modal header -->
-            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-50">
-                    <span>Add New Exam..</span>
-                </h3>
-                <button type="button"
-                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 dark:text-gray-50 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                    data-modal-hide="add-exam-modal">
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-            </div>
-            <!-- Modal body -->
-            <div class="p-4 md:p-5 space-y-4">
-                <p class="text-sm text-gray-500 dark:text-gray-100 mb-0">
-                    It is preferable to write a title that expresses the purpose of the test..
-                </p>
-                <div class="flex gap-2">
-                    <input type="text" name="title"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 dark:text-gray-50 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5"
-                        placeholder="Title of this Exam.." required />
-                    <x-select name='with_time' placeholder="Allow to Add Duration for Exam">
-                        <option value="no">Not need Time</option>
-                        <option value="allow">Put your Duration Exam</option>
-                    </x-select>
-                </div>
-                <div class="duration">
-                    <input type="number" min='10' max="240" name="duration"
-                        class='hidden outline-none border-1 border-gray-400 focus:border-gray-600 duration-300 rounded-lg w-full'>
-                    <p class="text-sm text-gray-700">- For minute</p>
-                </div>
-            </div>
-            <!-- Modal footer -->
-            <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                <button data-modal-hide="add-exam-modal" type="submit"
-                    class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                    Save
-                </button>
-                <button data-modal-hide="add-exam-modal" type="button"
-                    class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-whit rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Close</button>
-            </div>
-        </form>
-    </x-modal>
-@endsection
-
-@section('js')
-    <script>
-        $(document).ready(function() {
-            // Allow Add Duration for Exam
-            $('select[name=with_time]').on('change', function() {
-                let durationDiv = $('.duration');
-                let inputTime = $('.duration input[name=duration]');
-                if (this.value == 'no') {
-                    durationDiv.addClass('hidden');
-                } else {
-                    durationDiv.removeClass('hidden');
-                }
-                inputTime.val('');
-            });
-        })
-    </script>
 @endsection

@@ -10,7 +10,7 @@
             <div>
                 @if (!is_null($session->exam->duration))
                     <img id='icon-timer' class="w-8" src="{{ asset('assets/images/icons/clock.png') }}" alt="icon timer">
-                    <span id="timer" class="hidden font-xl font-bold">{{ $session->exam->duration }}</span>
+                    <span id="timer" class="hidden font-xl font-bold">{{ $timeLeftExam }}</span>
                 @else
                     <span class="text-sm font-bold text-green-800">Take Your Time</span>
                 @endif
@@ -137,24 +137,23 @@
                 }
             }, 1000);
         }
-
-        // Start the timer with 10 minutes (600 seconds)
-        window.onload = function() {
-            const iconTimer = document.getElementById("icon-timer");
-            const display = document.getElementById("timer");
-
-            startTimer(iconTimer, display.innerHTML * 60, display);
-        };
     </script>
 
     {{-- check if this exam have time, and it out now, Send form --}}
     @if (!is_null($session->exam->duration))
         <script>
-            const display = document.getElementById("timer");
+            // Start the timer 
+            window.onload = function() {
+                const iconTimer = document.getElementById("icon-timer");
+                const display = document.getElementById("timer");
+                startTimer(iconTimer, display.innerHTML, display);
+            };
 
+            // Submit After Finshed time
+            const display = document.getElementById("timer");
             setTimeout(() => {
                 $('.form-exam').submit();
-            }, display.innerHTML * 1000 * 60);
+            }, display.innerHTML * 1000);
         </script>
     @endif
 @endsection

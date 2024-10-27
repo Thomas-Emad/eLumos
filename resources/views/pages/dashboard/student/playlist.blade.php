@@ -47,43 +47,48 @@
                     <img src="{{ asset('assets/images/icons/exam.png') }}" class="w-[200px]" alt="icon exam">
                     <div class="flex flex-col gap-4 items-center">
                         <p class='text-gray-800 text-center'>
-                            @if (is_null($currentLecture->examStudent->last()) || $currentLecture->examStudent->last()?->status == 'processing')
+                            @php
+                                $examStuden = $currentLecture->examStudent->last();
+                            @endphp
+                            @if (is_null($examStuden) || $examStuden?->status == 'processing')
                                 <span> It seems that there is an exam for this lesson</span>
                                 <br>
                                 <span class="text-xs"><b>Note: </b>You will not get the certificate without solving all the
                                     exams</span>
-                            @elseif(!is_null($currentLecture->examStudent->last()) && $currentLecture->examStudent->last()?->status == 'sucess')
+                            @elseif(!is_null($examStuden) && $examStuden?->status == 'sucess')
                                 <span> <b>Congratulations</b>, you have successfully passed this exam, you can move
                                     on.</span>
-                            @elseif(!is_null($currentLecture->examStudent->last()) && $currentLecture->examStudent->last()?->status == 'failed')
-                                <span> <b>Better luck next time</b>, you can try again anytime.</span>
-                            @elseif(!is_null($currentLecture->examStudent->last()) && $currentLecture->examStudent->last()?->status == 'waiting')
+                            @elseif(!is_null($examStuden) && $examStuden?->status == 'failed')
+                                <b>You failed the exam,</b> <br> <span> But don't worry, you can try again anytime you
+                                    want..</span>
+                            @elseif(!is_null($examStuden) && $examStuden?->status == 'waiting')
                                 <span> <b>Wait a minute, </b>, it seems that this exam contains questions that cannot be
                                     corrected automatically, so wait a little, you can proceed for now.</span>
                             @endif
                         </p>
+                        <div class="flex gap-2 items-center">
 
-                        @if (!is_null($currentLecture->examStudent->last()) && $currentLecture->examStudent->last()?->status !== 'processing')
-                            <a href=""
-                                class="cursor-pointer py-2 px-4 font-bold text-white bg-amber-700 hover:bg-amber-900 duration-300 rounded-md">
-                                See Report
-                            </a>
-                        @endif
+                            @if (!is_null($examStuden) && $examStuden?->status !== 'processing')
+                                <a href=""
+                                    class="text-sm cursor-pointer py-2 px-4 font-bold text-white bg-amber-700 hover:bg-amber-900 duration-300 rounded-md">
+                                    See Report
+                                </a>
+                            @endif
 
-                        @if (is_null($currentLecture->examStudent->last()) ||
-                                in_array($currentLecture->examStudent->last()?->status, ['processing', 'sucess', 'failed']))
-                            <form action="{{ route('dashboard.student.exams.store') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="type"
-                                    value="{{ is_null($currentLecture->examStudent) ? 'join' : 'retest' }}">
-                                <input type="hidden" name="exam_id" value="{{ $currentLecture->exam->exam_id }}">
-                                <input type="hidden" name='lecture_id' value="{{ $currentLecture->id }}">
-                                <button type="submit"
-                                    class="cursor-pointer py-2 px-4 font-bold text-white bg-green-700 hover:bg-green-900 duration-300 rounded-md">
-                                    Open Exam
-                                </button>
-                            </form>
-                        @endif
+                            @if (is_null($examStuden) || in_array($examStuden?->status, ['processing', 'sucess', 'failed']))
+                                <form action="{{ route('dashboard.student.exams.store') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="type"
+                                        value="{{ is_null($examStuden) ? 'join' : 'retest' }}">
+                                    <input type="hidden" name="exam_id" value="{{ $currentLecture->exam->exam_id }}">
+                                    <input type="hidden" name='lecture_id' value="{{ $currentLecture->id }}">
+                                    <button type="submit"
+                                        class="text-sm cursor-pointer py-2 px-4 font-bold text-white bg-green-700 hover:bg-green-900 duration-300 rounded-md">
+                                        Open Exam
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
                     </div>
                 </div>
             @endif
@@ -103,7 +108,7 @@
                             <h3 class="font-bold text-md mb-1">{{ $section->title }}</h3>
                             @foreach ($section->lectures as $lecture)
                                 <a href='@if ($currentLecture->id !== $lecture->id) {{ route('dashboard.student.show', ['course' => $courseStudent->course_id, 'lecture' => $lecture->id]) }} @else # @endif'
-                                    class="mb-1 flex gap-2 justify-between items-center p-2 hover:bg-gray-800 duration-200 cursor-pointer rounded-lg @if ($currentLecture->id === $lecture->id || !is_null($lecture->watchedLecture)) bg-amber-700 @else bg-gray-950 @endif">
+                                    class="mb-1 flex gap-2 justify-between items-center p-2 hover:bg-gray-800 duration-200 cursor-pointer rounded-lg @if ($currentLecture->id === $lecture->id) bg-amber-700 @elseif(!is_null($lecture->watchedLecture)) bg-green-700 @else bg-gray-950 @endif">
                                     <div>
                                         <h4 class="font-bold text-sm">{{ $lecture->title }}</h4>
                                     </div>
@@ -126,23 +131,21 @@
 
 @section('js')
     <script>
-        $(document).ready(function() {
-            function markupLecture(timeout) {
-                setTimeout(() => {
-                    $.ajax({
-                        method: 'POST',
-                        url: "{{ route('dashboard.student.lecture.watch') }}",
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            course_id: '{{ $currentLecture->course_id }}',
-                            lecture_id: '{{ $currentLecture->id }}',
-                        },
-                    }).always(function(response) {
-                        console.log(response)
-                    })
-                }, timeout * 1000);
-            }
-        })
+        function markupLecture(timeout) {
+            setTimeout(() => {
+                $.ajax({
+                    method: 'POST',
+                    url: "{{ route('dashboard.student.lecture.watch') }}",
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        course_id: '{{ $currentLecture->course_id }}',
+                        lecture_id: '{{ $currentLecture->id }}',
+                    },
+                }).always(function(response) {
+                    console.log(response)
+                })
+            }, timeout * 1000);
+        }
     </script>
 
     @if (is_null($currentLecture->exam))

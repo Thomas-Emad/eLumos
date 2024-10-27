@@ -2,26 +2,33 @@
 
 namespace App\Http\Controllers\Dashboard\Student;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\StudentCourseExam;
+use App\Http\Controllers\Controller;
+use App\Http\Traits\FilterByDateTrait;
 use App\Http\Traits\UploadAttachmentTrait;
 use App\Services\StudentExamService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\View\View;
 
 
 class StudentExamController extends Controller
 {
-  use UploadAttachmentTrait;
+  use UploadAttachmentTrait, FilterByDateTrait;
 
   /**
    * Display a listing of the resource.
    */
-  public function index()
+  public function index(Request $request): View
   {
-    $sessions = StudentCourseExam::with('exam')->paginate(15);
+    $sessions = StudentCourseExam::with(['exam'])
+      ->whereHas('exam', function ($query) use ($request) {
+        $query->where('title', 'LIKE', "%$request->title%");
+      })->whereBetween('created_at', static::filterByDate($request->filterByDate))
+      ->paginate(15);
     return view('pages.dashboard.student.exams.index', compact('sessions'));
   }
+
 
   /**
    * Show the form for creating a new resource.
@@ -68,7 +75,9 @@ class StudentExamController extends Controller
       return view('pages.dashboard.student.exams.alerts.expired');
     }
 
-    return view('pages.dashboard.student.exams.exam', compact('session'));
+    $timeLeftExam = round(now()->diffInSeconds($session->created_at->addMinutes($session->exam->duration)), 0);
+
+    return view('pages.dashboard.student.exams.exam', compact('session', 'timeLeftExam'));
   }
 
   /**
