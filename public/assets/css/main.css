@@ -1,37 +1,42 @@
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-    width: 10px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
+  background-color: #f1f1f1;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgb(245 158 11 / var(--tw-bg-opacity));
-    border-radius: 5px;
+  background: rgb(245 158 11 / var(--tw-bg-opacity));
+  border-radius: 5px;
 }
 
 /* Anamtion Start */
 .an-section {
-    opacity: 0;
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  opacity: 0;
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
 .an-right {
-    transform: translateX(-100px);
+  transform: translateX(-100px);
+}
+
+.an-left {
+  transform: translateX(100px);
 }
 
 .an-bottom {
-    transform: translateY(100px)
+  transform: translateY(100px)
 }
 
 .an-bottom.visible,
+.an-left.visible,
 .an-right.visible {
-    opacity: 1;
-    transform: translate(0, 0);
+  opacity: 1;
+  transform: translate(0, 0);
 }

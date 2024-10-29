@@ -46,3 +46,11 @@ if (!function_exists('getLectureIcons')) {
     return $html;
   }
 }
+
+
+if (!function_exists('calcDegreeAnswer')) {
+  function calcDegreeAnswer(int $totalAnswers, int $countTrueAnswers)
+  {
+    return round((1 / $totalAnswers) * $countTrueAnswers, 2);
+  }
+}

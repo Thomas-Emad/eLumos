@@ -20,6 +20,7 @@ return new class extends Migration
 
       $table->text('content')->nullable();
       $table->boolean('is_true')->nullable();
+      $table->text('info')->nullable();
       $table->timestamps();
     });
   }

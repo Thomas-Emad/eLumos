@@ -7,7 +7,7 @@
             <h2 class="font-bold text-xl ">Previous Exams You Join in:</h2>
         </div>
 
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg min-h-[350px]">
+        <div class="relative shadow-md overflow-x-auto  sm:rounded-lg min-h-[350px]">
             <form action="{{ route('dashboard.student.exams.index') }}" method="GET"
                 class="flex flex-row sm:flex-column gap-2 items-center justify-between pb-4">
                 <x-select name='filterByDate' placeholder="Select Filter Exams By Date">
@@ -60,7 +60,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="overflow-x-auto ">
                     @forelse ($sessions as $key => $session)
                         <tr
                             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -75,7 +75,8 @@
                                 {{ $session->degree . '/' . $session->exam->questions->count() }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ round($session->created_at->diffInMinutes($session->updated_at), 2) . '/' . $session->exam->duration }}
+                                {{ round($session->created_at->diffInMinutes($session->updated_at), 2) }}
+                                {{ !is_null($session->exam->duration) ? '/' . $session->exam->duration : '' }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $session->status }}

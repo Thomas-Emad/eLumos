@@ -17,6 +17,7 @@ return new class extends Migration
       $table->foreignUuid('exam_id')->constrained('exams')->cascadeOnDelete();
       $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
       $table->float('degree')->default(0);
+      $table->float('total_degree')->default(0);
       $table->enum('status', ['processing', 'waiting', 'sucess', 'failed'])->default('processing');
       $table->timestamps();
     });

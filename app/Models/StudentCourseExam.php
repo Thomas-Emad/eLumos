@@ -17,6 +17,7 @@ class StudentCourseExam extends Model
     'exam_id',
     'user_id',
     'degree',
+    'total_degree',
     'status',
   ];
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard\Student;
 
 use App\Models\StudentCourseExam;
+use App\Models\ExamQuestion;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\FilterByDateTrait;
 use App\Http\Traits\UploadAttachmentTrait;
@@ -43,14 +44,19 @@ class StudentExamController extends Controller
    */
   public function store(Request $request)
   {
+    $totalDegree = ExamQuestion::where('exam_id',  $request->exam_id)->count();
+    if ($totalDegree === 0) {
+      return abort(500);
+    }
+
     if ($request->type !== 'join') {
       $session = Auth::user()->sessionsExam()->create(
-        ['lecture_id' => $request->lecture_id, 'exam_id' => $request->exam_id]
+        ['lecture_id' => $request->lecture_id, 'exam_id' => $request->exam_id, 'total_degree' => $totalDegree]
       );
     } else {
       $session = Auth::user()->sessionsExam()->firstOrCreate(
         ['lecture_id' => $request->lecture_id, 'exam_id' => $request->exam_id],
-        ['lecture_id' => $request->lecture_id, 'exam_id' => $request->exam_id]
+        ['lecture_id' => $request->lecture_id, 'exam_id' => $request->exam_id, 'total_degree' => $totalDegree]
       );
     }
     return redirect()->route("dashboard.student.exams.test", ['exam' => $session->id]);
@@ -116,9 +122,26 @@ class StudentExamController extends Controller
   }
 
 
+
+
   public function report(string $session)
   {
-    return view('pages.dashboard.student.exams.alerts.report');
+    $session = StudentCourseExam::with([
+      'lecture:id,course_id',
+      'lecture.course:id,title,mockup',
+      'exam:id,title,duration',
+      'exam.questions:id,exam_id,title,type_question',
+      'exam.questions.answers:id,question_id,is_true,answer',
+      'exam.questions.answers.answerStudent' => function ($query) use ($session) {
+        $query->where('std_course_exam_id', $session);
+      },
+    ])->findOrFail($session);
+
+
+
+
+    // return dd($session);
+    return view('pages.dashboard.student.exams.alerts.report', compact('session'));
   }
 
   public function done(string $session)

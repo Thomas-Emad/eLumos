@@ -35,6 +35,10 @@ class CourseLectures extends Model
     return $this->hasMany(CourseLectureAttachment::class, 'lecture_id', 'id');
   }
 
+  public function course(): BelongsTo
+  {
+    return $this->belongsTo(Course::class, 'course_id', 'id');
+  }
   public function section(): BelongsTo
   {
     return $this->belongsTo(CourseSections::class, 'section_id', 'id');
