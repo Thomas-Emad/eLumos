@@ -19,10 +19,19 @@ class Exam extends Model
   {
     return $this->hasMany(ExamQuestion::class, 'exam_id', 'id');
   }
+  public function answers(): HasMany
+  {
+    return $this->hasMany(ExamQuestionAnswer::class, 'exam_id', 'id');
+  }
 
 
   public function lectures(): hasMany
   {
     return $this->hasMany(ExamCourseLecture::class);
+  }
+
+  public function students(): hasMany
+  {
+    return $this->hasMany(StudentCourseExam::class);
   }
 }

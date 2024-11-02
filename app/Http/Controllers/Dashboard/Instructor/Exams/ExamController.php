@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard\Instructor\Exams;
 
 use App\Models\Exam;
+use App\Models\StudentCourseExamAnswer;
 use App\Http\Traits\FilterByDateTrait;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -23,7 +24,15 @@ class ExamController extends Controller
   {
     $exams = Exam::where('title', 'like', "%$request->title%")->whereBetween('created_at', static::filterByDate($request->filterByDate))
       ->paginate(15);
-    return view('pages.dashboard.instructor.exams.index', compact('exams'));
+
+    $answers = StudentCourseExamAnswer::with([
+      'question:id,title,type_question',
+      "sessionStudent:id,exam_id",
+      "sessionStudent.exam:id,title"
+    ])->where('is_true', null)->get();
+
+
+    return view('pages.dashboard.instructor.exams.index', compact('exams', 'answers'));
   }
 
   /**
@@ -60,33 +69,29 @@ class ExamController extends Controller
    */
   public function show(string $id): View
   {
-    $exam = Exam::with('questions')->findOrFail($id);
+    $exam = Exam::with([
+      'questions',
+      'students',
+      'lectures'
+    ])->findOrFail($id);
 
     return view('pages.dashboard.instructor.exams.manage', compact('exam'));
   }
 
   /**
-   * Show the form for editing the specified resource.
-   */
-  public function edit(string $id)
-  {
-    //
-  }
-
-  /**
-   * Update the specified resource in storage.
-   */
-  public function update(Request $request, string $id)
-  {
-    //
-  }
-
-  /**
    * Remove the specified resource from storage.
    */
-  public function destroy(string $id): JsonResponse
+  public function destroy(string $id): RedirectResponse
   {
     $exam = Exam::findOrFail($id);
+
+    if ($exam->students->count() > 0) {
+      return redirect()->route('dashboard.instructor.exams.index')->with('notification', [
+        'type' => 'fail',
+        'message' => 'Sorry, you cannot clear this exam, because some students have already passed this exam...'
+      ]);
+    }
+
     $exam->delete();
     return redirect()->route('dashboard.instructor.exams.index')->with('notification', [
       'type' => 'success',

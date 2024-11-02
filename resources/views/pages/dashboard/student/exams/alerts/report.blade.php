@@ -13,7 +13,7 @@
                 @case('processing')
                     <div class="text-gray-700">
                         <i class="fa-solid fa-circle-info mr-2"></i>
-                        <span> This exam is still coming, you can complete it</span>
+                        <span>This exam is still Work, you can complete it</span>
                         <a href="{{ route('dashboard.student.exams.test', $session->id) }}"
                             class="text-blue-700 hover:underline">here</a>
                     </div>
@@ -36,7 +36,7 @@
                 @case('failed')
                     <div class="text-red-700">
                         <i class="fa-regular fa-circle-xmark mr-2"></i>
-                        <span>I did well but it wasn't enough to try again.</span>
+                        <span>You tried to do well, but it wasn't enough. Try again please..</span>
                     </div>
                 @break
             @endswitch
@@ -53,11 +53,13 @@
                     <div class="flex flex-col text-sm">
                         <h1 class="font-bold text-2xl">{{ $session->exam->title }}</h1>
                         <a href="{{ route('course-details', $session->lecture->course_id) }}">
-                            <h2 class="text-lg mb-2 hover:text-amber-500 duration-200">Course Title</h2>
+                            <h2 class="text-lg mb-2 hover:text-amber-500 duration-200">
+                                {{ \Str::limit($session->lecture->course->title, 20) }}
+                            </h2>
                         </a>
                         <p>
                             <b>Duration:</b>
-                            {{ round($session->created_at->diffInMinutes($session->updated_at), 2) }}{{ !is_null($session->exam->duration) ? '/' . $session->exam->duration : '' }}
+                            {{ round($session->created_at->diffInMinutes($session->finished_at), 2) }}{{ !is_null($session->exam->duration) ? '/' . $session->exam->duration : '' }}
                             per minute
                         </p>
                         <p>
@@ -67,7 +69,7 @@
                 </div>
                 <div class="an-section an-left">
                     @php
-                        $percentDegree = 75;
+                        $percentDegree = ($session->degree / $session->total_degree) * 100;
                         $colorPercentDegree = '';
                         if ($percentDegree == 0 || $percentDegree <= 25) {
                             $colorPercentDegree = 'bg-red-700';
@@ -137,20 +139,26 @@
                                           @if (!is_null($item->answerStudent) && $item->answerStudent->is_true == true) border-green-600 @elseif(!is_null($item->answerStudent) && $item->answerStudent->is_true === false) border-red-600 @else border-gray-400 @endif">
                                             {{ $item->answerStudent->content }}
                                         </x-textarea>
-                                        @if (!is_null($item->answerStudent->info))
+                                        @if (!is_null($item->answerStudent?->info_reject))
                                             <x-textarea label='Right Answer' classParent="w-1/2" disabled="true">
-                                                {{ $item->answerStudent->info }}
+                                                {{ $item->answerStudent?->info_reject }}
                                             </x-textarea>
                                         @endif
                                     </div>
                                 @elseif ($question->type_question === 'attachment')
-                                    <p class="mb-2"> Can Download Your Attachment From
-                                        <a href="{{ json_decode($item->answerStudent?->content)->url }}" target="__blank"
-                                            class="text-blue-700 hover:underline">here</a>
-                                    </p>
-                                    @if (!is_null($item->answerStudent->info))
+                                    @if (is_null($item->answerStudent))
+                                        <p class="mb-2">
+                                            It's Look You Does not Answer On this Question..
+                                        </p>
+                                    @else
+                                        <p class="mb-2"> Can Download Your Attachment From
+                                            <a href="{{ json_decode($item->answerStudent?->content)->url }}"
+                                                target="__blank" class="text-blue-700 hover:underline">here</a>
+                                        </p>
+                                    @endif
+                                    @if (!is_null($item->answerStudent?->info_reject))
                                         <x-textarea label='Right Answer' classParent="w-1/2" disabled="true">
-                                            {{ $item->answerStudent->info }}
+                                            {{ $item->answerStudent?->info_reject }}
                                         </x-textarea>
                                     @endif
                                 @endif

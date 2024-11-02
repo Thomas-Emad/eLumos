@@ -6,7 +6,9 @@
         <div class="mb-2 border-b border-gray-200 pb-2 flex justify-between items-center gap-2">
             <h2 class="font-bold text-xl flex gap-2">
 
-                <button type="button" data-modal-target='delete-exam-modal' data-modal-toggle='delete-exam-modal'>
+                <button type="button"
+                    data-modal-target='{{ $exam->students->count() > 0 ? 'cannt-change-exam-modal' : 'delete-exam-modal' }}'
+                    data-modal-toggle='{{ $exam->students->count() > 0 ? 'cannt-change-exam-modal' : 'delete-exam-modal' }}'>
                     <i class="fa-solid fa-trash-can text-gray-700 hover:text-red-800 duration-300"></i>
                 </button>
                 <span>Exam: {{ $exam->title }}</span>
@@ -19,8 +21,12 @@
         <div class="p-2 border-b border-gray-200 mb-2">
             <div class=" text-gray-700 flex justify-between items-center gap-2 flex-wrap text-sm">
                 <div class="inline-flex justify-between items-center gap-2" title="Time Created This Exam">
-                    <i class="fa-solid fa-file-signature"></i>
-                    {{ 'Used: ' . 10 }}
+                    <i class="fa-solid fa-person-chalkboard"></i>
+                    {{ 'Lectures: ' . $exam->lectures->count() }}
+                </div>
+                <div class="inline-flex justify-between items-center gap-2" title="Time Created This Exam">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    {{ 'Students: ' . $exam->students->count() }}
                 </div>
 
                 <div class="inline-flex justify-between items-center gap-2" title="Time Created This Exam">
@@ -30,7 +36,7 @@
 
                 <div class="inline-flex justify-between items-center gap-2" title="Time Created This Exam">
                     <i class="fa-solid fa-calendar-week font-bold"></i>
-                    {{ 'Created At: ' . $exam->created_at->diffForHumans() }}
+                    {{ 'Since: ' . $exam->created_at->diffForHumans() }}
                 </div>
             </div>
 
@@ -212,6 +218,22 @@
                 cancel</button>
         </form>
     </x-modal-info>
+    <x-modal-info id="cannt-change-exam-modal">
+
+        <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+
+        <p class="text-center text-gray-500 dark:text-gray-100 mb-5 text-xl">
+            <b>Sorry</b>, you cannot delete or edit this exam, because some students have already passed this exam.
+        </p>
+        <button data-modal-hide="cannt-delete-exam-modal" type="button"
+            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+            Close
+        </button>
+    </x-modal-info>
     <x-modal-info id="delete-question-modal">
         <form action="{{ route('dashboard.instructor.exams.destroy', $exam->id) }}" method="POST">
             @csrf
@@ -280,7 +302,8 @@
                       <p class="text-lg"><span class='font-bold'>Title Question:</span>${response.question.title}</p>
                       <p><span class="font-bold">Type Question:</span> ${response.question.type_question}</p>
                       <p><span class="font-bold">Count Answers:</span> (${response.answers.length})</p>
-                      <div class="flex justify-between gap-2 items-center text-xs">
+                        @if ($exam->students->count() == 0)
+                        <div class="flex justify-between gap-2 items-center text-xs">
                           <p>Do you want Delete This Question?!</p>
                           <form action='{{ route('dashboard.instructor.exams.questions.destroy', 'delete') }}' method='POST'>
                             @csrf
@@ -293,6 +316,7 @@
                             </button>  
                           </form>
                       </div>
+                        @endif
                       <hr class="my-2">
                       <h3 class="font-bold text-lg mb-2">Your Answers:</h3>
                       ${answersHtml}

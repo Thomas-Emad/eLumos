@@ -210,11 +210,45 @@ class StudentExamService
    * @param int $lectureId The ID of the lecture.
    * @return void
    */
-  public function markupOnWatchLecture($courseId, $lectureId)
+  protected function markupOnWatchLecture($courseId, $lectureId)
   {
     return App::call([new \App\Actions\WatchCourseLectureAction, 'markupLecture'], [
       'courseId' => $courseId,
       'lectureId' => $lectureId,
     ]);
+  }
+
+  public function correctOneAnswer($answer, $isTrue, $infoReject)
+  {
+    $answer->update([
+      'is_true' =>  $isTrue,
+      'info_reject' => $infoReject
+    ]);
+
+    if ($isTrue == true) {
+      $answer->sessionStudent->increment("degree");
+    }
+
+
+    // check if last Answer Need Mannully correct
+    if (($answer->sessionStudent->answerStudent->whereNull('is_true')->count() - 1) <= 0) {
+      $studentIsSucessOrNot = $answer->sessionStudent->degree >= ($answer->sessionStudent->exam->questions->count() / 2) ? 'sucess' : 'failed';
+      $answer->sessionStudent->update([
+        'status' =>  $studentIsSucessOrNot
+      ]);
+    }
+
+    $this->checkFromStatusSucessExamForMarkupLecture(
+      $answer->sessionStudent->lecture->course_id,
+      $answer->sessionStudent->lecture->id,
+      $answer->sessionStudent->status
+    );
+  }
+
+  public function checkFromStatusSucessExamForMarkupLecture($courseId, $lectureId, $status)
+  {
+    if ($status == 'sucess') {
+      $this->markupOnWatchLecture($courseId, $lectureId);
+    }
   }
 }

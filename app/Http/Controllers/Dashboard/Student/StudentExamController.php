@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard\Student;
 
 use App\Models\StudentCourseExam;
 use App\Models\ExamQuestion;
+use App\Models\StudentCourseExamAnswer;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\FilterByDateTrait;
 use App\Http\Traits\UploadAttachmentTrait;
@@ -107,22 +108,63 @@ class StudentExamController extends Controller
 
     $statusExam = $studentExamService->getStatusExam($session->exam->questions->count());
 
-    // Save User Watched this Lecture
-    if ($statusExam === 'sucess') {
-      $studentExamService->markupOnWatchLecture($session->lecture->course_id, $session->lecture_id);
-    }
+    $studentExamService->checkFromStatusSucessExamForMarkupLecture(
+      $session->lecture->course_id,
+      $session->lecture_id,
+      $statusExam
+    );
 
     // After finish from Correct Answers Upload Session
     $session->update([
       'degree' => $studentExamService->getDegree(),
-      'status' => $statusExam
+      'status' => $statusExam,
+      'finished_at' => now()
     ]);
 
     return redirect()->route('dashboard.student.exams.done', $session->id);
   }
 
+  public function getInfoQuestion(Request $request)
+  {
+    $session = StudentCourseExamAnswer::with([
+      'question:id,title,type_question',
+      'question.answers',
+    ])->where('id', $request->id)->first();
+
+    return response()->json([
+      "id" => $session->id,
+      "report" => $session->std_course_exam_id,
+      "answerStudent" => $session->question->type_question === 'text' ? $session->content : json_decode($session?->content)?->url,
+      "questionTitle" => $session->question->title,
+      "typeQuestion" => $session->question->type_question,
+      "infoForYou" => $session->question->answers->first()->answer
+    ], 200);
+  }
+
+  public function correctAnswer(Request $request,  StudentExamService $studentExamService)
+  {
+    $request->validate([
+      'id' => 'required|exists:student_course_exam_answers,id',
+      'is_true' => 'required',
+      'info_reject' => 'nullable|string|max:500'
+    ]);
+
+    $answer = StudentCourseExamAnswer::with([
+      'sessionStudent',
+      'sessionStudent.lecture:id,course_id',
+      'sessionStudent.answerStudent:id,is_true,std_course_exam_id',
+      'sessionStudent.exam:id',
+      'sessionStudent.exam.questions:id,exam_id',
+    ])->where('id', $request->id)->first();
+
+    $studentExamService->correctOneAnswer($answer, (bool) $request->is_true, $request->info_reject);
 
 
+    return redirect()->back()->with('noitifcation', [
+      'type' => 'sucess',
+      'message' => 'Correct This Answer Has Been Sucessfully..'
+    ]);
+  }
 
   public function report(string $session)
   {
@@ -137,10 +179,6 @@ class StudentExamController extends Controller
       },
     ])->findOrFail($session);
 
-
-
-
-    // return dd($session);
     return view('pages.dashboard.student.exams.alerts.report', compact('session'));
   }
 

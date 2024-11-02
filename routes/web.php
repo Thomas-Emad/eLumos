@@ -88,6 +88,8 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     Route::resource('instructor/exams', ExamController::class)->names('instructor.exams');
     Route::resource('instructor/exam/questions', ExamQuestionController::class)->names('instructor.exams.questions');
     Route::get('instructor/exam/questions/component/{type?}',  [ExamQuestionController::class, 'getComponent'])->name('instructor.exams.get-component');
+    Route::post('instructor/exams/question/answer-student', [StudentExamController::class, 'getInfoQuestion'])->name('instructor.exams.get-info-question');
+    Route::post('instructor/exams/question/correct-answer', [StudentExamController::class, 'correctAnswer'])->name('instructor.exams.correct-answer');
   });
 
   /* *******************Admin************************* */

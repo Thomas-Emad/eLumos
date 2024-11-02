@@ -19,6 +19,7 @@ return new class extends Migration
       $table->float('degree')->default(0);
       $table->float('total_degree')->default(0);
       $table->enum('status', ['processing', 'waiting', 'sucess', 'failed'])->default('processing');
+      $table->timestamp('finished_at');
       $table->timestamps();
     });
   }

@@ -7,9 +7,7 @@ use App\Services\ExamQuestionService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ExamQuestionRequest;
 use App\Http\Resources\Dashboard\Instructor\ExamQuestionResource;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\{Request, RedirectResponse, JsonResponse};
 
 class ExamQuestionController extends Controller
 {
@@ -74,13 +72,22 @@ class ExamQuestionController extends Controller
   /**
    * Remove the specified resource from storage.
    */
-  public function destroy(Request $request): JsonResponse
+  public function destroy(Request $request): RedirectResponse
   {
     $request->validate([
       'id' => 'required|exists:exam_questions,id'
     ]);
 
-    ExamQuestion::findOrFail($request->id)->delete();
+    $question =  ExamQuestion::with(['exam:id', 'exam.students:id'])->findOrFail($request->id);
+
+    if ($question->exam->students->count() > 0) {
+      return redirect()->route('dashboard.instructor.exams.index')->with('notification', [
+        'type' => 'fail',
+        'message' => 'Sorry, you cannot clear this exam, because some students have already passed this exam...'
+      ]);
+    }
+
+    $question->delete();
 
     return redirect()->back()->with('notification', [
       'type' => 'success',

@@ -19,6 +19,7 @@ class StudentCourseExam extends Model
     'degree',
     'total_degree',
     'status',
+    'finished_at',
   ];
 
   public function lecture(): BelongsTo

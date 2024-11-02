@@ -337,7 +337,6 @@
                             id: $(this).data('id'),
                         },
                         success: function(response) {
-                            // console.log(response)
                             putDataInModalPermission(response)
                         },
                         dataType: 'json'
@@ -427,7 +426,6 @@
                         $("#loader").addClass("hidden");
                     },
                     error: function(response) {
-                        console.log(response)
                         $("#loader").addClass("hidden");
                     },
                     dataType: 'json'
@@ -497,7 +495,6 @@
                     },
                     url: "{{ route('roles.users') }}",
                     success: function(response) {
-                        console.log(($('#users-form select[name="role"]').val()).toLowerCase())
                         putDataInModalUsers(response)
                     },
                     error: function(response) {
