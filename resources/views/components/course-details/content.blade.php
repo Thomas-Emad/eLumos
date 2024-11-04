@@ -103,7 +103,7 @@
                 data-modal-toggle="video-preview">
                 <img src="{{ json_decode($course->mockup)->url }}"
                     onerror="this.onerror=null;this.src='{{ asset('assets/images/course.png') }}';"
-                    class="w-full h-full " alt="view course">
+                    class="w-full h-[200px] " alt="view course">
                 <div
                     class="px-4 py-2 rounded-full bg-gray-300/75 w-fit absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition duration-300 hover:bg-gray-300 z-[2]">
                     <i class="fa-solid fa-play text-white text-xl"></i>

@@ -28,7 +28,8 @@ class CoursesEnrolledService
   public function getCourseEnrolled($course): CoursesEnrolled
   {
     $courseStudent = CoursesEnrolled::with([
-      'course:id,title,mockup',
+      'course:id,user_id,title,mockup',
+      'course.user:id,photo',
       'course.reviews:course_id,user_id,rate,content',
       'course.sections:id,course_id,title',
       'course.sections.lectures:id,course_id,section_id,title,video,video_duration,content,order_sort',

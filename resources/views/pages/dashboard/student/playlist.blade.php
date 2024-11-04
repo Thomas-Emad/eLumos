@@ -8,10 +8,10 @@
             <div>
                 @if (!is_null($currentLecture->video))
                     <div class="w-full bg-gray-950 p-4 text-white">
-                        <iframe class="rounded-xl" allow="autoplay"
-                            src="https://player.cloudinary.com/embed/?public_id={{ json_decode($currentLecture->video)->public_id }}&cloud_name=dtyvom84s&player[showLogo]=false&source[poster]={{ json_decode($courseStudent->course->mockup)->url }}"
-                            width="100%" height="360" allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-                            undefined allowfullscreen frameborder="0"></iframe>
+                        <iframe class="rounded-xl w-full"
+                            src="https://player.cloudinary.com/embed/?public_id={{ json_decode($currentLecture->video)->public_id }}&cloud_name=dtyvom84s&source[poster]={{ json_decode($courseStudent->course->mockup)->url }}&player[autoplay]=true&player[autoplayMode]=on-scroll&player[showJumpControls]=true&player[pictureInPictureToggle]=true&player[logoOnclickUrl]={{ route('dashboard.profile', $courseStudent->course->user->id) }}&player[logoImageUrl]={{ asset('storage/' . $courseStudent->course->user->photo) }}&player[aiHighlightsGraph]=true&source[info][title]={{ $currentLecture->title }}&source[info][subtitle]={{ \Str::limit($courseStudent->course->title, 20) }}"
+                            height="360" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" undefined
+                            allowfullscreen frameborder="0"></iframe>
                     </div>
                 @endif
                 <hr class="mt-2 h-.5 block bg-gray-200">
