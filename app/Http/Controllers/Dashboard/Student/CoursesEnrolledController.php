@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Dashboard\Student;
 
-use App\Http\Controllers\Controller;
-use App\Models\CoursesEnrolled;
-use App\Http\Resources\CoursesEnrolledResource;
 use App\Models\CourseLectures;
-use App\Services\CoursesEnrolledService;
+use App\Models\CoursesEnrolled;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use App\Services\CoursesEnrolledService;
+use App\Http\Resources\CoursesEnrolledResource;
 
 
 class CoursesEnrolledController extends Controller
@@ -81,10 +82,20 @@ class CoursesEnrolledController extends Controller
   public function show(CoursesEnrolledService $courseService, string $course, string $lecture = null)
   {
     $courseStudent = $courseService->getCourseEnrolled($course);
+    $reviewStudent = $courseStudent->course->reviews()->where('user_id', Auth::id())->first();
     $currentLecture =  $courseService->getCurrentLectureFromAll($courseStudent, $lecture);
     $nextLecture =  $courseService->getNextLectureFromAll($courseStudent, $currentLecture->id);
     $setTimeOutForWatchLecture = $courseService->setTimeOutForWatchLecture($currentLecture);
 
-    return view('pages.dashboard.student.playlist', compact('courseStudent', 'currentLecture', 'nextLecture', 'setTimeOutForWatchLecture'));
+    return view(
+      'pages.dashboard.student.playlist',
+      compact(
+        'courseStudent',
+        'currentLecture',
+        'nextLecture',
+        'setTimeOutForWatchLecture',
+        'reviewStudent'
+      )
+    );
   }
 }

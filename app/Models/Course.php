@@ -85,4 +85,9 @@ class Course extends Model
   {
     return $this->hasMany(Wishlist::class, 'course_id', 'id')->withTrashed();
   }
+
+  public function reviews(): HasMany
+  {
+    return $this->hasMany(ReviewCourse::class);
+  }
 }

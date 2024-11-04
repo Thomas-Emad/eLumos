@@ -1,12 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Dashboard\Admin\{RoleController, CourseController as DashboardCoursesController};
 use App\Http\Controllers\{StepsForwardController};
-use App\Http\Controllers\Dashboard\Instructor\{CoursesController, CourseSectionsController, CourseLecturesController};
+use App\Http\Controllers\Dashboard\ReviewCourseController;
 use App\Http\Controllers\Dashboard\Instructor\Exams\{ExamController, ExamQuestionController};
-use App\Http\Controllers\Dashboard\Student\{CoursesEnrolledController, StudentExamController, WatchCourseLectureController};
+use App\Http\Controllers\Dashboard\Admin\{RoleController, CourseController as DashboardCoursesController};
 use App\Http\Controllers\Student\{CourseStudentController, BasketController, CheckoutController, WishlistController};
+use App\Http\Controllers\Dashboard\Instructor\{CoursesController, CourseSectionsController, CourseLecturesController};
+use App\Http\Controllers\Dashboard\Student\{CoursesEnrolledController, StudentExamController, WatchCourseLectureController};
 
 
 
@@ -58,6 +59,9 @@ Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => '
     Route::get('/student/exams/{session}/done', 'done')->name('student.exams.done');
     Route::view('/student/exams/{session}/expired', 'pages.dashboard.student.exams.alerts.expired')->name('student.exams.expired');
   });
+
+  Route::resource("/course/reviews", ReviewCourseController::class);
+  Route::post("course/reviews/statistics", [ReviewCourseController::class, 'getStatisticsRate'])->name('reviews.get-statistics');
 });
 
 Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {

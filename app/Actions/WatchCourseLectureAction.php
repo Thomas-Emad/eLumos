@@ -27,6 +27,7 @@ class WatchCourseLectureAction
     if ($lecture->created_at == $lecture->updated_at) {
       $total_lectures = CourseLectures::where('course_id', $courseId)->count();
       $progress =  (Auth::user()->watchedCourseLectures()->count() / $total_lectures) * 100;
+      $progress = $progress <= 100 ? $progress : 100;
 
       Auth::user()->enrolledCourses()->where('course_id', $courseId)->update([
         'progress_lectures' => $progress

@@ -4,7 +4,7 @@
 @section('content')
     <div class="container mx-auto max-w-screen-xl p-4 flex flex-col-reverse md:flex-row gap-4 mt-20">
         <div class="w-full md:w-2/3">
-            <form class="flex gap-3 w-full">
+            <form action="{{ route('courses') }}" method="get" class="flex gap-3 w-full">
                 <div class="w-full">
                     <label for="search" class="mb-2 text-sm font-sm text-gray-900 sr-only">Search</label>
                     <div class="relative">
@@ -15,19 +15,19 @@
                                     d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                             </svg>
                         </div>
-                        <input type="search" id="search"
+                        <input type="search" id="search" name="title" value="{{ request()->input('title') }}"
                             class="block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-amber-500 focus:border-amber-500 "
                             placeholder="Search Mockups, Logos..." required />
                         <button type="submit"
                             class="text-white absolute end-2.5 bottom-2.5 bg-amber-700 hover:bg-amber-800 focus:ring-4 focus:outline-none focus:ring-amber-300 font-medium rounded-lg text-sm px-2 py-1">Search</button>
                     </div>
                 </div>
-                <select id="countries"
+                <select name="sortBy"
                     class="w-fit bg-white dark:bg-gray-700 border border-gray-300 text-gray-900 dark:text-gray-100 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 p-2.5">
-                    <option value="0" selected>Highest Rated</option>
-                    <option value="0">Newly published</option>
-                    <option value="0">Low Price</option>
-                    <option value="0">Free</option>
+                    <option value="top-rate" @selected(request()->input('sortBy') == 'top-rate')>Highest Rated</option>
+                    <option value="new-published" @selected(request()->input('sortBy') == 'new-published')>Newly published</option>
+                    <option value="low-price" @selected(request()->input('sortBy') == 'low-price')>Low Price</option>
+                    <option value="free" @selected(request()->input('sortBy') == 'free')>Free</option>
                 </select>
             </form>
             <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4 mt-4 text-gray-800 dark:text-gray-100">
