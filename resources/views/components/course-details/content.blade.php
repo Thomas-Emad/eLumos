@@ -1,12 +1,12 @@
-@props(['course'])
+@props(['course', 'hasThisCourse'])
 {{-- Content Course info --}}
-<div class="container mx-auto max-w-screen-xl p-4 flex flex-col md:flex-row gap-4">
+<div class="container mx-auto max-w-screen-xl p-4 flex flex-col-reverse md:flex-row gap-4">
     <div class="w-full md:w-2/3 ">
-        <div class="p-4 bg-white dark:bg-gray-700 rounded-xl border border-gray-200">
+        <div class="p-4 bg-white dark:bg-gray-700 rounded-xl border border-gray-200 break-words">
             <h2 class="font-bold text-xl text-amber-700 mb-3">Overview</h2>
             <div class="text-sm">
                 <h3 class="font-bold">Course Description</h3>
-                <p class="text-gray-600 dark:text-gray-100">
+                <p class="text-gray-600 dark:text-gray-100 ">
                     {{ $course->description }}
                 </p>
             </div>
@@ -20,7 +20,6 @@
                 <h3 class="font-bold">Requirements</h3>
                 <div class="text-gray-600 dark:text-gray-100 ps-2">
                     {{ $course->requirements }}
-
                 </div>
             </div>
 
@@ -95,7 +94,7 @@
             </div>
         </div>
         {{-- Instructor, Reviews --}}
-        <x-course-details.instructor-reviews :course="$course"></x-course-details.instructor-reviews>
+        <x-course-details.instructor-reviews :course="$course" :hasThisCourse="$hasThisCourse"></x-course-details.instructor-reviews>
     </div>
     <div class="w-full md:w-1/3 h-fit -translate-y-0 md:-translate-y-36 z-[2] flex flex-col gap-4">
         <div class="p-4 bg-white dark:bg-gray-700 rounded-xl border border-gray-200 ">
@@ -151,12 +150,20 @@
                 </div>
             </div>
             <div class="mt-2">
-                @if (!checkCourseInBasket($course->id))
+                @php
+                    $existsInBasket = checkCourseInBasket($course->id);
+                @endphp
+                @if ($hasThisCourse)
+                    <a href="{{ route('dashboard.student.show', ['course' => $course->id]) }}"
+                        class="block w-full change-cart rounded-full py-2 px-4 bg-green-500 text-sm text-center font-bold text-white hover:bg-green-700 transition duration-300">
+                        Watch Course
+                    </a>
+                @elseif(!$existsInBasket)
                     <button type="button" data-id="{{ $course->id }}"
                         class="block w-full change-cart rounded-full py-2 px-4 bg-green-500 text-sm text-center font-bold text-white hover:bg-green-700 transition duration-300">
                         Enroll Now
                     </button>
-                @else
+                @elseif ($existsInBasket)
                     <button type="button" data-id="{{ $course->id }}"
                         class="block w-full change-cart rounded-full py-2 px-4 text-sm text-center font-bold text-amber-700 hover:text-white border border-amber-700 hover:bg-amber-700 transition duration-300">
                         Remove form Basket

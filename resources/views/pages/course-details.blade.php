@@ -10,12 +10,11 @@
             </p>
         @endif
         <x-course-details.head :course="$course"></x-course-details.head>
-        <x-course-details.content :course="$course"></x-course-details.content>
+        <x-course-details.content :course="$course" :hasThisCourse="$hasThisCourse"></x-course-details.content>
 
-        <x-course-details.modals :course="$course"></x-course-details.modals>
+        <x-course-details.modals :course="$course" :reviewStudent="$reviewStudent" :hasThisCourse="$hasThisCourse"></x-course-details.modals>
     </div>
 
 @endsection
 
-@section('js')
-@endsection
+<x-course-details.js :course="$course"></x-course-details.js>

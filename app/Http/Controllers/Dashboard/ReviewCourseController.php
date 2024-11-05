@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ReviewCourseRequest;
+use App\Actions\StatisticsRateCourseAction;
 
 class ReviewCourseController extends Controller
 {
@@ -27,21 +28,9 @@ class ReviewCourseController extends Controller
    * @param Request $request
    * @return JsonResponse
    */
-  public function getStatisticsRate(Request $request): JsonResponse
+  public function getStatisticsRate(Request $request, StatisticsRateCourseAction $action): JsonResponse
   {
-    $rates = ReviewCourse::where("course_id", $request->course_id)->get(['id', 'rate']);
-    $totalCountRates = $rates->count() > 0 ? $rates->count() : 1;
-    $result = [];
-    for ($i = 5; $i >= 1; $i--) {
-      $result[] =
-        [
-          'rate' => $i,
-          'count' => $rates->where('rate', $i)->count(),
-          'progress' => ($rates->where('rate', $i)->count() / $totalCountRates) * 100
-        ];
-    }
-
-    return response()->json($result, 200);
+    return response()->json($action->getStatistics($request->course_id), 200);
   }
 
   /**

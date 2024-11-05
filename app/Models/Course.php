@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Observers\Dashboard\CoursesObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[ObservedBy([CoursesObserver::class])]
 class Course extends Model
@@ -86,6 +86,10 @@ class Course extends Model
     return $this->hasMany(Wishlist::class, 'course_id', 'id')->withTrashed();
   }
 
+  public function enrolled(): HasOne
+  {
+    return $this->hasOne(CoursesEnrolled::class);
+  }
   public function reviews(): HasMany
   {
     return $this->hasMany(ReviewCourse::class);

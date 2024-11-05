@@ -33,7 +33,7 @@
             </div>
             <div class="mt-4">
                 <h1 class="font-bold text-2xl">{{ $course->name }}</h1>
-                <p class="text-sm">{{ $course->headline }}</p>
+                <p class="text-sm break-words">{{ $course->headline }}</p>
             </div>
             <div class="mt-4 flex gap-4 text-sm">
                 <div class="flex gap-2 items-center">

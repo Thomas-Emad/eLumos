@@ -133,61 +133,61 @@
                             .replace(':id', course.data.id);
 
                         $(`.courses`).append(`
-              <div class="p-2 bg-white dark:bg-gray-600  border border-gray-200 rounded-xl">
-                  <a href="{{ route('course-details') }}" class="block rounded-xl overflow-hidden">
-                      <img src="${course.data.mockup ? `${course.data.mockup}` : `{{ asset('assets/images/course.png') }}` }"
-                          class="w-full h-[150px] hover:scale-125 duration-300" alt="photo course">
-                  </a>
-                  <div class="py-2 flex justify-between gap-2 items-center">
-                      <div class="flex gap-2">
-                          <img src="${course.user.photo ? `{{ asset('storage/${course.user.photo}') }}` : `{{ asset('assets/images/user-1.png') }}` }" class="w-10 h-10 rounded-full"
-                              alt="photo Instructor">
-                          <div>
-                              <h3 class=" font-bold hover:text-amber-600 duration-200">
-                                  <a href="{{ route('dashboard.profile') }}/${course.user.id}">Thomas E.</a>
-                              </h3>
-                              <span class="text-sm">${course.user.headline}</span>
-                          </div>
-                      </div>
-                  </div>
-                  <a href="{{ route('course-details') }}/${course.data.id}"
-                      class="block pb-2 text-xl font-bold hover:text-amber-600 duration-200">
-                      ${course.data.title}
-                  </a>
-                  <hr>
-                  <div class="text-sm p-2 flex justify-between gap-2  text-gray-800  dark:text-gray-200">
-                      <a href='${editRoute}' class="flex gap-2 hover:text-amber-600 duration-300">
-                          <i class="fa-solid fa-pen-to-square"></i><span>Edit</span>
-                      </a>
-                      <a data-id="${course.data.id}" data-title="${course.data.title}" data-modal-target="delete-course-modal" data-modal-toggle="delete-course-modal" class="deleteCourse flex gap-2 hover:text-amber-600 duration-300 cursor-pointer">
-                          <i class="fa-solid fa-trash-can"></i><span>Delete</span>
-                      </a>
-                  </div>
-              </div>
-            `)
+                            <div class="p-2 bg-white dark:bg-gray-600  border border-gray-200 rounded-xl">
+                                <a href="{{ route('course-details') }}" class="block rounded-xl overflow-hidden">
+                                    <img src="${course.data.mockup ? `${course.data.mockup}` : `{{ asset('assets/images/course.png') }}` }"
+                                        class="w-full h-[150px] hover:scale-125 duration-300" alt="photo course">
+                                </a>
+                                <div class="py-2 flex justify-between gap-2 items-center">
+                                    <div class="flex gap-2">
+                                        <img src="${course.user.photo ? `{{ asset('storage/${course.user.photo}') }}` : `{{ asset('assets/images/user-1.png') }}` }" class="w-10 h-10 rounded-full"
+                                            alt="photo Instructor">
+                                        <div>
+                                            <h3 class=" font-bold hover:text-amber-600 duration-200">
+                                                <a href="{{ route('dashboard.profile') }}/${course.user.id}">Thomas E.</a>
+                                            </h3>
+                                            <span class="text-sm">${course.user.headline}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="{{ route('course-details') }}/${course.data.id}"
+                                    class="block pb-2 text-xl font-bold hover:text-amber-600 duration-200">
+                                    ${course.data.title}
+                                </a>
+                                <hr>
+                                <div class="text-sm p-2 flex justify-between gap-2  text-gray-800  dark:text-gray-200">
+                                    <a href='${editRoute}' class="flex gap-2 hover:text-amber-600 duration-300">
+                                        <i class="fa-solid fa-pen-to-square"></i><span>Edit</span>
+                                    </a>
+                                    <a data-id="${course.data.id}" data-title="${course.data.title}" data-modal-target="delete-course-modal" data-modal-toggle="delete-course-modal" class="deleteCourse flex gap-2 hover:text-amber-600 duration-300 cursor-pointer">
+                                        <i class="fa-solid fa-trash-can"></i><span>Delete</span>
+                                    </a>
+                                </div>
+                            </div>
+                        `)
                     })
                     if (response.count > 0) {
                         $('.pagination').append(`
-              <nav aria-label="Page navigation example">
-                <ul class="inline-flex -space-x-px text-base h-10">
-                <!-- prettier-ignore-start -->
-                  <li>
-                    <a data-page="${response.pagination.current_page - 1}"  class="${response.pagination.current_page > 1 ? 'cursor-pointer' : 'disabled'}  link-pagination flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
-                  </li>
-                  ${Array.from({ length: response.pagination.last_page }, (_, i) => `
-                    <li>
-                      <a data-page="${i + 1}" class="link-pagination flex items-center justify-center px-4 h-10 border border-gray-300 dark:border-gray-700 dark:text-white ${response.pagination.current_page == (i+1) ? 'disabled text-blue-600 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:bg-gray-700 dark:text-white' : 'cursor-pointer leading-tight text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700'}">
-                        ${i + 1}
-                      </a>
-                    </li>
-                  `).join('')}
-                    <li>
-                      <a data-page="${response.pagination.current_page + 1}"  class="${response.pagination.last_page > response.pagination.current_page ? 'cursor-pointer' : 'disabled'} link-pagination flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
-                    </li>
-                <!-- prettier-ignore-end -->
-                </ul>
-              </nav>
-            `);
+                            <nav aria-label="Page navigation example">
+                              <ul class="inline-flex -space-x-px text-base h-10">
+                              <!-- prettier-ignore-start -->
+                                <li>
+                                  <a data-page="${response.pagination.current_page - 1}"  class="${response.pagination.current_page > 1 ? 'cursor-pointer' : 'disabled'}  link-pagination flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+                                </li>
+                                ${Array.from({ length: response.pagination.last_page }, (_, i) => `
+                                  <li>
+                                    <a data-page="${i + 1}" class="link-pagination flex items-center justify-center px-4 h-10 border border-gray-300 dark:border-gray-700 dark:text-white ${response.pagination.current_page == (i+1) ? 'disabled text-blue-600 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:bg-gray-700 dark:text-white' : 'cursor-pointer leading-tight text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700'}">
+                                      ${i + 1}
+                                    </a>
+                                  </li>
+                                `).join('')}
+                                  <li>
+                                    <a data-page="${response.pagination.current_page + 1}"  class="${response.pagination.last_page > response.pagination.current_page ? 'cursor-pointer' : 'disabled'} link-pagination flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+                                  </li>
+                              <!-- prettier-ignore-end -->
+                              </ul>
+                            </nav>
+                          `);
                         changePageCourses();
                         initFlowbite();
 
@@ -195,8 +195,8 @@
                     }
                 } else {
                     $(`.message`).append(`
-                  <p>You Dosen't Have Any Course</p>
-              `);
+                        <p>You Dosen't Have Any Course</p>
+                    `);
                 }
             }
 

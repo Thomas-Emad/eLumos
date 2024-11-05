@@ -19,17 +19,21 @@ Route::view('terms', 'pages.terms')->name('terms');
 
 
 /* *******************Student************************* */
-// Student Controllers 
-Route::get("courses", [CourseStudentController::class, 'index'])->name("courses");
-Route::get("course-details/{id?}", [CourseStudentController::class, 'show'])->name("course-details");
+// Student Controllers
+Route::controller(CourseStudentController::class)->group(function () {
+  Route::get("courses",  'index')->name("courses");
+  Route::get("course-details/{id?}",  'show')->name("course-details");
+  Route::post("course-details/reviews",  'reviews')->name("course-details.reviews");
+  Route::get("course-details/reviews/api/{courseId?}",  'getReviews')->name("api.course-details.reviews");
+});
 
-// Wishlist 
+// Wishlist
 Route::controller(WishlistController::class)->group(function () {
   Route::get('dashboard/wishlist', "index")->name('dashboard.wishlist');
   Route::post('course-details/{id?}/wishlist', "actionWishlist")->name('wishlist.controll');
 });
 
-// Baskets 
+// Baskets
 Route::controller(BasketController::class)->group(function () {
   Route::get('/cart',  'index')->name('baskets');
   Route::get('/cart-get-data', 'getData')->name('basket.getData');
