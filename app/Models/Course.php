@@ -86,9 +86,9 @@ class Course extends Model
     return $this->hasMany(Wishlist::class, 'course_id', 'id')->withTrashed();
   }
 
-  public function enrolled(): HasOne
+  public function enrolleds(): HasMany
   {
-    return $this->hasOne(CoursesEnrolled::class);
+    return $this->hasMany(CoursesEnrolled::class);
   }
   public function reviews(): HasMany
   {

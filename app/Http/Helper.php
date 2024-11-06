@@ -33,11 +33,11 @@ if (!function_exists('getLectureIcons')) {
     ];
     $html = '';
 
-    if ($text) {
-      $html .= $iconsHtml['text'];
-    }
     if ($video) {
       $html .= $iconsHtml['video'];
+    }
+    if ($text) {
+      $html .= $iconsHtml['text'];
     }
     if ($exam) {
       $html .= $iconsHtml['exam'];

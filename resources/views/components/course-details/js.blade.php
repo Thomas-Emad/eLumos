@@ -1,26 +1,41 @@
 @section('js')
     <script>
         $(document).ready(() => {
-            setTimeout(() => {
-                $.ajax({
-                    method: "POST",
-                    url: "{{ route('course-details.reviews') }}",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        course_id: "{{ $course->id }}",
-                        instructor_id: "{{ $course->user->id }}"
-                    }
-                }).done((response) => {
-                    window.reviews = function() {
-                        return response.reviewsContent;
-                    }
-                    window.instructor = function() {
-                        return response.instructorContent;
-                    }
-                    $(document).trigger('reviewsDataLoaded');
-                    $(document).trigger('instructorDataLoaded');
-                });
-            }, 1000 * 3);
+            let hasSentRequest = false;
+            $(window).on('scroll', function() {
+                if (hasSentRequest) return; // Prevent multiple requests
+
+                const sectionTop = $('.load-content').offset().top;
+                const sectionHeight = $('.load-content').outerHeight();
+                const scrollPosition = $(window).scrollTop();
+                const windowHeight = $(window).height();
+
+                // Check if section is in viewport
+                if (scrollPosition + windowHeight >= sectionTop + (sectionHeight / 2)) {
+                    hasSentRequest = true; // Prevent further requests
+
+                    setTimeout(() => {
+                        $.ajax({
+                            method: "POST",
+                            url: "{{ route('course-details.reviews') }}",
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                course_id: "{{ $course->id }}",
+                                instructor_id: "{{ $course->user->id }}"
+                            }
+                        }).done((response) => {
+                            window.reviews = function() {
+                                return response.reviewsContent;
+                            }
+                            window.instructor = function() {
+                                return response.instructorContent;
+                            }
+                            $(document).trigger('reviewsDataLoaded');
+                            $(document).trigger('instructorDataLoaded');
+                        });
+                    }, 1000 * 3);
+                }
+            });
         })
     </script>
 
@@ -262,12 +277,8 @@
                       </div>
                   </div>
                   <div class="text-sm">
-                      <i class="fa-solid fa-star text-amber-400"></i>
-                      <i class="fa-solid fa-star text-amber-400"></i>
-                      <i class="fa-solid fa-star text-amber-400"></i>
-                      <i class="fa-solid fa-star text-amber-400"></i>
-                      <i class="fa-solid fa-star text-gray-400"></i>
-                      <span>4.5 Instructor Rating</span>
+                      ${buildHtmlStarsInstructor(instructor.rateInstructor)}
+                      <span>${instructor.rateInstructor} Instructor Rating</span>
                   </div>
               </div>
               <div class="flex gap-4 border-b border-gray-200 py-4 font-bold text-gray-700 dark:text-gray-200 text-sm mb-1">
@@ -290,6 +301,21 @@
               </div>
               <div class="text-gray-800 dark:text-gray-200 text-sm whitespace-pre-line">${instructor.description}</div>
           `;
+        }
+
+        // Display Stars Instructor
+        function buildHtmlStarsInstructor(rateInstructor) {
+            let stars = '';
+            for (i = 1; i <= Math.floor(rateInstructor); i++) {
+                stars += `<i class="fa-solid fa-star text-amber-500"></i>`;
+            }
+            if (rateInstructor - Math.floor(rateInstructor) >= 0.5) {
+                stars += `<i class="fa-solid fa-star-half-stroke text-amber-500"></i>`;
+            }
+            for (i = 1; i <= 5 - Math.ceil(rateInstructor); i++) {
+                stars += `<i class="fa-solid fa-star text-white"></i>`;
+            }
+            return stars;
         }
     </script>
 @endsection

@@ -28,15 +28,18 @@
             <div class="flex justify-between gap-2 items-center font-bold">
                 <h2 class=" text-xl text-amber-700 mb-3">Course Content</h2>
                 <div>
-                    {{ $course->lectures()->count() }} Lectures /
-                    {{ explainSecondsToHumans($course->lectures()->sum('video_duration')) }}
+                    {{ $course->totalLectures }} Lectures /
+                    {{ explainSecondsToHumans($course->totalLecturesTime) }}
                 </div>
             </div>
 
             <div id="content-course" data-accordion="collapse">
+                @php
+                    $isFirstSetion = true;
+                @endphp
                 @foreach ($course->sections as $section)
                     <div
-                        class="border first:border-b-0 only-of-type:border even:border-b-0   border-gray-200 first-of-type:rounded-t-xl last-of-type:rounded-b-xl only-of-type:rounded-xl  overflow-hidden">
+                        class="border first:border-b-0 only-of-type:border   border-gray-200 first-of-type:rounded-t-xl last-of-type:rounded-b-xl only-of-type:rounded-xl  overflow-hidden">
                         <h2 id="content-course-heading-{{ $section->id }}">
                             <button type="button"
                                 class="flex items-center justify-between w-full px-4 py-2 font-sm rtl:text-right text-gray-500   hover:bg-gray-100 gap-3 "
@@ -63,33 +66,32 @@
                                                 {{ $lecture->title }}
                                             </span>
                                         </div>
-                                        <div class='flex gap-2 items-center'>
-                                            <div
-                                                class='flex gap-2 items-center text-sm text-gray-400 dark:text-ammber-500'>
-                                                <span>{{ !is_null($lecture->video_duartion) ? \Carbon\Carbon::createFromTimestampUTC($lecture->video_duartion)->format('H:m:s') : '' }}</span>
-                                                @if (!is_null($lecture->video))
-                                                    <i class="fa-solid fa-video"
-                                                        title='This lecture included video'></i>
-                                                @endif
-
-                                                @if (!is_null($lecture->content))
-                                                    <i class="fa-solid fa-book"
-                                                        title='This Lecture have his content'></i>
-                                                @endif
-
-                                                @if (false)
-                                                    <i class="fa-solid fa-circle-exclamation"
-                                                        title='This lecture included Exam'></i>
-                                                @endif
+                                        <div
+                                            class='flex gap-2 items-center  text-sm text-gray-400 dark:text-ammber-500'>
+                                            <div class='flex gap-2 items-center'>
+                                                {!! getLectureIcons(
+                                                    text: !is_null($lecture->content),
+                                                    video: !is_null($lecture->video),
+                                                    exam: !is_null($lecture->exam),
+                                                ) !!}
                                             </div>
-                                            <a href="#"
-                                                class="underline hover:text-amber-600 duration-300 mr-1">Preview</a>
+                                            @if ($isFirstSetion && !is_null($lecture->video))
+                                                <button type='button'
+                                                    data-url="{{ json_decode($lecture->video)->url }}"
+                                                    data-modal-target="view-lecture" data-modal-toggle="view-lecture"
+                                                    class="cursor-pointer underline hover:text-amber-600 duration-300 mr-1">Preview</button>
+                                            @elseif(!$isFirstSetion)
+                                                <i class="fa-solid fa-lock "></i>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
                         </div>
                     </div>
+                    @php
+                        $isFirstSetion = false;
+                    @endphp
                 @endforeach
             </div>
         </div>
@@ -178,15 +180,14 @@
                     <i class="fa-solid fa-users text-amber-700 mr-2"></i>
                     <span>
                         <span>Enrolled:</span>
-                        <span class="font-bold"> 32 students</span>
+                        <span class="font-bold"> {{ $course->enrolleds->count() }} students</span>
                     </span>
                 </div>
                 <div class="p-2 border-b border-gray-200 last-of-type:border-none">
                     <i class="fa-solid fa-hourglass-half text-amber-700 mr-2"></i>
                     <span>
                         <span>Duration:</span>
-                        <span
-                            class="font-bold">{{ explainSecondsToHumans($course->lectures()->sum('video_duration')) }}</span>
+                        <span class="font-bold">{{ explainSecondsToHumans($course->totalLecturesTime) }}</span>
                     </span>
                 </div>
                 <div class="p-2 border-b border-gray-200 last-of-type:border-none">

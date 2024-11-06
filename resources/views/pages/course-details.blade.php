@@ -9,7 +9,7 @@
                 This Course his status is: {{ $course->status }}
             </p>
         @endif
-        <x-course-details.head :course="$course"></x-course-details.head>
+        <x-course-details.head :course="$course" :averageRating="$averageRating"></x-course-details.head>
         <x-course-details.content :course="$course" :hasThisCourse="$hasThisCourse"></x-course-details.content>
 
         <x-course-details.modals :course="$course" :reviewStudent="$reviewStudent" :hasThisCourse="$hasThisCourse"></x-course-details.modals>
