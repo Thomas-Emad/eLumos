@@ -1,4 +1,14 @@
 @section('js')
+    {{-- Put url When user open Modal View Lecture --}}
+    <script>
+        $(document).ready(() => {
+            $("[data-modal-target='view-lecture']").on('click', function() {
+                $("#view-lecture .player").attr('src', $(this).attr('data-url'));
+            });
+        });
+    </script>
+
+    {{-- Get Data Reviews, Instructor Sections --}}
     <script>
         $(document).ready(() => {
             let hasSentRequest = false;

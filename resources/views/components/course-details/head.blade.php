@@ -5,19 +5,23 @@
     <div class="absolute top-0 left-0 w-full h-full z-[1] bg-[#22222299] "></div>
     <div class="container mx-auto max-w-screen-xl px-4 py-12 relative z-[2]">
         <div class="text-white w-full md:w-[65%]">
-            <div class="flex justify-between items-start md:items-center flex-col md:flex-row gap-2">
-                <div class="flex gap-4 items-center">
-                    <div class="flex gap-4 items-center">
-                        <img src="{{ asset('storage/' . $course->user->photo) }}"
-                            onerror="this.onerror=null;this.src='{{ asset('assets/images/user-1.png') }}';"
-                            alt="user photo" class="rounded-full w-12 h-12">
-                        <div>
-                            <a href="{{ route('dashboard.profile', $course->user->id) }}"
-                                class="block transition duration-300 hover:text-amber-600 font-bold">
-                                {{ $course->user->name }}
-                            </a>
-                            <p>{{ $course->user->headline }}</p>
-                        </div>
+            <div class="flex justify-between gap-4 items-center flex-col-reverse md:flex-row">
+                <div class="flex gap-4 items-center w-full">
+                    <img src="{{ asset('storage/' . $course->user->photo) }}"
+                        onerror="this.onerror=null;this.src='{{ asset('assets/images/user-1.png') }}';" alt="user photo"
+                        class="rounded-full w-12 h-12">
+                    <div>
+                        <a href="{{ route('dashboard.profile', $course->user->id) }}"
+                            class="block transition duration-300 hover:text-amber-600 font-bold">
+                            {{ $course->user->name }}
+                        </a>
+                        <p>{{ $course->user->headline }}</p>
+                    </div>
+                </div>
+                <div class="flex flex-row  md:flex-col items-center gap-2 ">
+                    <div
+                        class="inline-block py-2 px-3 text-white text-xs font-bold bg-amber-600 rounded-full mt-1 uppercase whitespace-nowrap">
+                        {{ $course->category->name }}
                     </div>
                     <div class="flex gap-1 text-sm">
                         @for ($i = 1; $i <= floor($averageRating); $i++)
@@ -36,9 +40,8 @@
                             <span>({{ $course->reviews->count() }})</span>
                         </div>
                     </div>
+
                 </div>
-                <div class="inline-block py-2 px-3 text-white text-sm font-bold bg-amber-600 rounded-full mt-1">WEB
-                    DEVELPMENT</div>
             </div>
             <div class="mt-4">
                 <h1 class="font-bold text-2xl">{{ $course->name }}</h1>

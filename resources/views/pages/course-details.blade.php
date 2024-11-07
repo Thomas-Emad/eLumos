@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'course details')
-
+@section('description', $course->headline)
+@section('keywords', $course->tags->pluck('name')->join(', '))
 
 @section('content')
     <div class="min-h-60 mt-16">

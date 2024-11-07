@@ -110,7 +110,8 @@ class CoursesController extends Controller implements HasMiddleware
       'headline' => 'required|min:50|max:255',
       'description' => 'required|min:50|max:1000',
       'language' => 'required|exists:languages,id',
-      'tags' => 'required|array|max:3|min:1',
+      'tags' => 'required|array|max:5|min:1',
+      'category' => 'required|exists:tags,id',
       'tags.*' => 'required|exists:tags,id',
     ]);
 
@@ -130,7 +131,8 @@ class CoursesController extends Controller implements HasMiddleware
       'headline' => $request->headline,
       'description' => $request->description,
       'language_id' => $request->language,
-      'steps_status' => json_encode($stepsStatus)
+      'steps_status' => json_encode($stepsStatus),
+      'category_id' => $request->category
     ]);
 
     $course->tags()->attach($request->tags);

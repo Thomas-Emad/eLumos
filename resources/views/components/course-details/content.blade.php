@@ -77,7 +77,7 @@
                                             </div>
                                             @if ($isFirstSetion && !is_null($lecture->video))
                                                 <button type='button'
-                                                    data-url="{{ json_decode($lecture->video)->url }}"
+                                                    data-url="https://player.cloudinary.com/embed/?public_id={{ json_decode($lecture->video)->public_id }}&cloud_name=dtyvom84s&player[autoplay]=true&player[autoplayMode]=on-scroll&player[aiHighlightsGraph]=true"
                                                     data-modal-target="view-lecture" data-modal-toggle="view-lecture"
                                                     class="cursor-pointer underline hover:text-amber-600 duration-300 mr-1">Preview</button>
                                             @elseif(!$isFirstSetion)

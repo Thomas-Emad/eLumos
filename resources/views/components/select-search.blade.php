@@ -1,3 +1,4 @@
+@props(['name' => '', 'placeholder' => 'Select item From here', 'placeholderSearch' => 'Search By Item name..'])
 <!-- Select -->
 <select name="{{ $name }}"
     data-hs-select='{

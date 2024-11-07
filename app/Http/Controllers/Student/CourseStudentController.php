@@ -31,6 +31,8 @@ class CourseStudentController extends Controller
   public function show(String $id)
   {
     $course = Course::with([
+      'tags:id,name',
+      'category:id,name',
       'user:id,name,headline,photo',
       'reviews:id,course_id,user_id,rate,content',
       'enrolleds:id,course_id,user_id',

@@ -33,7 +33,8 @@ class Course extends Model
     'steps_status',
     'status',
     'level',
-    'message'
+    'message',
+    'category_id'
   ];
 
 
@@ -80,6 +81,12 @@ class Course extends Model
   {
     return $this->BelongsToMany(Tag::class, "course_tags", 'course_id', 'tag_id');
   }
+
+  public function category(): BelongsTo
+  {
+    return $this->BelongsTo(Tag::class, 'category_id', 'id');
+  }
+
 
   public function wishlist(): HasMany
   {

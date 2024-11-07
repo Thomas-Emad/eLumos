@@ -28,9 +28,12 @@ trait CoursesUpdateTrait
       'headline' => 'required|min:50|max:255',
       'description' => 'required|min:50|max:1000',
       'language' => 'required|exists:languages,id',
-      'tags' => 'required|array',
+      'category' => 'required|exists:tags,id',
+      'tags' => 'required|array|max:5|min:1',
       'tags.*' => 'required|exists:tags,id',
     ]);
+
+    $validated['category_id'] = $request->category;
 
     $course->update($validated);
     static::updateStepsStatusWithIncrementStep('stepOne', $course);
