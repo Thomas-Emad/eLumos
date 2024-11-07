@@ -93,8 +93,8 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     Route::apiResource('/api/courses/lectures', CourseLecturesController::class)->names('api.instructor.courses.lectures');
 
     // Exams
-    Route::resource('instructor/exams', ExamController::class)->names('instructor.exams');
-    Route::resource('instructor/exam/questions', ExamQuestionController::class)->names('instructor.exams.questions');
+    Route::resource('instructor/exams', ExamController::class)->names('instructor.exams')->only(['index', 'store', 'show', 'destroy']);
+    Route::resource('instructor/exam/questions', ExamQuestionController::class)->names('instructor.exams.questions')->only(['store', 'show', 'destroy']);
     Route::get('instructor/exam/questions/component/{type?}',  [ExamQuestionController::class, 'getComponent'])->name('instructor.exams.get-component');
     Route::post('instructor/exams/question/answer-student', [StudentExamController::class, 'getInfoQuestion'])->name('instructor.exams.get-info-question');
     Route::post('instructor/exams/question/correct-answer', [StudentExamController::class, 'correctAnswer'])->name('instructor.exams.correct-answer');
@@ -102,7 +102,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
 
   /* *******************Admin************************* */
   // Role Pages for owner role
-  Route::resource('dashboard/roles', RoleController::class);
+  Route::resource('dashboard/roles', RoleController::class)->only(['index', 'store', 'update', 'destroy']);
   Route::controller(RoleController::class)->group(function () {
     Route::post('dashboard/role/', 'showRole')->name('roles.showRole');
     Route::get('dashboard/role/users', 'users')->name('roles.users');

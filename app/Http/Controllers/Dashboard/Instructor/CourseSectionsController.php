@@ -129,7 +129,6 @@ class CourseSectionsController extends Controller
       $course->changeSortOrderSection($section->id, true);
     }
 
-
     return response()->json([
       'message' => 'Deleted Section Has Been Done Successfully.',
       'section_id' => $request->section_id
