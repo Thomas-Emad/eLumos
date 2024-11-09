@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Dashboard\Instructor;
 
-use App\Http\Controllers\Controller;
-use App\Models\Course;
 use App\Models\Exam;
-use App\Http\Resources\CoursesDashboardResource;
-use App\Http\Traits\CoursesUpdateTrait;
+use App\Models\Course;
 use Illuminate\Http\Request;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Contracts\View\View;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Cache;
+use App\Http\Traits\CoursesUpdateTrait;
+use App\Http\Resources\CoursesDashboardResource;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
 class CoursesController extends Controller implements HasMiddleware
 {
@@ -147,7 +148,7 @@ class CoursesController extends Controller implements HasMiddleware
   {
     $course->load(['tags', 'sections']);
     if ($course->user_id != auth()->user()->id) {
-      return abort(404);
+      return abort(403);
     }
 
     $exams = Exam::with('questions')->get();
@@ -160,6 +161,9 @@ class CoursesController extends Controller implements HasMiddleware
    */
   public function update(Request $request, Course $course)
   {
+    if ($course->user_id != auth()->user()->id) {
+      return abort(403);
+    }
     return match ($request->input('step')) {
       '1' => self::stepOneUpdate($request, $course),
       '2' => self::stepTwoUpdate($request, $course),
@@ -176,6 +180,9 @@ class CoursesController extends Controller implements HasMiddleware
   public function destroy(Request $request)
   {
     $course = Course::findOrFail($request->id);
+    if ($course->user_id != auth()->user()->id) {
+      return abort(403);
+    }
     $course->delete();
     return redirect()->route('dashboard.instructor.courses')->with('success', 'Course deleted successfully');
   }

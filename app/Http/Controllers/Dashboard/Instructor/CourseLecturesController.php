@@ -3,22 +3,29 @@
 namespace App\Http\Controllers\Dashboard\Instructor;
 
 use App\Models\Course;
-use App\Models\CourseLectures;
-use App\Services\CourseLectureService;
-use App\Http\Controllers\Controller;
-use App\Http\Traits\UploadAttachmentTrait;
-use App\Http\Traits\UpdateStepsStatusTrait;
-use App\Http\Requests\CourseLectureRequest;
-use App\Http\Resources\SectionsCourseResource;
 use Illuminate\Http\Request;
+use App\Models\CourseLectures;
 use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+use App\Services\CourseLectureService;
+use App\Http\Traits\UploadAttachmentTrait;
+use App\Http\Requests\CourseLectureRequest;
+use App\Http\Traits\UpdateStepsStatusTrait;
+use App\Http\Resources\SectionsCourseResource;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 
-class CourseLecturesController extends Controller
+class CourseLecturesController extends Controller implements HasMiddleware
 {
   use UploadAttachmentTrait, UpdateStepsStatusTrait;
 
+  public static function middleware(): array
+  {
+    return [
+      'permission:instructors-control-courses',
+    ];
+  }
   /**
    * Store a newly created resource in storage.
    */

@@ -3,15 +3,22 @@
 namespace App\Http\Controllers\Dashboard\Instructor;
 
 use App\Models\Course;
-use App\Models\CourseSections;
-use App\Services\CourseSectionService;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\SectionsCourseResource;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Models\CourseSections;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+use App\Services\CourseSectionService;
+use App\Http\Resources\SectionsCourseResource;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class CourseSectionsController extends Controller
+class CourseSectionsController extends Controller implements HasMiddleware
 {
+  public static function middleware(): array
+  {
+    return [
+      'permission:instructors-control-courses',
+    ];
+  }
   /**
    * Retrieves course sections based on the provided course ID.
    *

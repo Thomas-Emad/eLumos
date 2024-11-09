@@ -9,9 +9,18 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ReviewCourseRequest;
 use App\Actions\StatisticsRateCourseAction;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class ReviewCourseController extends Controller
+class ReviewCourseController extends Controller  implements HasMiddleware
 {
+
+  public static function middleware(): array
+  {
+    return [
+      'permission:buy-courses',
+    ];
+  }
+
   /**
    * Display a listing of the resource.
    */

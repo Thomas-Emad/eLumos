@@ -3,14 +3,23 @@
 namespace App\Http\Controllers\Dashboard\Instructor\Exams;
 
 use App\Models\ExamQuestion;
-use App\Services\ExamQuestionService;
 use App\Http\Controllers\Controller;
+use App\Services\ExamQuestionService;
 use App\Http\Requests\ExamQuestionRequest;
-use App\Http\Resources\Dashboard\Instructor\ExamQuestionResource;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Http\{Request, RedirectResponse, JsonResponse};
+use App\Http\Resources\Dashboard\Instructor\ExamQuestionResource;
 
-class ExamQuestionController extends Controller
+class ExamQuestionController extends Controller implements HasMiddleware
 {
+
+  public static function middleware(): array
+  {
+    return [
+      'permission:instructors-control-exams',
+    ];
+  }
+
   /**
    * Store a newly created resource in storage.
    */

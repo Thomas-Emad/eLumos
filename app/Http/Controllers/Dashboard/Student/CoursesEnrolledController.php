@@ -9,9 +9,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use App\Services\CoursesEnrolledService;
 use App\Http\Resources\CoursesEnrolledResource;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
 
-class CoursesEnrolledController extends Controller
+class CoursesEnrolledController extends Controller implements HasMiddleware
 {
 
   protected array $getStatus = [
@@ -19,6 +20,14 @@ class CoursesEnrolledController extends Controller
     'active' => ['new', 'incomplete'],
     'completed' => ['completed']
   ];
+
+  public static function middleware(): array
+  {
+    return [
+      'permission:buy-courses',
+    ];
+  }
+
 
   public function index()
   {

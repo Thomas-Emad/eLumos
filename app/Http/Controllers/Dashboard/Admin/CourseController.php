@@ -2,15 +2,22 @@
 
 namespace App\Http\Controllers\Dashboard\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Course;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Http\Traits\FilterByDateTrait;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class CourseController extends Controller
+class CourseController extends Controller implements HasMiddleware
 {
   use FilterByDateTrait;
 
+  public static function middleware(): array
+  {
+    return [
+      'permission:admin-control-courses',
+    ];
+  }
   /**
    * Show the admin courses index page.
    *

@@ -2,21 +2,30 @@
 
 namespace App\Http\Controllers\Dashboard\Student;
 
-use App\Models\StudentCourseExam;
 use App\Models\ExamQuestion;
-use App\Models\StudentCourseExamAnswer;
-use App\Http\Controllers\Controller;
-use App\Http\Traits\FilterByDateTrait;
-use App\Http\Traits\UploadAttachmentTrait;
-use App\Services\StudentExamService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\StudentCourseExam;
 use Illuminate\Contracts\View\View;
+use App\Http\Controllers\Controller;
+use App\Services\StudentExamService;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Traits\FilterByDateTrait;
+use App\Models\StudentCourseExamAnswer;
+use App\Http\Traits\UploadAttachmentTrait;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
 
-class StudentExamController extends Controller
+class StudentExamController extends Controller implements HasMiddleware
 {
   use UploadAttachmentTrait, FilterByDateTrait;
+
+  public static function middleware(): array
+  {
+    return [
+      'permission:buy-courses',
+    ];
+  }
+
 
   /**
    * Display a listing of the resource.

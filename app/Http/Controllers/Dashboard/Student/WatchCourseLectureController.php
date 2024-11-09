@@ -2,14 +2,23 @@
 
 namespace App\Http\Controllers\Dashboard\Student;
 
-use App\Actions\WatchCourseLectureAction;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Actions\WatchCourseLectureAction;
 
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class WatchCourseLectureController extends Controller
+class WatchCourseLectureController extends Controller implements HasMiddleware
 {
+
+  public static function middleware(): array
+  {
+    return [
+      'permission:buy-courses',
+    ];
+  }
+
   /**
    * Handle the incoming request.
    */

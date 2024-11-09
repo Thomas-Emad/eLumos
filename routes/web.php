@@ -82,7 +82,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
 
     /* *******************instructor************************* */
     // instructor Controllers
-    Route::resource('/courses', CoursesController::class)->names('instructor.courses');
+    Route::resource('/courses', CoursesController::class)->names('instructor.courses')->except('show');
     Route::get('/api/courses/show/{type?}',  [CoursesController::class, 'getCourses'])->name('api.instructor.courses.show');
 
     // Api CRUD Operations for Course Sections

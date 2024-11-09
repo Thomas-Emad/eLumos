@@ -3,20 +3,27 @@
 namespace App\Http\Controllers\Dashboard\Instructor\Exams;
 
 use App\Models\Exam;
-use App\Models\StudentCourseExamAnswer;
-use App\Http\Traits\FilterByDateTrait;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\View\View;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+use App\Http\Traits\FilterByDateTrait;
+use App\Models\StudentCourseExamAnswer;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class ExamController extends Controller
+class ExamController extends Controller implements HasMiddleware
 {
   use FilterByDateTrait;
 
+  public static function middleware(): array
+  {
+    return [
+      'permission:instructors-control-exams',
+    ];
+  }
   /**
    * Display a listing of the resource.
    */
