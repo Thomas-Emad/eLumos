@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Classes\Payment\StripePaymentGateway;
 use App\Http\Controllers\{StepsForwardController};
+use App\Http\Controllers\Student\PaymentController;
 use App\Http\Controllers\Dashboard\ReviewCourseController;
 use App\Http\Controllers\Dashboard\Instructor\Exams\{ExamController, ExamQuestionController};
 use App\Http\Controllers\Dashboard\Admin\{RoleController, CourseController as DashboardCoursesController};
@@ -42,7 +44,13 @@ Route::controller(BasketController::class)->group(function () {
 });
 
 // Checkout
-Route::post('/checkout', [CheckoutController::class, 'saveCourses'])->name('checkout.saveCourses');
+Route::middleware(['middleware' => 'step-forward'])->group(function () {
+  Route::get('/checkout/payment', [CheckoutController::class, 'viewPayment'])->name('checkout.viewPayment');
+  Route::post('/checkout/processPayment/intent', [StripePaymentGateway::class, 'paymentIntent'])->name('checkout.processPayment.stripe.intent');
+  Route::get('/checkout/payment/callback/', [PaymentController::class, 'callback'])->name('checkout.callback');
+  Route::get('/payment/success/', [PaymentController::class, 'success'])->name('checkout.success');
+  Route::get('/payment/fail/', [PaymentController::class, 'fail'])->name('checkout.fail');
+});
 
 Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
   // Course Pages for Student Courses

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Student;
 
+use App\Factories\PaymentGatewayFactory;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
 class CheckoutController extends Controller implements HasMiddleware
 {
@@ -15,16 +17,17 @@ class CheckoutController extends Controller implements HasMiddleware
     ];
   }
 
-  public function saveCourses()
+  private function orders()
   {
-    $courses = Auth::user()->basketWithCourses()->select('courses.id')->where('status', 'active')->pluck('id');
+    $courses = Auth::user()->basketWithCourses()->select('courses.id', 'courses.price')->where('status', 'active')->get('id', 'price');
+    return $courses;
+  }
 
-    Auth::user()->enrolledCourses()->attach($courses);
-    Auth::user()->baskets()->whereIn('course_id', $courses)->delete();
+  public function viewPayment(Request $request)
+  {
+    $request->gateway = $request->gateway ?? 'stripe';
+    $gateway = PaymentGatewayFactory::make($request->gateway);
 
-    return redirect()->route('dashboard.index')->with('notification', [
-      'type' => 'success',
-      'message' => "You have successfully saved your courses."
-    ]);
+    return $gateway->view($this->orders());
   }
 }
