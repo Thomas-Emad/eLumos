@@ -7,7 +7,6 @@ use App\Models\Course;
 use App\Models\ReviewCourse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Actions\StatisticsRateCourseAction;
 use App\Http\Resources\ReviewUserCourseResource;
 use App\Http\Resources\InstructorCourseDetailsResource;

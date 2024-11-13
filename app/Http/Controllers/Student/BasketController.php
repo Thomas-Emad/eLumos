@@ -62,10 +62,10 @@ class BasketController extends Controller implements HasMiddleware
       (Auth::check() && Auth::user()->baskets()->where('course_id', $request->id)->exists())
       || (!is_null($request->id) && in_array($request->id, $baskets))
     ) {
-      $baskets = $this->removeCoursesBasket($baskets, $request->id);
+      $baskets = $this->removeCourseBasket($baskets, $request->id);
       $messageButton = 'Add To Cart';
     } else {
-      $baskets = $this->addCoursesBasket($baskets, $request->id);
+      $baskets = $this->addCourseBasket($baskets, $request->id);
       $messageButton = 'Remove from Cart';
     }
 

@@ -16,7 +16,7 @@ return new class extends Migration
       $table->foreignId('user_id')->constrained()->cascadeOnDelete();
       $table->float('amount', 8, 2)->default(0);
       $table->float('discount', 8, 2)->default(0);
-      $table->enum('status', ['processing', 'succeeded', 'failed', 'canceled'])->default('processing');
+      $table->enum('status', ['pending', 'succeeded', 'failed', 'canceled'])->default('pending');
       $table->timestamps();
     });
   }

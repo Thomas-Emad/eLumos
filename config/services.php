@@ -38,7 +38,8 @@ return [
   'payments' => [
     'stripe' => [
       'publishable_key' => env('STRIPE_KEY'),
-      'secret_key' => env('STRIPE_SECRET')
+      'secret_key' => env('STRIPE_SECRET'),
+      'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
     ],
   ],
 

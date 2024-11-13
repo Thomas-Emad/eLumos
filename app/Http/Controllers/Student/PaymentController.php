@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers\Student;
 
-use App\Models\Order;
-use App\Models\Payment;
-use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -61,11 +58,11 @@ class PaymentController extends Controller implements HasMiddleware
    * @return \Illuminate\Http\RedirectResponse
    */
 
-  public function callback(Request $request)
+  public function callback(Request $request, string $gateway = 'stripe')
   {
     try {
       DB::beginTransaction();
-      $gateway = PaymentGatewayFactory::make('stripe');
+      $gateway = PaymentGatewayFactory::make($gateway);
       $callback = $gateway->callback($request->payment_intent);
       $order = $this->createOrder($callback['status']);
 
@@ -79,25 +76,16 @@ class PaymentController extends Controller implements HasMiddleware
         $callback['status'],
         $callback['transaction_details'],
       );
+      DB::commit();
 
-      // Attach Courses
       if ($callback['status'] == 'succeeded') {
-        Auth::user()->enrolledCourses()->attach($order['courses']);
-        Auth::user()->baskets()->delete();
-
-        Payment::where('order_id', $order['order_id'])
-          ->where('transaction_id', $callback['transaction_id'])
-          ->update(['payment_date' => now()]);
-
-        DB::commit();
         return redirect()->route('checkout.success');
       }
 
-      $message = $callback['status']  == 'failed' ?
+      $message = $callback['status'] == 'failed' ?
         'Something is wrong, please try again?'
         : 'The process may take a little time. You should wait a little.';
 
-      DB::commit();
       return redirect()->route('checkout.fail')->with('notification', [
         'type' => 'fail',
         'message' => $message

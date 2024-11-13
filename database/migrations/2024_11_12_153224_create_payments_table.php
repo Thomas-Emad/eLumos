@@ -19,7 +19,7 @@ return new class extends Migration
       $table->char('payment_provider', 20)->nullable();
       $table->char('payment_method', 20)->nullable();
       $table->string('currency', 3)->default('USD');
-      $table->enum('status', ['processing', 'succeeded', 'failed', 'canceled'])->default('processing');
+      $table->enum('status', ['pending', 'succeeded', 'failed', 'canceled'])->default('pending');
       $table->string('transaction_id')->nullable();
       $table->json('transaction_details')->nullable();
       $table->timestamp('payment_date')->nullable();

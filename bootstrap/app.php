@@ -20,8 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
       'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
       'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
       'step-forward' => \App\Http\Middleware\StepForwardMiddleware::class,
-      'watch-course-lecture' => \App\Http\Middleware\WatchCourseLectureMiddleware::class
+    ]);
 
+    $middleware->validateCsrfTokens(except: [
+      'payment/webhook/*',
     ]);
   })
   ->withExceptions(function (Exceptions $exceptions) {

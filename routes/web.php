@@ -5,6 +5,7 @@ use App\Classes\Payment\StripePaymentGateway;
 use App\Http\Controllers\{StepsForwardController};
 use App\Http\Controllers\Student\PaymentController;
 use App\Http\Controllers\Dashboard\ReviewCourseController;
+use App\Http\Controllers\Student\PaymentWebhookController;
 use App\Http\Controllers\Dashboard\Instructor\Exams\{ExamController, ExamQuestionController};
 use App\Http\Controllers\Dashboard\Admin\{RoleController, CourseController as DashboardCoursesController};
 use App\Http\Controllers\Student\{CourseStudentController, BasketController, CheckoutController, WishlistController};
@@ -47,10 +48,11 @@ Route::controller(BasketController::class)->group(function () {
 Route::middleware(['middleware' => 'step-forward'])->group(function () {
   Route::get('/checkout/payment', [CheckoutController::class, 'viewPayment'])->name('checkout.viewPayment');
   Route::post('/checkout/processPayment/intent', [StripePaymentGateway::class, 'paymentIntent'])->name('checkout.processPayment.stripe.intent');
-  Route::get('/checkout/payment/callback/', [PaymentController::class, 'callback'])->name('checkout.callback');
+  Route::get('/checkout/payment/callback/{gateway?}', [PaymentController::class, 'callback'])->name('checkout.callback');
   Route::get('/payment/success/', [PaymentController::class, 'success'])->name('checkout.success');
   Route::get('/payment/fail/', [PaymentController::class, 'fail'])->name('checkout.fail');
 });
+Route::post('/payment/webhook/stripe', [PaymentWebhookController::class, 'handleStripeWebhook'])->name('checkout.stripe.webhook');
 
 Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
   // Course Pages for Student Courses

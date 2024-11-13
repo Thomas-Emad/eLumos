@@ -46,9 +46,9 @@ trait BasketTrait
    * @param string $id
    * @return array
    */
-  private function addCoursesBasket(array $baskets, string $id): array
+  private function addCourseBasket(array $baskets, string $id): array
   {
-    if (Auth::check()) {
+    if (Auth::check() && !Auth::user()->baskets()->where('course_id', $id)->exists() && !Auth::user()->enrolledCourses()->where('course_id', $id)->exists()) {
       Auth::user()->baskets()->create([
         'course_id' => $id
       ]);
@@ -67,7 +67,7 @@ trait BasketTrait
    * @param string $id
    * @return array
    */
-  private function removeCoursesBasket(array $baskets, string $id): array
+  private function removeCourseBasket(array $baskets, string $id): array
   {
     if (Auth::check()) {
       Auth::user()->baskets()->where('course_id', $id)->delete();

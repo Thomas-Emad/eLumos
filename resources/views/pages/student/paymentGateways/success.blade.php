@@ -4,7 +4,8 @@
 
 
 @section('content')
-    <div class="min-h-60 mt-20 flex flex-col items-center gap-4">
+    <div
+        class="container mx-auto p-4 mt-16 max-w-screen-xl min-h-screen -translate-x-full an-section an-right text-gray-900 flex flex-col items-center justify-center gap-4">
         <img src="{{ asset('assets/images/congratulation.png') }}" alt="success" class="w-64 mx-auto">
         <h1 class="font-bold text-2xl">Congratulations, your purchase has been successful.</h1>
         <a href="{{ route('dashboard.courses-list') }}"
