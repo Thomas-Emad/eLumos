@@ -55,26 +55,28 @@
                 <div>
                     <div class="space-y-2">
                         <dl class="flex items-center justify-between gap-4">
-                            <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Original price
-                            </dt>
+                            <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Original price</dt>
                             <dd class="text-base font-medium text-gray-900 dark:text-white">${{ $orders->sum('price') }}
                             </dd>
                         </dl>
 
                         <dl class="flex items-center justify-between gap-4">
-                            <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Savings</dt>
-                            <dd class="text-base font-medium text-green-500">-$$orders->descount</dd>
+                            <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Wallet Used</dt>
+                            <dd class="text-base font-medium text-gray-900 dark:text-white">${{ $amountUseWallet }}</dd>
+
                         </dl>
 
                         <dl class="flex items-center justify-between gap-4">
-                            <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Store Pickup</dt>
-                            <dd class="text-base font-medium text-gray-900 dark:text-white">$$orders->descount</dd>
+                            <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Discount</dt>
+                            <dd class="text-base font-medium text-green-500">-asd</dd>
+
                         </dl>
                     </div>
 
                     <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
                         <dt class="text-base font-bold text-gray-900 dark:text-white">Total</dt>
-                        <dd class="text-base font-bold text-gray-900 dark:text-white">${{ $orders->sum('price') }}</dd>
+                        <dd class="text-base font-bold text-gray-900 dark:text-white">
+                            ${{ $orders->sum('price') - $amountUseWallet }}</dd>
                     </dl>
                 </div>
 
@@ -127,6 +129,7 @@
                     },
                     body: JSON.stringify({
                         _token: "{{ csrf_token() }}",
+                        amountUseWallet: {{ $amountUseWallet }},
                     }),
                 });
                 if (!response.ok) {

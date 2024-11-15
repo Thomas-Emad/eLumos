@@ -24,6 +24,7 @@ return new class extends Migration
       $table->enum('steps_forward', ['new', 'info', 'complate'])->default('new');
       $table->text('description')->nullable();
       $table->json('media')->nullable();
+      $table->float('wallet', 8)->defult(0);
       $table->rememberToken();
       $table->timestamps();
     });

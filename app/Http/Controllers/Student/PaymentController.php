@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Student;
 
 use Illuminate\Http\Request;
+use App\Services\PaymentService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Factories\PaymentGatewayFactory;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
@@ -20,54 +20,27 @@ class PaymentController extends Controller implements HasMiddleware
   }
 
   /**
-   * Creates an order for the authenticated user with the given status.
-   *
-   * This function retrieves all active courses from the user's basket,
-   * calculates the total amount, and creates an order with the specified status.
-   * It then associates each course with the order as an order item.
-   *
-   * @param string $status The status of the order to be created.
-   * @return array An array containing the order ID, list of course IDs, and total amount.
-   */
-  private function createOrder($status)
-  {
-    $courses = Auth::user()->basketWithCourses()->select('courses.id', 'courses.price')->where('status', 'active')->get('id', 'price');
-    $order = Auth::user()->orders()->create([
-      'amount' => $courses->sum('price'),
-      'status' => $status,
-      'discount' => 0,
-    ]);
-
-    foreach ($courses->pluck('id')->toArray() as $course) {
-      $order->items()->create([
-        'course_id' => $course
-      ]);
-    }
-
-    return [
-      'order_id' => $order->id,
-      'courses' => $courses->pluck('id')->toArray(),
-      'amount' => $order->amount,
-    ];
-  }
-
-  /**
    * Process payment callback from Stripe.
    *
    * @param  \Illuminate\Http\Request  $request
    * @return \Illuminate\Http\RedirectResponse
    */
-
   public function callback(Request $request, string $gateway = 'stripe')
   {
     try {
       DB::beginTransaction();
       $gateway = PaymentGatewayFactory::make($gateway);
       $callback = $gateway->callback($request->payment_intent);
-      $order = $this->createOrder($callback['status']);
+      $order = (new PaymentService)->createOrder(
+        $callback['metadata']['user_id'],
+        $callback['status'],
+        (int) $callback['metadata']['amountUseWallet'],
+        $callback['metadata']['courses_id']
+      );
 
       // Add New Payment
       $gateway->charge(
+        $callback['metadata']['user_id'],
         $order['order_id'],
         $callback['transaction_id'],
         $order['amount'],

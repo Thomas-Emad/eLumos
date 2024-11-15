@@ -46,7 +46,7 @@ Route::controller(BasketController::class)->group(function () {
 
 // Checkout
 Route::middleware(['middleware' => 'step-forward'])->group(function () {
-  Route::get('/checkout/payment', [CheckoutController::class, 'viewPayment'])->name('checkout.viewPayment');
+  Route::post('/checkout/payment', [CheckoutController::class, 'viewPayment'])->name('checkout.viewPayment');
   Route::post('/checkout/processPayment/intent', [StripePaymentGateway::class, 'paymentIntent'])->name('checkout.processPayment.stripe.intent');
   Route::get('/checkout/payment/callback/{gateway?}', [PaymentController::class, 'callback'])->name('checkout.callback');
   Route::get('/payment/success/', [PaymentController::class, 'success'])->name('checkout.success');

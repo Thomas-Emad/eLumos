@@ -29,7 +29,7 @@ class PaymentProcessFreeOrderJob implements ShouldQueue
   /**
    * Create a new job instance.
    */
-  public function __construct(public $userId, public $orders)
+  public function __construct(public $userId, public $orders, public float $amountUseWallet)
   {
     //
   }
@@ -40,21 +40,29 @@ class PaymentProcessFreeOrderJob implements ShouldQueue
   public function handle(): void
   {
     $user = User::findOrFail($this->userId);
-    $courseIds = $this->orders->pluck('id')->toArray();
+    $orders = $this->orders;
 
-    DB::transaction(function () use ($courseIds, $user) {
+    DB::transaction(function () use ($orders, $user) {
       $order = $user->orders()->create([
-        'amount' => $this->orders->sum('price'),
+        'amount' => $orders->sum('price'),
         'status' => 'succeeded',
         'discount' => 0,
       ]);
 
-      foreach ($courseIds as $courseId) {
-        $order->items()->create(['course_id' => $courseId]);
+      foreach ($orders as $course) {
+        $order->items()->create([
+          'course_id' => $course->id,
+          'amount' => $course->price,
+        ]);
       }
 
-      $user->enrolledCourses()->attach($courseIds);
+      $user->enrolledCourses()->attach($orders->pluck('id')->toArray());
       $user->baskets()->delete();
+
+      // Update wallet here
+      if ($this->amountUseWallet > 0) {
+        $user->decrement('wallet', $this->amountUseWallet);
+      }
 
       // Send Message here if needed
     });

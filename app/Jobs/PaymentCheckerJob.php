@@ -47,8 +47,9 @@ class PaymentCheckerJob implements ShouldQueue
         $order = Order::with('items')->where('id', $this->orderId)->firstOrFail();
 
         // Check if payment succeeded
-        if ($this->status == 'succeeded') {
-          $user->enrolledCourses()->attach($order->items->pluck('course_id')->toArray());
+        $coursesEnroled = $order->items->pluck('course_id')->toArray();
+        if ($this->status == 'succeeded' && $user->enrolledCourses()->whereIn('course_id', $coursesEnroled)->doesntExist()) {
+          $user->enrolledCourses()->attach($coursesEnroled);
           $user->baskets()->delete();
         }
 

@@ -15,6 +15,7 @@ return new class extends Migration
       $table->id();
       $table->foreignId('order_id')->constrained()->cascadeOnDelete();
       $table->foreignUuid('course_id')->constrained()->cascadeOnDelete();
+      $table->float('amount', 8, 2)->default(0);
       $table->timestamps();
     });
   }
