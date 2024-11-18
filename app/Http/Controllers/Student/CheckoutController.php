@@ -42,7 +42,7 @@ class CheckoutController extends Controller implements HasMiddleware
     $totalOrderAmount = $order->sum('price');
 
     // Check if the wallet amount and the order conditions are valid
-    $validationResult = $this->checkOrderAmount($totalOrderAmount, $request->amountUseWallet);
+    $validationResult = $this->checkOrderAmount($totalOrderAmount, $request->amountUseWallet ?? 0);
     if ($validationResult) {
       return $validationResult;
     }
@@ -70,7 +70,7 @@ class CheckoutController extends Controller implements HasMiddleware
    *
    * @return null|\Illuminate\Http\RedirectResponse
    */
-  public function checkOrderAmount(float $totalAmountOrder, float $totalUseWallet): null|\Illuminate\Http\RedirectResponse
+  public function checkOrderAmount(float $totalAmountOrder, float $totalUseWallet = 0): null|\Illuminate\Http\RedirectResponse
   {
     $userWallet = Auth::user()->wallet;
     if ($totalUseWallet > $userWallet || (($totalAmountOrder - $totalUseWallet) < 5 && ($totalAmountOrder - $totalUseWallet) > 0)) {

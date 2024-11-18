@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Models\Course;
+use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
 
 class PaymentService
 {
@@ -13,7 +15,7 @@ class PaymentService
    * @param string $courses A comma-separated string of course IDs.
    * @return Course A collection of courses with their IDs and prices.
    */
-  private function getCourses(string $courses): Course
+  private function getCourses(string $courses): Collection
   {
     $coursesId = explode(',',  $courses);
     return Course::whereIn('id', $coursesId)->select('id', 'price')->get('id', 'price');
@@ -69,5 +71,45 @@ class PaymentService
     if ($amountUseWallet != 0) {
       User::where('id', $userId)->decrement('wallet', $amountUseWallet);
     }
+  }
+
+  /**
+   * Formats the payment status to a standard output.
+   *
+   * Converts the given status to lowercase and returns standardized versions
+   * of the payment status. This method maps multiple possible input statuses
+   * to a smaller set of standardized outputs: 'pending', 'succeeded', 'failed',
+   * or 'canceled'.
+   *
+   * @param string $status The original payment status.
+   * @return string The standardized payment status.
+   */
+  public function formatStatus($status): string
+  {
+    $status = strtolower($status);
+    if ($status == 'pending') {
+      return 'pending';
+    } elseif (in_array($status, ['succeeded', 'completed'])) {
+      return 'succeeded';
+    } elseif (in_array($status, ['denied', 'failed'])) {
+      return 'failed';
+    } else {
+      return 'canceled';
+    }
+  }
+
+  /**
+   * Retrieves the transaction ID from the request based on the payment gateway.
+   *
+   * @param \Illuminate\Http\Request $request The HTTP request containing payment gateway data.
+   * @param string $gateway The payment gateway name ('stripe' or 'paypal').
+   * @return string The transaction ID associated with the payment.
+   */
+  public function getTransactionId(Request $request, $gateway)
+  {
+    return match ($gateway) {
+      'stripe' => $request->payment_intent,
+      'paypal' => $request->token,
+    };
   }
 }

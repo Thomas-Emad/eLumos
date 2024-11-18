@@ -9,6 +9,7 @@ class OrderItem extends Model
   protected $fillable = [
     'order_id',
     'course_id',
-    'amount'
+    'amount',
+    'withdraw'
   ];
 }

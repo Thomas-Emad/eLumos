@@ -129,7 +129,7 @@
                     },
                     body: JSON.stringify({
                         _token: "{{ csrf_token() }}",
-                        amountUseWallet: {{ $amountUseWallet }},
+                        amountUseWallet: "{{ $amountUseWallet }}",
                     }),
                 });
                 if (!response.ok) {

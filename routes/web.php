@@ -50,9 +50,11 @@ Route::middleware(['middleware' => 'step-forward'])->group(function () {
   Route::post('/checkout/processPayment/intent', [StripePaymentGateway::class, 'paymentIntent'])->name('checkout.processPayment.stripe.intent');
   Route::get('/checkout/payment/callback/{gateway?}', [PaymentController::class, 'callback'])->name('checkout.callback');
   Route::get('/payment/success/', [PaymentController::class, 'success'])->name('checkout.success');
+  Route::get('/payment/pending/', [PaymentController::class, 'pending'])->name('checkout.pending');
   Route::get('/payment/fail/', [PaymentController::class, 'fail'])->name('checkout.fail');
 });
 Route::post('/payment/webhook/stripe', [PaymentWebhookController::class, 'handleStripeWebhook'])->name('checkout.stripe.webhook');
+Route::post('/payment/webhook/paypal', [PaymentWebhookController::class, 'handlePaypalWebhook'])->name('checkout.paypal.webhook');
 
 Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
   // Course Pages for Student Courses

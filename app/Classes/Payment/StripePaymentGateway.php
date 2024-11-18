@@ -6,8 +6,9 @@ use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Interfaces\PaymentGatewayInterface;
 
-class StripePaymentGateway
+class StripePaymentGateway implements PaymentGatewayInterface
 {
 
   public function __construct(private $stripe = null)
@@ -90,25 +91,27 @@ class StripePaymentGateway
   }
 
   /**
-   * Callback function to verify the status of a stripe payment intent.
+   * Processes a callback from Stripe for a payment intent.
    *
-   * @param string $paymentIntentId the id of the payment intent
-   * @return array a dictionary with the following keys:
-   *  - transaction_id
-   *  - method
-   *  - currency
-   *  - status
-   *  - transaction_details
-   *  - metadata
-   * @throws \Exception if the payment intent can't be found
+   * This method is called from the webhook endpoint and will be triggered when a payment
+   * is completed but the payment was not found in the database. This is normally
+   * caused by a race condition where the payment was completed before the
+   * payment intent was created. This method will create the payment intent and
+   * then call the charge method to create the payment record in the database.
+   *
+   * @param string $paymentId The ID of the payment intent.
+   *
+   * @return array An array of information about the payment.
+   *
+   * @throws \Exception If the payment intent cannot be retrieved.
    */
-  public function callback($paymentIntentId)
+  public function callback(string $paymentId)
   {
     try {
-      $payment = $this->stripe->paymentIntents->retrieve($paymentIntentId, []);
+      $payment = $this->stripe->paymentIntents->retrieve($paymentId, []);
 
       return [
-        'transaction_id' => $paymentIntentId,
+        'transaction_id' => $paymentId,
         'method' => $payment->payment_method_types,
         'currency' =>  $payment->currency,
         'status' =>  $payment->status,
@@ -116,7 +119,7 @@ class StripePaymentGateway
         'metadata' => $payment->metadata ?? null
       ];
     } catch (\Exception  $e) {
-      Log::error("Failed to retrieve payment intent for ID {$paymentIntentId}: " . $e->getMessage());
+      Log::error("Failed to retrieve payment intent for ID {$paymentId}: " . $e->getMessage());
       throw new \Exception("Error processing callback for payment.");
     }
   }

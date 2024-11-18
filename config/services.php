@@ -41,6 +41,11 @@ return [
       'secret_key' => env('STRIPE_SECRET'),
       'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
     ],
+    'paypal' => [
+      'publishable_key' => env('PAYBAL_KEY'),
+      'secret_key' => env('PAYPAL_SECRET'),
+      'base_url' => env('PAYPAL_BASE_URL'),
+    ],
   ],
 
 ];
