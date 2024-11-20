@@ -2,23 +2,37 @@
 
 namespace App\Http\Controllers\Student;
 
+use App\Models\Tag;
 use App\Models\User;
 use App\Models\Course;
 use App\Models\ReviewCourse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SearchCourseRequest;
 use App\Actions\StatisticsRateCourseAction;
 use App\Http\Resources\ReviewUserCourseResource;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use App\Http\Resources\InstructorCourseDetailsResource;
+
 
 class CourseStudentController extends Controller
 {
-  public function index(Request $request)
+  public function index(SearchCourseRequest $request)
   {
     $courses = Course::with(['user', 'wishlist'])
       ->where('status', 'active')
+      ->search($request->title)
+      ->price($request->paidCourse, $request->freeCourse)
+      ->levels($request->levels)
+      ->selectBy($request->selectBy)
+      ->when($request->tags, function ($query) use ($request) {
+        $query->whereHas('tags', fn ($query) => $query->whereIn('tag_id', (array) $request->tags));
+      })
+      ->when($request->category && $request->category != 0, fn ($query) => $query->where('category_id', $request->category))
       ->paginate(9);
-    return view('pages.courses', compact('courses'));
+
+    $categories = Tag::get(['id', 'name']);
+    return view('pages.courses', compact('courses', 'categories'));
   }
 
   /**

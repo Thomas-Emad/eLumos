@@ -2,16 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Builder;
 use App\Observers\Dashboard\CoursesObserver;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 #[ObservedBy([CoursesObserver::class])]
 class Course extends Model
@@ -100,5 +101,54 @@ class Course extends Model
   public function reviews(): HasMany
   {
     return $this->hasMany(ReviewCourse::class);
+  }
+
+
+
+  /*  Scopes  */
+  public function scopeSearch(Builder $query, $search)
+  {
+    if ($search) {
+      return $query->where('title', 'like', "%$search%");
+    }
+    return $query;
+  }
+  public function scopePrice(Builder $query, bool $statusPaid, bool $statusFree)
+  {
+    if ($statusPaid && $statusFree) {
+      return $query;
+    } elseif ($statusPaid) {
+      return $query->where('price', ">", "0");
+    } elseif ($statusFree) {
+      return $query->where('price', "0");
+    }
+  }
+  public function scopeLevels(Builder $query, array $levels)
+  {
+    return $query->whereIn('level', $levels);
+  }
+  public function scopeSelectBy(Builder $query, string $select)
+  {
+    switch ($select) {
+      case 'top-rate':
+        return $query;
+        break;
+
+      case 'oldest-published':
+        return $query->orderBy('preview_at', 'ASC');
+        break;
+
+      case 'new-published':
+        return $query->orderBy('preview_at', 'DESC');
+        break;
+
+      case 'high-price':
+        return $query->orderBy('price', 'DESC');
+        break;
+
+      case 'low-price':
+        return $query->orderBy('price', 'ASC');
+        break;
+    }
   }
 }

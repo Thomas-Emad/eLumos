@@ -2,9 +2,10 @@
 @section('title', 'Courses')
 
 @section('content')
-    <div class="container mx-auto max-w-screen-xl p-4 flex flex-col-reverse md:flex-row gap-4 mt-20">
+    <form action="{{ route('courses') }}" method="get"
+        class="container mx-auto max-w-screen-xl p-4 flex flex-col-reverse md:flex-row gap-4 mt-20">
         <div class="w-full md:w-2/3">
-            <form action="{{ route('courses') }}" method="get" class="flex gap-3 w-full">
+            <div action="{{ route('courses') }}" method="get" class="flex gap-3 w-full">
                 <div class="w-full">
                     <label for="search" class="mb-2 text-sm font-sm text-gray-900 sr-only">Search</label>
                     <div class="relative">
@@ -17,19 +18,20 @@
                         </div>
                         <input type="search" id="search" name="title" value="{{ request()->input('title') }}"
                             class="block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-amber-500 focus:border-amber-500 "
-                            placeholder="Search Mockups, Logos..." required />
+                            placeholder="Search Mockups, Logos..." />
                         <button type="submit"
                             class="text-white absolute end-2.5 bottom-2.5 bg-amber-700 hover:bg-amber-800 focus:ring-4 focus:outline-none focus:ring-amber-300 font-medium rounded-lg text-sm px-2 py-1">Search</button>
                     </div>
                 </div>
-                <select name="sortBy"
+                <select name="selectBy"
                     class="w-fit bg-white dark:bg-gray-700 border border-gray-300 text-gray-900 dark:text-gray-100 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 p-2.5">
-                    <option value="top-rate" @selected(request()->input('sortBy') == 'top-rate')>Highest Rated</option>
-                    <option value="new-published" @selected(request()->input('sortBy') == 'new-published')>Newly published</option>
-                    <option value="low-price" @selected(request()->input('sortBy') == 'low-price')>Low Price</option>
-                    <option value="free" @selected(request()->input('sortBy') == 'free')>Free</option>
+                    <option value="top-rate" @selected(request()->input('selectBy') == 'top-rate')>Highest Rated</option>
+                    <option value="new-published" @selected(request()->input('selectBy') == 'new-published')>Newly published</option>
+                    <option value="Oldest-published" @selected(request()->input('selectBy') == 'Oldest-published')>Oldest published</option>
+                    <option value="high-price" @selected(request()->input('selectBy') == 'free')>High Price</option>
+                    <option value="low-price" @selected(request()->input('selectBy') == 'low-price')>Low Price</option>
                 </select>
-            </form>
+            </div>
             <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4 mt-4 text-gray-800 dark:text-gray-100">
                 @foreach ($courses as $course)
                     <div class="p-2 bg-white dark:bg-gray-700  border border-gray-200 rounded-xl">
@@ -51,7 +53,7 @@
                                 </div>
                             </div>
 
-                            <form action="{{ route('wishlist.controll', $course->id) }}" method='POST'>
+                            <div action="{{ route('wishlist.controll', $course->id) }}" method='POST'>
                                 @csrf
                                 @if (Auth::check() &&
                                         $course->wishlist()->where('user_id', auth()->user()->id)->whereNull('deleted_at')->exists())
@@ -65,7 +67,7 @@
                                             class="fa-solid fa-heart text-lg  text-gray-300 hover:text-amber-400 duration-200"></i>
                                     </button>
                                 @endif
-                            </form>
+                            </div>
                         </div>
                         <a href="{{ route('course-details', $course->id) }}"
                             class="block pb-2 text-xl font-bold hover:text-amber-600 duration-200">
@@ -81,8 +83,8 @@
                                 <i class="fa-solid fa-star text-gray-400"></i>
                                 <span>4.0 (15)</span>
                             </div>
-                            <div class="font-bold">
-                                {{ $course->price }}$
+                            <div class="font-bold {{ $course->price ? 'text-gray-600' : 'text-green-600' }}">
+                                {{ $course->price ? $course->price . '$' : 'Free' }}
                             </div>
                         </div>
 
@@ -194,17 +196,18 @@
                     <label for="free-checkbox"
                         class="flex justify-between items-center cursor-pointer gap-2 w-full ms-2 text-sm font-medium text-gray-900 p-1 rounded-xl duration-150 hover:bg-gray-50 dark:text-gray-300">
                         <div class="flex items-center gap-2">
-                            <input checked id="free-checkbox" type="checkbox" value=""
+                            <input id="free-checkbox" type="checkbox" value="free" name="coursePrice[]"
+                                @checked(in_array('free', Request::input('coursePrice', ['free'])))
                                 class="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <span>free</span>
                         </div>
                         <span class="text-gray-600 dark:text-gray-100">(30)</span>
                     </label>
-
                     <label for="paid-checkbox"
                         class="flex justify-between items-center cursor-pointer gap-2 w-full ms-2 text-sm font-medium text-gray-900 p-1 rounded-xl duration-150 hover:bg-gray-50 dark:text-gray-300">
                         <div class="flex items-center gap-2">
-                            <input checked id="paid-checkbox" type="checkbox" value=""
+                            <input id="paid-checkbox" type="checkbox" value="paid" name="coursePrice[]"
+                                @checked(in_array('paid', Request::input('coursePrice', ['paid'])))
                                 class="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <span>paid</span>
                         </div>
@@ -220,7 +223,7 @@
                     <button type="button" data-accordion-target="#category-body-1"
                         class="flex justify-between items-center gap-2 w-full bg-transparent px-2 rounded-xl"
                         aria-expanded="true" aria-controls="category-body-1">
-                        <span>Course categories</span>
+                        <span>Course Category</span>
                         <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -228,45 +231,42 @@
                         </svg>
                     </button>
                 </h2>
-                <div id="category-body-1" class="hidden" aria-labelledby="category-heading-1">
-                    <label for="php-checkbox"
-                        class="flex justify-between items-center cursor-pointer gap-2 w-full ms-2 text-sm font-medium text-gray-900 p-1 rounded-xl duration-150 hover:bg-gray-50 dark:text-gray-300">
-                        <div class="flex items-center gap-2">
-                            <input checked id="php-checkbox" type="checkbox" value=""
-                                class="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <span>php</span>
-                        </div>
-                        <span class="text-gray-600 dark:text-gray-100">(30)</span>
-                    </label>
-                    <label for="laravel-checkbox"
-                        class="flex justify-between items-center cursor-pointer gap-2 w-full ms-2 text-sm font-medium text-gray-900 p-1 rounded-xl duration-150 hover:bg-gray-50 dark:text-gray-300">
-                        <div class="flex items-center gap-2">
-                            <input checked id="laravel-checkbox" type="checkbox" value=""
-                                class="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <span>laravel</span>
-                        </div>
-                        <span class="text-gray-600 dark:text-gray-100">(30)</span>
-                    </label>
-                    <label for="vue-checkbox"
-                        class="flex justify-between items-center cursor-pointer gap-2 w-full ms-2 text-sm font-medium text-gray-900 p-1 rounded-xl duration-150 hover:bg-gray-50 dark:text-gray-300">
-                        <div class="flex items-center gap-2">
-                            <input checked id="vue-checkbox" type="checkbox" value=""
-                                class="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <span>vue</span>
-                        </div>
-                        <span class="text-gray-600 dark:text-gray-100">(30)</span>
-                    </label>
-                    <label for="mysql-checkbox"
-                        class="flex justify-between items-center cursor-pointer gap-2 w-full ms-2 text-sm font-medium text-gray-900 p-1 rounded-xl duration-150 hover:bg-gray-50 dark:text-gray-300">
-                        <div class="flex items-center gap-2">
-                            <input checked id="mysql-checkbox" type="checkbox" value=""
-                                class="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <span>MySQL</span>
-                        </div>
-                        <span class="text-gray-600 dark:text-gray-100">(30)</span>
-                    </label>
+                <div id="category-body-1" class="hidden " aria-labelledby="category-heading-1">
+                    <x-select-search name='category' placeholder='Select Category Your course'>
+                        <option value="0" selected>See All</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}" @selected($category->id == Request::input('category'))>{{ $category->name }}
+                            </option>
+                        @endforeach
+                    </x-select-search>
                 </div>
-
+            </div>
+            <div id="tags" data-accordion="open"
+                class=" text-gray-700 flex flex-col gap-3 text-lg p-3 border bg-white dark:bg-gray-700 rounded-xl border-gray-200">
+                <h2 id="tags-heading-1">
+                    <button type="button" data-accordion-target="#tags-body-1"
+                        class="flex justify-between items-center gap-2 w-full bg-transparent px-2 rounded-xl"
+                        aria-expanded="true" aria-controls="tags-body-1">
+                        <span>Course Tags</span>
+                        <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5 5 1 1 5" />
+                        </svg>
+                    </button>
+                </h2>
+                <div id="tags-body-1" class="hidden " aria-labelledby="tags-heading-1">
+                    <x-multi-select name='tags[]' placeholder='Select tags Your course'>
+                        @php
+                            $categoriesId = $categories->pluck('id')->toArray();
+                        @endphp
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}" @selected(in_array($category->id, Request::input('tags', $categoriesId)))>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </x-multi-s>
+                </div>
             </div>
             <div id="level" data-accordion="open"
                 class=" text-gray-700 flex flex-col gap-3 text-lg p-3 border bg-white dark:bg-gray-700 rounded-xl border-gray-200">
@@ -283,19 +283,11 @@
                     </button>
                 </h2>
                 <div id="level-body-1" class="hidden" aria-labelledby="level-heading-1">
-                    <label for="all-checkbox"
-                        class="flex justify-between items-center cursor-pointer gap-2 w-full ms-2 text-sm font-medium text-gray-900 p-1 rounded-xl duration-150 hover:bg-gray-50 dark:text-gray-300">
-                        <div class="flex items-center gap-2">
-                            <input checked id="all-checkbox" type="checkbox" value=""
-                                class="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <span>All Of Levels</span>
-                        </div>
-                        <span class="text-gray-600 dark:text-gray-100">(30)</span>
-                    </label>
                     <label for="beginner-checkbox"
                         class="flex justify-between items-center cursor-pointer gap-2 w-full ms-2 text-sm font-medium text-gray-900 p-1 rounded-xl duration-150 hover:bg-gray-50 dark:text-gray-300">
                         <div class="flex items-center gap-2">
-                            <input checked id="beginner-checkbox" type="checkbox" value=""
+                            <input id="beginner-checkbox" type="checkbox" name="levels[]" value="beginner"
+                                @checked(in_array('beginner', Request::input('levels', ['beginner'])))
                                 class="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <span>Beginner</span>
                         </div>
@@ -304,18 +296,20 @@
                     <label for="intermediate-checkbox"
                         class="flex justify-between items-center cursor-pointer gap-2 w-full ms-2 text-sm font-medium text-gray-900 p-1 rounded-xl duration-150 hover:bg-gray-50 dark:text-gray-300">
                         <div class="flex items-center gap-2">
-                            <input checked id="intermediate-checkbox" type="checkbox" value=""
+                            <input id="intermediate-checkbox" type="checkbox" name="levels[]"
+                                @checked(in_array('intermediate', Request::input('levels', ['intermediate']))) value="intermediate"
                                 class="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <span>Intermediate</span>
                         </div>
                         <span class="text-gray-600 dark:text-gray-100">(30)</span>
                     </label>
-                    <label for="expert-checkbox"
+                    <label for="advanced-checkbox"
                         class="flex justify-between items-center cursor-pointer gap-2 w-full ms-2 text-sm font-medium text-gray-900 p-1 rounded-xl duration-150 hover:bg-gray-50 dark:text-gray-300">
                         <div class="flex items-center gap-2">
-                            <input checked id="expert-checkbox" type="checkbox" value=""
+                            <input id="advanced-checkbox" type="checkbox" name="levels[]" value="advanced"
+                                @checked(in_array('advanced', Request::input('levels', ['advanced'])))
                                 class="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <span>Expert</span>
+                            <span>Advanced</span>
                         </div>
                         <span class="text-gray-600 dark:text-gray-100">(30)</span>
                     </label>
@@ -323,7 +317,7 @@
 
             </div>
         </div>
-    </div>
+    </form>
 @endsection
 
 @section('js')

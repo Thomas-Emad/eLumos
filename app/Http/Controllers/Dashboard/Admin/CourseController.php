@@ -12,10 +12,10 @@ class CourseController extends Controller implements HasMiddleware
 {
   use FilterByDateTrait;
 
-  public static function middleware(): array
+  public static function middleware()
   {
     return [
-      'permission:admin-control-courses',
+      'permission:admin-control-courses'
     ];
   }
   /**

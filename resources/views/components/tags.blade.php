@@ -1,5 +1,5 @@
 <!-- Select -->
-<select id="dynamic-select" multiple name="{{ $name }}"
+<select id="{{ $name }}-select" multiple name="{{ $name }}"
     data-hs-select='{
     "placeholder": "{{ $placeholder }}",
     "toggleTag": "<button type=\"button\"></button>",
