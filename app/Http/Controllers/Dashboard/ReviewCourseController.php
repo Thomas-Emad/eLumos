@@ -79,7 +79,9 @@ class ReviewCourseController extends Controller  implements HasMiddleware
    */
   public function update(ReviewCourseRequest $request, string $id)
   {
-    ReviewCourse::where('id', $id)->where('user_id', Auth::id())->update([
+    $review = ReviewCourse::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+
+    $review->update([
       ...$request->validated(),
     ]);
 

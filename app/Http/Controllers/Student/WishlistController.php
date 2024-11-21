@@ -42,4 +42,34 @@ class WishlistController extends Controller
       'message' => "We Will done as Well.."
     ]);
   }
+
+  public function actionWishlistApi(Request $request)
+  {
+    if (!request()->ajax() || !isset($request->course_id)) {
+      return abort(404);
+    }
+
+    $wishlist = Auth::user()->wishlist()->firstOrNew(
+      ['course_id' => $request->course_id],
+      ['user_id' => Auth::user()->id]
+    );
+
+    if ($wishlist->exists) {
+      if (!is_null($wishlist->deleted_at)) {
+        $wishlist->restore();
+        $type = 'add';
+      } else {
+        $wishlist->delete();
+        $type = 'remove';
+      }
+    } else {
+      $wishlist->save();
+      $type = 'add';
+    }
+
+    return response()->json([
+      'type' => $type,
+      'message' => "We Will done as Well.."
+    ]);
+  }
 }

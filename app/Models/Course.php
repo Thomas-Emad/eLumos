@@ -26,6 +26,7 @@ class Course extends Model
     'description',
     'mockup',
     'preview_video',
+    'category_id',
     'language_id',
     'price',
     'learn',
@@ -35,7 +36,8 @@ class Course extends Model
     'status',
     'level',
     'message',
-    'category_id'
+    'rate',
+    'average_rating'
   ];
 
 
@@ -131,7 +133,7 @@ class Course extends Model
   {
     switch ($select) {
       case 'top-rate':
-        return $query;
+        return $query->orderBy("average_rating", "DESC");
         break;
 
       case 'oldest-published':

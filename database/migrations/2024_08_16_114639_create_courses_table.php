@@ -21,12 +21,14 @@ return new class extends Migration
       $table->string('mockup', 255)->nullable();
       $table->string('preview_video', 255)->nullable();
       $table->foreignId('language_id')->nullable()->constrained();
-      $table->float('price', 8, 2)->nullable();
+      $table->float('price', 2)->nullable();
       $table->text('learn')->nullable();
       $table->text("requirements")->nullable();
       $table->json("message")->nullable();
       $table->integer("steps")->default(2);
       $table->json("steps_status")->nullable();
+      $table->float('average_rating', 2)->default(0);
+      $table->integer('rate')->default(0);
       $table->enum('status', ['draft', 'pending', 'redject', 'active', 'inactive', 'removed', 'blocked'])->default('draft');
       $table->enum('level', ['beginner', 'intermediate', 'advanced'])->default('beginner');
       $table->timestamp("preview_at")->nullable();

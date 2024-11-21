@@ -36,7 +36,8 @@
                 @foreach ($courses as $course)
                     <div class="p-2 bg-white dark:bg-gray-700  border border-gray-200 rounded-xl">
                         <a href="{{ route('course-details', $course->id) }}" class="block rounded-xl overflow-hidden">
-                            <img src="{{ asset('assets/images/article.png') }}"
+                            <img src="{{ json_decode($course->mockup)->url }}"
+                                onerror="this.onerror=null;this.src='{{ asset('assets/images/course.png') }}';"
                                 class="w-full h-[150px] hover:scale-125 duration-300" alt="photo course">
                         </a>
                         <div class="py-2 flex justify-between gap-2 items-center">
@@ -52,21 +53,16 @@
                                     <span class="text-sm">{{ $course->user->headline }}</span>
                                 </div>
                             </div>
-
-                            <div action="{{ route('wishlist.controll', $course->id) }}" method='POST'>
-                                @csrf
-                                @if (Auth::check() &&
-                                        $course->wishlist()->where('user_id', auth()->user()->id)->whereNull('deleted_at')->exists())
-                                    <button type="submit" name="type" value="remove">
-                                        <i
-                                            class="fa-solid fa-heart text-lg  text-amber-400 hover:text-gray-300 duration-200"></i>
-                                    </button>
-                                @else
-                                    <button type="submit" name="type" value="add">
-                                        <i
-                                            class="fa-solid fa-heart text-lg  text-gray-300 hover:text-amber-400 duration-200"></i>
-                                    </button>
-                                @endif
+                            <div>
+                                <button type="button" data-id="{{ $course->id }}" class="wishlist" name="type">
+                                    <i @class([
+                                        'fa-solid fa-heart text-lg duration-200',
+                                        'text-amber-400 hover:text-gray-300' =>
+                                            Auth::check() && $course->wishlist()->withoutTrashed()->count() > 0,
+                                        'text-gray-300 hover:text-amber-400' =>
+                                            Auth::check() && $course->wishlist()->withoutTrashed()->count() == 0,
+                                    ])></i>
+                                </button>
                             </div>
                         </div>
                         <a href="{{ route('course-details', $course->id) }}"
@@ -76,26 +72,39 @@
                         <hr>
                         <div class="text-sm py-2 flex justify-between gap-2">
                             <div>
-                                <i class="fa-solid fa-star text-amber-400"></i>
-                                <i class="fa-solid fa-star text-amber-400"></i>
-                                <i class="fa-solid fa-star text-amber-400"></i>
-                                <i class="fa-solid fa-star text-amber-400"></i>
-                                <i class="fa-solid fa-star text-gray-400"></i>
-                                <span>4.0 (15)</span>
+                                @for ($i = 1; $i <= floor($course->average_rating); $i++)
+                                    <i class="fa-solid fa-star text-amber-500"></i>
+                                @endfor
+
+                                @if ($course->average_rating - floor($course->average_rating) >= 0.5)
+                                    <i class="fa-solid fa-star-half-stroke text-amber-500"></i>
+                                @endif
+
+                                @for ($i = 1; $i <= 5 - ceil($course->average_rating); $i++)
+                                    <i class="fa-solid fa-star text-gray-400"></i>
+                                @endfor
+                                <span>{{ $course->average_rating }} ({{ $course->reviewsCount }})</span>
                             </div>
                             <div class="font-bold {{ $course->price ? 'text-gray-600' : 'text-green-600' }}">
                                 {{ $course->price ? $course->price . '$' : 'Free' }}
                             </div>
                         </div>
 
-                        @php
-                            $isInCart = checkCourseInBasket($course->id);
-                            $textButton = $isInCart ? 'Remove Cart' : 'Add To Cart';
-                        @endphp
-                        <button type="button" data-id="{{ $course->id }}"
-                            class="change-cart block w-full font-bold text-sm text-center py-1 px-2  rounded-full border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white duration-300">
-                            {{ $textButton }}
-                        </button>
+                        @if (in_array($course->id, $enrolledStudent))
+                            <a href="{{ route('dashboard.courses-list.show', $course->id) }}" target="_blank"
+                                class="block w-full font-bold text-sm text-center py-1 px-2  rounded-full border text-white bg-green-600 hover:bg-green-800 duration-300">
+                                Watch Your Course
+                            </a>
+                        @else
+                            @php
+                                $isInCart = checkCourseInBasket($course->id);
+                                $textButton = $isInCart ? 'Remove Cart' : 'Add To Cart';
+                            @endphp
+                            <button type="button" data-id="{{ $course->id }}"
+                                class="change-cart block w-full font-bold text-sm text-center py-1 px-2  rounded-full border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white duration-300">
+                                {{ $textButton }}
+                            </button>
+                        @endif
                     </div>
                 @endforeach
                 {{ $courses->links() }}
@@ -111,7 +120,7 @@
                     <i class="fa-solid fa-filter"></i>
                     <span>Filters</span>
                 </span>
-                <a href="#" class="hover:text-amber-700 duration-200">CLEAR</a>
+                <a href="{{ route('courses') }}" class="hover:text-amber-700 duration-200">CLEAR</a>
             </div>
             <div id="ratings" data-accordion="open"
                 class=" text-gray-700 flex flex-col gap-3 text-lg p-3 border bg-white dark:bg-gray-700 rounded-xl border-gray-200">
@@ -131,7 +140,8 @@
                     <label for="five-checkbox"
                         class="flex justify-between items-center cursor-pointer gap-2 w-full ms-2 text-sm font-medium text-gray-900 dark:text-gray-100 p-1 rounded-xl duration-150 hover:bg-gray-50">
                         <div class="flex items-center gap-2">
-                            <input checked id="five-checkbox" type="checkbox" value=""
+                            <input id="five-checkbox" type="checkbox" name='rates[]' value="5"
+                                @checked(in_array(5, Request::input('rates', [5])))
                                 class="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <div>
                                 <i class="fa-solid fa-star text-amber-400"></i>
@@ -142,12 +152,13 @@
                                 <span>5.0 (15)</span>
                             </div>
                         </div>
-                        <span class="text-gray-600 dark:text-gray-100">(30)</span>
+                        <span class="text-gray-600 dark:text-gray-100">({{ $courses->where('rate', 5)->count() }})</span>
                     </label>
                     <label for="four-checkbox"
                         class="flex justify-between items-center cursor-pointer gap-2 w-full ms-2 text-sm font-medium text-gray-900 p-1 rounded-xl duration-150 hover:bg-gray-50 dark:text-gray-300">
                         <div class="flex items-center gap-2">
-                            <input checked id="four-checkbox" type="checkbox" value=""
+                            <input id="four-checkbox" type="checkbox" name='rates[]' value="4"
+                                @checked(in_array(4, Request::input('rates', [4])))
                                 class="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <div>
                                 <i class="fa-solid fa-star text-amber-400"></i>
@@ -158,12 +169,13 @@
                                 <span>4.0 (15)</span>
                             </div>
                         </div>
-                        <span class="text-gray-600 dark:text-gray-100">(30)</span>
+                        <span class="text-gray-600 dark:text-gray-100">({{ $courses->where('rate', 4)->count() }})</span>
                     </label>
                     <label for="three-checkbox"
                         class="flex justify-between items-center cursor-pointer gap-2 w-full ms-2 text-sm font-medium text-gray-900 p-1 rounded-xl duration-150 hover:bg-gray-50 dark:text-gray-300">
                         <div class="flex items-center gap-2">
-                            <input checked id="three-checkbox" type="checkbox" value=""
+                            <input id="three-checkbox" type="checkbox" name='rates[]' value="3"
+                                @checked(in_array(3, Request::input('rates', [3])))
                                 class="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <div>
                                 <i class="fa-solid fa-star text-amber-400"></i>
@@ -174,7 +186,7 @@
                                 <span>3.0 (15)</span>
                             </div>
                         </div>
-                        <span class="text-gray-600 dark:text-gray-100">(30)</span>
+                        <span class="text-gray-600 dark:text-gray-100">({{ $courses->where('rate', 3)->count() }})</span>
                     </label>
                 </div>
             </div>
@@ -201,7 +213,7 @@
                                 class="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <span>free</span>
                         </div>
-                        <span class="text-gray-600 dark:text-gray-100">(30)</span>
+                        <span class="text-gray-600 dark:text-gray-100">({{ $courses->where('price', 0)->count() }})</span>
                     </label>
                     <label for="paid-checkbox"
                         class="flex justify-between items-center cursor-pointer gap-2 w-full ms-2 text-sm font-medium text-gray-900 p-1 rounded-xl duration-150 hover:bg-gray-50 dark:text-gray-300">
@@ -211,7 +223,8 @@
                                 class="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <span>paid</span>
                         </div>
-                        <span class="text-gray-600 dark:text-gray-100">(30)</span>
+                        <span
+                            class="text-gray-600 dark:text-gray-100">({{ $courses->where('price', '>', 0)->count() }})</span>
                     </label>
 
                 </div>
@@ -265,7 +278,7 @@
                                 {{ $category->name }}
                             </option>
                         @endforeach
-                    </x-multi-s>
+                        </x-multi-s>
                 </div>
             </div>
             <div id="level" data-accordion="open"
@@ -291,7 +304,8 @@
                                 class="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <span>Beginner</span>
                         </div>
-                        <span class="text-gray-600 dark:text-gray-100">(30)</span>
+                        <span
+                            class="text-gray-600 dark:text-gray-100">({{ $courses->where('level', 'beginner')->count() }})</span>
                     </label>
                     <label for="intermediate-checkbox"
                         class="flex justify-between items-center cursor-pointer gap-2 w-full ms-2 text-sm font-medium text-gray-900 p-1 rounded-xl duration-150 hover:bg-gray-50 dark:text-gray-300">
@@ -301,7 +315,8 @@
                                 class="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <span>Intermediate</span>
                         </div>
-                        <span class="text-gray-600 dark:text-gray-100">(30)</span>
+                        <span
+                            class="text-gray-600 dark:text-gray-100">({{ $courses->where('level', 'intermediate')->count() }})</span>
                     </label>
                     <label for="advanced-checkbox"
                         class="flex justify-between items-center cursor-pointer gap-2 w-full ms-2 text-sm font-medium text-gray-900 p-1 rounded-xl duration-150 hover:bg-gray-50 dark:text-gray-300">
@@ -311,7 +326,8 @@
                                 class="w-4 h-4 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <span>Advanced</span>
                         </div>
-                        <span class="text-gray-600 dark:text-gray-100">(30)</span>
+                        <span
+                            class="text-gray-600 dark:text-gray-100">({{ $courses->where('level', 'advanced')->count() }})</span>
                     </label>
                 </div>
 
@@ -321,4 +337,33 @@
 @endsection
 
 @section('js')
+    <script>
+        $(document).ready(function() {
+            $(".wishlist").on("click", function() {
+                var course_id = $(this).attr("data-id");
+                const csrfToken = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    method: "POST",
+                    url: "{{ route('api.wishlist.controll') }}/",
+                    data: {
+                        _token: csrfToken,
+                        course_id: course_id
+                    }
+                }).done(function(response) {
+                    if (response.type == 'add') {
+                        $(`.wishlist[data-id=${course_id}]`).html(`
+                          <i class="fa-solid fa-heart text-lg duration-200 text-amber-400 hover:text-gray-300"></i>
+                        `);
+                    } else {
+                        $(`.wishlist[data-id=${course_id}]`).html(`
+                          <i class="fa-solid fa-heart text-lg duration-200 text-gray-300 hover:text-amber-400"></i>
+                        `);
+                    }
+                    $('.notifications').append(`@include('components.notifications.success', [
+                        'message' => 'We Will done as Well..',
+                    ])`);
+                })
+            });
+        });
+    </script>
 @endsection

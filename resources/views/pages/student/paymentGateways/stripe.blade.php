@@ -51,7 +51,7 @@
 
                 </div>
             </form>
-            <div class="bg-white p-4 rounded-lg w-full md:w-[30%] shadow">
+            <div class="bg-white p-4 rounded-lg w-full md:w-[30%] h-fit shadow">
                 <div>
                     <div class="space-y-2">
                         <dl class="flex items-center justify-between gap-4">
@@ -62,8 +62,8 @@
 
                         <dl class="flex items-center justify-between gap-4">
                             <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Wallet Used</dt>
-                            <dd class="text-base font-medium text-gray-900 dark:text-white">${{ $amountUseWallet }}</dd>
-
+                            <dd class="text-base font-medium text-gray-900 dark:text-white">${{ $amountUseWallet ?? 0 }}
+                            </dd>
                         </dl>
 
                         <dl class="flex items-center justify-between gap-4">

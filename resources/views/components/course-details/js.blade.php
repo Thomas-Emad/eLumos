@@ -323,7 +323,7 @@
                 stars += `<i class="fa-solid fa-star-half-stroke text-amber-500"></i>`;
             }
             for (i = 1; i <= 5 - Math.ceil(rateInstructor); i++) {
-                stars += `<i class="fa-solid fa-star text-white"></i>`;
+                stars += `<i class="fa-solid fa-star text-gray-400"></i>`;
             }
             return stars;
         }

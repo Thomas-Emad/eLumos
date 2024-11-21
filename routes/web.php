@@ -34,6 +34,7 @@ Route::controller(CourseStudentController::class)->group(function () {
 Route::controller(WishlistController::class)->group(function () {
   Route::get('dashboard/wishlist', "index")->name('dashboard.wishlist');
   Route::post('course-details/{id?}/wishlist', "actionWishlist")->name('wishlist.controll');
+  Route::post('course/wishlist/api', "actionWishlistApi")->name('api.wishlist.controll');
 });
 
 // Baskets

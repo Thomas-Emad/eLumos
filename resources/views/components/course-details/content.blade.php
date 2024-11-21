@@ -112,7 +112,8 @@
                 <div class="absolute top-0 left-0 w-full h-full bg-gray-800/50 z-[1]"></div>
             </div>
             <div class="flex justify-between items-center gap-2 py-4">
-                <span class="text-bold text-2xl text-green-500">{{ $course->price }}$</span>
+                <span
+                    class="text-bold text-2xl text-green-500">{{ $course->price > 0 ? $course->price . '$' : 'Free' }}</span>
                 <div class="text-gray-600 dark:text-gray-100 text-sm">
                     <span class="line-through">100$</span>
                     <span>50% off</span>

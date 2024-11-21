@@ -60,7 +60,7 @@ class PaymentController extends Controller implements HasMiddleware
       );
       DB::commit();
 
-      $this->returnRedirect($callback['status']);
+      return $this->returnRedirect($callback['status']);
     } catch (\Exception  $e) {
       DB::rollBack();
       Log::error("Failed to retrieve payment intent for ID {$request->payment_intent}: " . $e->getMessage());

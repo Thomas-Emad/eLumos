@@ -19,7 +19,13 @@ class CourseStudentController extends Controller
 {
   public function index(SearchCourseRequest $request)
   {
-    $courses = Course::with(['user', 'wishlist'])
+    $courses = Course::with([
+      'user:id,name,photo,headline',
+      'wishlist' => function ($query) {
+        $query->where('user_id', auth()->id());
+      }
+    ])
+      ->withCount('reviews as reviewsCount')
       ->where('status', 'active')
       ->search($request->title)
       ->price($request->paidCourse, $request->freeCourse)
@@ -29,10 +35,12 @@ class CourseStudentController extends Controller
         $query->whereHas('tags', fn ($query) => $query->whereIn('tag_id', (array) $request->tags));
       })
       ->when($request->category && $request->category != 0, fn ($query) => $query->where('category_id', $request->category))
+      ->when($request->rates, fn ($query) => $query->whereIn('rate', $request->rates))
       ->paginate(9);
 
     $categories = Tag::get(['id', 'name']);
-    return view('pages.courses', compact('courses', 'categories'));
+    $enrolledStudent = auth()->user()->enrolledCourses()->pluck('course_id')->toArray();
+    return view('pages.courses', compact('courses', 'categories', 'enrolledStudent'));
   }
 
   /**
@@ -57,7 +65,7 @@ class CourseStudentController extends Controller
       ->withSum('lectures as totalLecturesTime', 'video_duration')->findOrFail($id);
     $reviewStudent = $course->reviews->where('user_id', auth()->user()->id)->first();
     $hasThisCourse = !is_null($course->enrolleds->where('user_id', auth()->user()->id)->first());
-    $averageRating = $this->averageRating($course->reviews->sum('rate'), $course->reviews->count());
+    $averageRating = $course->average_rating;
 
     if ($course->status !== 'active' && !auth()->user()->hasAnyPermission('control-courses', 'instructors-control-courses')) {
       return abort(403);
@@ -135,11 +143,5 @@ class CourseStudentController extends Controller
       }])
       ->where('id', $instructor_id)
       ->first();
-  }
-
-  private function averageRating(int $totalStars, int $totalUsers): float
-  {
-    $totalUsers = $totalUsers !== 0 ? $totalUsers : 1;
-    return $totalStars / $totalUsers;
   }
 }

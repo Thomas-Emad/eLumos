@@ -19,9 +19,9 @@
                     </div>
                 </div>
                 <div class="flex flex-row  md:flex-col items-center gap-2 ">
-                    <div
+                    <div title="{{ $course->category->name }}"
                         class="inline-block py-2 px-3 text-white text-xs font-bold bg-amber-600 rounded-full mt-1 uppercase whitespace-nowrap">
-                        {{ $course->category->name }}
+                        {{ Str::limit($course->category->name, 30) }}
                     </div>
                     <div class="flex gap-1 text-sm">
                         @for ($i = 1; $i <= floor($averageRating); $i++)
