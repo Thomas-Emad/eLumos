@@ -10,6 +10,8 @@ class OrderItem extends Model
     'order_id',
     'course_id',
     'amount',
+    'user_profit',
+    'instructor_profit',
     'withdraw'
   ];
 }

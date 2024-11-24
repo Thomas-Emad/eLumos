@@ -46,7 +46,9 @@ class PaymentService
     foreach ($courses as $course) {
       $order->items()->create([
         'course_id' => $course->id,
-        'amount' => $course->price
+        'amount' => $course->price,
+        'user_profit' => $this->calcProfitInstructor($course->price, 0.1),
+        'platform_profit' => $this->calcProfitPlatform($course->price, 0.1)
       ]);
     }
 
@@ -57,6 +59,16 @@ class PaymentService
       'courses' => $courses->pluck('id')->toArray(),
       'amount' => $order->amount - $amountUseWallet,
     ];
+  }
+
+  private function calcProfitInstructor($amount, $percentage)
+  {
+    return $amount - ($amount * $percentage);
+  }
+
+  private function calcProfitPlatform($amount, $percentage)
+  {
+    return $amount * $percentage;
   }
 
   /**

@@ -16,6 +16,8 @@ return new class extends Migration
       $table->foreignId('order_id')->constrained()->cascadeOnDelete();
       $table->foreignUuid('course_id')->constrained()->cascadeOnDelete();
       $table->float('amount', 8, 2)->default(0);
+      $table->decimal('user_profit', 2)->default(0);
+      $table->decimal('instructor_profit', 2)->default(0);
       $table->boolean('withdraw')->default(false);
       $table->timestamps();
     });

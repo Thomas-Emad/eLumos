@@ -105,6 +105,12 @@ class Course extends Model
     return $this->hasMany(ReviewCourse::class);
   }
 
+  /* Orders */
+  public function orderItems(): HasMany
+  {
+    return $this->hasMany(OrderItem::class);
+  }
+
 
 
   /*  Scopes  */

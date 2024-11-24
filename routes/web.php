@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Classes\Payment\StripePaymentGateway;
 use App\Http\Controllers\{StepsForwardController};
 use App\Http\Controllers\Student\PaymentController;
-use App\Http\Controllers\Dashboard\ReviewCourseController;
+use App\Http\Controllers\Dashboard\{DashboardController, ReviewCourseController};
 use App\Http\Controllers\Student\PaymentWebhookController;
 use App\Http\Controllers\Dashboard\Instructor\Exams\{ExamController, ExamQuestionController};
 use App\Http\Controllers\Dashboard\Admin\{RoleController, CourseController as DashboardCoursesController};
@@ -90,7 +90,8 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
 
   // Check From Steps Forward to get executed information
   Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
-    Route::view('/', 'pages.dashboard.home')->name('index');
+    // Route::view('/', 'pages.dashboard.home')->name('index');
+    Route::get('/', [DashboardController::class, "__invoke"])->name('index');
     Route::view('/profile/{id?}', 'pages.dashboard.profile')->name('profile');
 
     /* *******************instructor************************* */
