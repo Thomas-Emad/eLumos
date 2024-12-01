@@ -80,7 +80,7 @@
                         </div>
                     </div>
                     <div>
-                        @foreach ($coursesInstructor->courses as $course)
+                        @forelse ($coursesInstructor->courses as $course)
                             <div
                                 class="flex justify-between items-center gap-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-400  p-4 border-b border-b-gray-200 last-of-type:border-none only-of-type:border-none">
                                 <a href="{{ route('course-details', $course->id) }}"
@@ -97,7 +97,9 @@
                                     <span>{{ $course->status }}</span>
                                 </div>
                             </div>
-                        @endforeach
+                        @empty
+                            <div class="text-center font-bold italic text-gray-500 py-4">No Courses Found</d>
+                        @endforelse
                     </div>
                 </div>
             </div>
@@ -178,7 +180,7 @@
 
         @if (sizeof($courses) === 0)
             <div class="p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-400 rounded-xl">
-                <h2 class="my-4 italic text-gray-800 dark:text-gray-200 text-lg text-center">No Courses Found</h2>
+                <div class="text-center font-bold italic text-gray-500 py-4">You have not any Courses..</div>
             </div>
         @endif
     </div>

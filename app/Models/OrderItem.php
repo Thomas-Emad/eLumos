@@ -11,7 +11,7 @@ class OrderItem extends Model
     'course_id',
     'amount',
     'user_profit',
-    'instructor_profit',
+    'platform_profit',
     'withdraw'
   ];
 }

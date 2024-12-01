@@ -3,7 +3,10 @@
 namespace App\Observers\Dashboard;
 
 use App\Models\Course;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use App\Notifications\CourseInstructorNotification;
+use Illuminate\Support\Facades\Notification;
 
 class CoursesObserver
 {
@@ -14,6 +17,8 @@ class CoursesObserver
   {
     Cache::forget("courses.draft." . auth()->id());
     Cache::forget("courses.published." . auth()->id());
+
+    Notification::send(Auth::user(), new CourseInstructorNotification($course));
   }
 
   /**
@@ -24,6 +29,11 @@ class CoursesObserver
     Cache::forget("courses.pending." . auth()->id());
     Cache::forget("courses.published." . auth()->id());
     Cache::forget("courses.draft." . auth()->id());
+
+    // send notifications:
+    if ($course->status == 'pending') {
+      Notification::send(Auth::user(), new CourseInstructorNotification($course));
+    }
   }
 
   /**

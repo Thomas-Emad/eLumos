@@ -13,7 +13,8 @@
         <div class="w-full md:w-1/4">
             <div class="rounded-xl border border-gray-200 overflow-hidden bg-white dark:bg-gray-700">
                 <div class="h-20 bg-amber-500 w-full"></div>
-                <img src="{{ asset('assets/images/user-1.png') }}" alt="photo user"
+                <img src="{{ isset($user->photo) ? $user->photo : asset('assets/images/user-1.png') }}"
+                    onerror="this.onerror=null;this.src='{{ asset('assets/images/user-1.png') }}';" alt="photo user"
                     class="w-24 h-24 rounded-full mx-auto border-2 border-solid border-white" style="margin-top:-3rem">
                 <div class="p-3">
                     <div class="flex items-center gap-1 flex-col">
@@ -145,7 +146,8 @@
                 </ul>
                 <h2 class="font-bold text-gray-900 text-lg dark:text-gray-50">Account Settings</h2>
                 <ul class="mt-2 text-gray-800 dark:text-gray-300">
-                    <li><a href="#" class="mt-2 flex items-center gap-2 hover:text-amber-600 duration-200">
+                    <li><a href="{{ route('dashboard.profile.settings') }}"
+                            class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.profile.settings')) text-amber-600 @endif hover:text-amber-600 duration-200">
                             <i class="fa-solid fa-sliders"></i> <span>Settings</span>
                         </a>
                     </li>

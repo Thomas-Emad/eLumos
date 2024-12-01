@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Services;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
-
-class InstructorCourseDetailsResource extends JsonResource
+class ProfileService
 {
   /**
-   * Transform the resource into an array.
-   *
-   * @return array<string, mixed>
+   * Create a new class instance.
    */
-  public function toArray(Request $request): array
+  public function __construct()
+  {
+    //
+  }
+
+  public function formatInstructor($instructor)
   {
     // Initialize counters
     $totalLectureTime = 0;
@@ -21,7 +21,7 @@ class InstructorCourseDetailsResource extends JsonResource
     $totalReviewsCount = 0;
     $totalRate = 0;
 
-    foreach ($this->courses as $course) {
+    foreach ($instructor->courses as $course) {
       $totalLectureTime += $course->lectures->sum('video_duration');
       $totalStudents +=  !is_null($course->enrolleds) ? $course->enrolleds->count() : 0;
       $totalLectures += !is_null($course->lectures) ? $course->lectures->count() : 0;
@@ -35,16 +35,17 @@ class InstructorCourseDetailsResource extends JsonResource
     $averageRating = $totalReviewsCount > 0 ? $totalRate / $totalReviewsCount : 0;
 
     // Return formatted instructor data
-    return [
-      'profile_user' => route("dashboard.profile", $this->id),
-      'name' => $this->name,
-      'username' => $this->username,
-      'headline' => $this->headline,
-      'photo' => asset('storage/' . $this->photo),
-      'description' => $this->description ?? 'There is No Description here..',
-      'created_at' => $this->created_at,
-      'email_verified_at' => $this->email_verified_at,
-      'countCourses' => $this->courses->count(),
+    return (object) [
+      'id' =>  $instructor->id,
+      'name' => $instructor->name,
+      'email' => $instructor->email,
+      'username' => $instructor->username,
+      'headline' => $instructor->headline,
+      'photo' => asset('storage/' . $instructor->photo),
+      'description' => $instructor->description ?? 'There is No Description here..',
+      'created_at' => $instructor->created_at,
+      'email_verified_at' => $instructor->email_verified_at,
+      'countCourses' => $instructor->courses->count(),
       'timeLectures' => explainSecondsToHumans($totalLectureTime),
       'countLectures' => $totalLectures,
       'totalStudents' => $totalStudents,

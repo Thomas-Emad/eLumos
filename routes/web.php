@@ -2,14 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Classes\Payment\StripePaymentGateway;
-use App\Http\Controllers\{StepsForwardController};
-use App\Http\Controllers\Student\PaymentController;
-use App\Http\Controllers\Dashboard\{DashboardController, ReviewCourseController};
-use App\Http\Controllers\Student\PaymentWebhookController;
-use App\Http\Controllers\Dashboard\Instructor\Exams\{ExamController, ExamQuestionController};
+use App\Http\Controllers\{StepsForwardController, ProfileController};
+use App\Http\Controllers\Student\{CourseStudentController, BasketController, CheckoutController, WishlistController, PaymentController, PaymentWebhookController};
+use App\Http\Controllers\Dashboard\{DashboardController, ReviewCourseController, NotificationContoller};
 use App\Http\Controllers\Dashboard\Admin\{RoleController, CourseController as DashboardCoursesController};
-use App\Http\Controllers\Student\{CourseStudentController, BasketController, CheckoutController, WishlistController};
 use App\Http\Controllers\Dashboard\Instructor\{CoursesController, CourseSectionsController, CourseLecturesController};
+use App\Http\Controllers\Dashboard\Instructor\Exams\{ExamController, ExamQuestionController};
 use App\Http\Controllers\Dashboard\Student\{CoursesEnrolledController, StudentExamController, WatchCourseLectureController};
 
 
@@ -43,6 +41,12 @@ Route::controller(BasketController::class)->group(function () {
   Route::get('/cart-get-data', 'getData')->name('basket.getData');
   Route::post('/cart-set-data', 'setData')->name('basket.setData');
   Route::delete('/cart/destory/{id}', 'destory')->name('basket.destory');
+});
+
+// Notifications
+Route::controller(NotificationContoller::class)->group(function () {
+  Route::get('/notifications', 'index')->name('notifications.index');
+  Route::get('/get-notifications', 'getNotifications')->name('notifications.api');
 });
 
 // Checkout
@@ -92,7 +96,8 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
   Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
     // Route::view('/', 'pages.dashboard.home')->name('index');
     Route::get('/', [DashboardController::class, "__invoke"])->name('index');
-    Route::view('/profile/{id?}', 'pages.dashboard.profile')->name('profile');
+    Route::get('/profile/{id?}', [ProfileController::class, 'index'])->name('profile');
+    Route::get('/profile/settings', [ProfileController::class, 'settings'])->name('profile.settings');
 
     /* *******************instructor************************* */
     // instructor Controllers
