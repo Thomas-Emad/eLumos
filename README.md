@@ -2,7 +2,7 @@
 
 ### **eLumos - Educational Platform**
 
-eLumos is a modern educational platform that connects instructors with students, providing powerful tools to create and manage courses, lessons, and exams. The platform offers:
+eLumos is a modern educational platform that connects instructors with students, providing powerful tools to create and manage courses, lessons, and exams. The platform offers: 
 
 -   **Dynamic Exam Creation** with various question types and automatic grading.
 -   **Course Structure** that allows instructors to organize content into sections and lessons.
