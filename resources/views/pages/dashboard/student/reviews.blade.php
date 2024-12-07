@@ -27,7 +27,7 @@
                             </div>
                         </div>
 
-                        <div data-popover id="popover-default" role="tooltip"
+                        <div data-popover id="message-{{ $review->id }}" role="tooltip"
                             class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
                             <div
                                 class="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
@@ -40,7 +40,6 @@
                         </div>
                         <div>
                             <div>
-
                                 @for ($i = 1; $i <= floor($review->rate); $i++)
                                     <i class="fa-solid fa-star text-amber-500"></i>
                                 @endfor
@@ -55,7 +54,7 @@
                             </div>
                             <div>
                                 <button class="text-gray-600 hover:text-amber-700 duration-300 dark:text-gray-100"
-                                    data-popover-target="popover-default" type="button">
+                                    data-popover-target="message-{{ $review->id }}" type="button">
                                     <i class="fa-solid fa-message"></i>
                                 </button>
                                 <a href="{{ route('course-details', $review->course_id) }}"

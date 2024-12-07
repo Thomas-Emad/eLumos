@@ -54,3 +54,29 @@ if (!function_exists('calcDegreeAnswer')) {
     return round((1 / $totalAnswers) * $countTrueAnswers, 2);
   }
 }
+
+
+if (!function_exists('getImagePaymentByStatus')) {
+  function getImagePaymentByStatus($status = null): string
+  {
+    return match ($status) {
+      'pending' => asset('assets/images/icons/wait.png'),
+      'succeeded' => asset('assets/images/congratulation.png'),
+      'failed' => asset('assets/images/fail.png'),
+      'canceled' => asset('assets/images/canceled.png'),
+    };
+  }
+}
+
+if (!function_exists('getMessagePaymentByStatus')) {
+  function getMessagePaymentByStatus($status = null): string
+  {
+    return match ($status) {
+      'pending' => "Payment is pending.",
+      'succeeded' => "Payment was successful.",
+      'failed' => "Payment failed.",
+      'canceled' => "Payment was canceled.",
+      default => "Unknown payment status.",
+    };
+  }
+}

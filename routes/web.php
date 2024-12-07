@@ -57,6 +57,7 @@ Route::middleware(['middleware' => 'step-forward'])->group(function () {
   Route::get('/payment/success/', [PaymentController::class, 'success'])->name('checkout.success');
   Route::get('/payment/pending/', [PaymentController::class, 'pending'])->name('checkout.pending');
   Route::get('/payment/fail/', [PaymentController::class, 'fail'])->name('checkout.fail');
+  Route::get('/payment/canceled/', [PaymentController::class, 'canceled'])->name('checkout.canceled');
 });
 Route::post('/payment/webhook/stripe', [PaymentWebhookController::class, 'handleStripeWebhook'])->name('checkout.stripe.webhook');
 Route::post('/payment/webhook/paypal', [PaymentWebhookController::class, 'handlePaypalWebhook'])->name('checkout.paypal.webhook');

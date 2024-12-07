@@ -21,22 +21,33 @@ class PaymentController extends Controller implements HasMiddleware
     ];
   }
 
+  /**
+   * index function
+   *
+   * @return View
+   */
   public function index(): View
   {
-    $payments = Payment::lastest()->paginate(20);
-    return view('pages.dashboard.student.payments.index', compact("payments"));
+    $payments = Payment::withCount('items')->latest()->paginate(20);
+    return view('pages.dashboard.student.payments.index', compact('payments'));
   }
 
+  /**
+   * show function
+   *
+   * @param string $id
+   * @return View
+   */
   public function show(string $id): View
   {
     $payment = Payment::with([
       'order',
       'order.items',
       'order.items.course',
-    ])->where('id', $id)->firstOrFail();
-    return view('pages.dashboard.student.payments.show', compact("payment"));
-  }
+    ])->where('transaction_id', $id)->firstOrFail();
 
+    return view('pages.dashboard.student.payments.show', compact('payment'));
+  }
 
   /**
    * Process payment callback from Stripe.
@@ -113,8 +124,15 @@ class PaymentController extends Controller implements HasMiddleware
         ]);
         break;
 
-      default:
+      case 'failed':
         return redirect()->route('checkout.fail')->with('notification', [
+          'type' => 'fail',
+          'message' => "Something is wrong, please try again?"
+        ]);
+        break;
+
+      default:
+        return redirect()->route('checkout.canceled')->with('notification', [
           'type' => 'fail',
           'message' => "Something is wrong, please try again?"
         ]);
@@ -142,7 +160,6 @@ class PaymentController extends Controller implements HasMiddleware
     return view('pages.student.paymentGateways.fail');
   }
 
-
   /**
    * Display a pending page to the user after a pending payment.
    *
@@ -151,5 +168,15 @@ class PaymentController extends Controller implements HasMiddleware
   public function pending(): View
   {
     return view('pages.student.paymentGateways.pending');
+  }
+
+  /**
+   * Display a canceled page to the user after a cancele payment.
+   *
+   * @return \Illuminate\Contracts\View\View
+   */
+  public function canceled(): View
+  {
+    return view('pages.student.paymentGateways.canceled');
   }
 }
