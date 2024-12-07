@@ -89,21 +89,22 @@
                                 {{ $course->price ? $course->price . '$' : 'Free' }}
                             </div>
                         </div>
-
-                        @if (in_array($course->id, $enrolledStudent))
-                            <a href="{{ route('dashboard.courses-list.show', $course->id) }}" target="_blank"
-                                class="block w-full font-bold text-sm text-center py-1 px-2  rounded-full border text-white bg-green-600 hover:bg-green-800 duration-300">
-                                Watch Your Course
-                            </a>
-                        @else
-                            @php
-                                $isInCart = checkCourseInBasket($course->id);
-                                $textButton = $isInCart ? 'Remove Cart' : 'Add To Cart';
-                            @endphp
-                            <button type="button" data-id="{{ $course->id }}"
-                                class="change-cart block w-full font-bold text-sm text-center py-1 px-2  rounded-full border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white duration-300">
-                                {{ $textButton }}
-                            </button>
+                        @if ($course->user_id !== auth()->user()->id)
+                            @if (in_array($course->id, $enrolledStudent))
+                                <a href="{{ route('dashboard.courses-list.show', $course->id) }}" target="_blank"
+                                    class="block w-full font-bold text-sm text-center py-1 px-2  rounded-full border text-white bg-green-600 hover:bg-green-800 duration-300">
+                                    Watch Your Course
+                                </a>
+                            @else
+                                @php
+                                    $isInCart = checkCourseInBasket($course->id);
+                                    $textButton = $isInCart ? 'Remove Cart' : 'Add To Cart';
+                                @endphp
+                                <button type="button" data-id="{{ $course->id }}"
+                                    class="change-cart block w-full font-bold text-sm text-center py-1 px-2  rounded-full border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white duration-300">
+                                    {{ $textButton }}
+                                </button>
+                            @endif
                         @endif
                     </div>
                 @endforeach

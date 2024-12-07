@@ -106,7 +106,7 @@
                     notifys += `
                       <li class="mb-10 ms-6">            
                           <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
-                              <img class="w-6 h-6  rounded-full shadow-lg" src="{{ asset('assets/images/favicon.png') }}" alt="System Logo"/>
+                            <img class="w-6 h-6  rounded-full shadow-lg" src="{{ asset('assets/images/favicon.png') }}" alt="System Logo"/>
                           </span>
                           <div class="p-2 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                               <time class="block mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0 text-right">${element.duration}</time>
@@ -118,7 +118,7 @@
                 $(".notify").append(notifys);
             } else {
                 $(".notify").append(`
-                  <div class="flex gap-4 border-b border-b-gray-200 py-2">
+                  <div class="flex gap-4 py-2">
                     <p class="text-gray-400 text-center">It Seem You haven't Any Notification..</p>
                   </div>
                 `);

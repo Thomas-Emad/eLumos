@@ -21,7 +21,7 @@ class NotificationContoller extends Controller
       return abort(404);
     }
 
-    $notifications = Auth::user()->notifications()->latest()->get();
+    $notifications = Auth::user()->notifications()->latest()->limit(10)->get();
     $notifications->markAsRead();
 
     return response()->json([

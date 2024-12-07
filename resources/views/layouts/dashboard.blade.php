@@ -31,57 +31,62 @@
                 </div>
             </div>
             <div class='rounded-xl border border-gray-200 overflow-hidden bg-white dark:bg-gray-700 p-3 mt-3'>
-                <h2 class="font-bold text-gray-900 text-lg dark:text-gray-50">Dashboard</h2>
-                <ul class="mt-2 text-gray-800 dark:text-gray-300">
-                    <li><a href="{{ route('dashboard.index') }}"
-                            class="flex items-center gap-2 @if (Route::is('dashboard.index')) text-amber-600 @endif  hover:text-amber-600 duration-200">
-                            <i class="fa-solid fa-chart-simple "></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li><a href="{{ route('dashboard.profile') }}"
-                            class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.profile')) text-amber-600 @endif hover:text-amber-600 duration-200">
-                            <i class="fa-solid fa-user "></i>
-                            <span>My Profile</span>
-                        </a>
-                    </li>
-                    <li><a href="{{ route('dashboard.courses-list') }}"
-                            class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.courses-list')) text-amber-600 @endif hover:text-amber-600 duration-200">
-                            <i class="fa-solid fa-graduation-cap"></i>
-                            <span>Enrolled Courses</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('dashboard.wishlist') }}"
-                            class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.wishlist')) text-amber-600 @endif hover:text-amber-600 duration-200">
-                            <i class="fa-solid fa-heart"></i>
-                            <span>Wishlist</span>
-                        </a>
-                    </li>
-                    <li><a href="{{ route('dashboard.student.exams.index') }}"
-                            class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.student.exams.index')) text-amber-600 @endif hover:text-amber-600 duration-200">
-                            <i class="fa-solid fa-clipboard-question"></i>
-                            <span>Previous Exams</span>
-                        </a>
-                    </li>
-                    {{-- <li><a href="{{ route('dashboard.index') }}/wishlist"
-                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/wishlist')) @endif hover:text-amber-600 duration-200">
-                            <i class="fa-solid fa-heart"></i>
-                            <span>Wishlist</span>
-                        </a>
-                    </li>
-                    <li><a href="{{ route('dashboard.index') }}/reviews"
-                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/reviews')) @endif hover:text-amber-600 duration-200">
-                            <i class="fa-solid fa-star"></i>
-                            <span>Reviews</span>
-                        </a>
-                    </li>
-                    <li><a href="{{ route('dashboard.index') }}/orders"
-                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/orders')) @endif hover:text-amber-600 duration-200">
-                            <i class="fa-solid fa-basket-shopping"></i>
-                            <span>Order History</span>
-                        </a>
-                    </li>
+                <ul class="text-gray-800 dark:text-gray-300">
+                    <div>
+                        <h2 class="font-bold text-gray-900 text-lg dark:text-gray-50 mb-2">Dashboard</h2>
+                        <li><a href="{{ route('dashboard.index') }}"
+                                class="flex items-center gap-2 @if (Route::is('dashboard.index')) text-amber-600 @endif  hover:text-amber-600 duration-200">
+                                <i class="fa-solid fa-chart-simple "></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li><a href="{{ route('dashboard.profile') }}"
+                                class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.profile')) text-amber-600 @endif hover:text-amber-600 duration-200">
+                                <i class="fa-solid fa-user "></i>
+                                <span>My Profile</span>
+                            </a>
+                        </li>
+                        <li><a href="{{ route('dashboard.courses-list') }}"
+                                class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.courses-list')) text-amber-600 @endif hover:text-amber-600 duration-200">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                                <span>Enrolled Courses</span>
+                            </a>
+                        </li>
+
+                        <li><a href="{{ route('dashboard.student.exams.index') }}"
+                                class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.student.exams.index')) text-amber-600 @endif hover:text-amber-600 duration-200">
+                                <i class="fa-solid fa-clipboard-question"></i>
+                                <span>Previous Exams</span>
+                            </a>
+                        </li>
+                    </div>
+
+                    <div>
+                        <hr class="mx-6 my-4">
+                        <h2 class="font-bold text-gray-900 text-lg dark:text-gray-50">Others</h2>
+                        <li>
+                            <a href="{{ route('dashboard.wishlist') }}"
+                                class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.wishlist')) text-amber-600 @endif hover:text-amber-600 duration-200">
+                                <i class="fa-solid fa-heart"></i>
+                                <span>Wishlist</span>
+                            </a>
+                        </li>
+                        <li><a href="{{ route('dashboard.reviews.index') }}"
+                                class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.reviews.index')) text-amber-600 @endif hover:text-amber-600 duration-200">
+                                <i class="fa-solid fa-star"></i>
+                                <span>Reviews</span>
+                            </a>
+                        </li>
+                        <li><a href="{{ route('dashboard.orders.index') }}"
+                                class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.orders.index')) text-amber-600 @endif hover:text-amber-600 duration-200">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                                <span>Payments</span>
+                            </a>
+                        </li>
+                        <hr class="mx-6 my-4">
+
+                    </div>
+                    {{-- 
                     <li><a href="{{ route('dashboard.index') }}/messages"
                             class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/messages')) @endif hover:text-amber-600 duration-200">
                             <i class="fa-solid fa-comment-dots"></i>
@@ -128,7 +133,7 @@
                                 </a>
                             </li>
                         @endhaspermission
-                        @haspermission('control-courses')
+                        @haspermission('admin-control-courses')
                             <li class="flex justify-between items-center gap-2">
                                 <a href="{{ route('dashboard.admin.courses') }}"
                                     class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.admin.courses')) text-amber-600 @endif hover:text-amber-600 duration-200">
@@ -139,7 +144,7 @@
                                     class="bg-gray-600/70 px-2 py-1 rounded-xl text-xs text-white">({{ \App\Models\Course::where('status', 'pending')->count() }})</span>
                             </li>
                         @endhaspermission
-                        @can(['roles', 'control-courses'])
+                        @can(['roles', 'admin-control-courses'])
                             <hr class="mx-6 my-4">
                         @endcan
                     </div>

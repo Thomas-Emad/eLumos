@@ -10,6 +10,7 @@
                 This Course his status is: {{ $course->status }}
             </p>
         @endif
+          
         <x-course-details.head :course="$course" :averageRating="$averageRating"></x-course-details.head>
         <x-course-details.content :course="$course" :hasThisCourse="$hasThisCourse"></x-course-details.content>
 

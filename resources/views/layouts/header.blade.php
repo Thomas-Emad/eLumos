@@ -243,7 +243,7 @@
         </svg>
         <span class="sr-only">Close menu</span>
     </button>
-    <div class="py-4 overflow-y-auto h-96">
+    <div class="py-4 overflow-y-auto h-full">
         <div class="flex flex-col gap-4 h-full ps-4">
             <ol class="relative border-s border-gray-200 dark:border-gray-700 notify">
                 {{-- Loader --}}

@@ -38,8 +38,8 @@ class PaymentWebhookController extends Controller
     $order = (new PaymentService)->createOrder(
       $callback['metadata']['user_id'],
       $callback['status'],
-      (int) $callback['metadata']['amountUseWallet'],
-      $callback['metadata']['courses_id']
+      $callback['metadata']['courses_id'],
+      (int) $callback['metadata']['amountUseWallet']
     );
 
     // Add New Payment

@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Traits\CoursesUpdateTrait;
 use App\Http\Resources\CoursesDashboardResource;
@@ -138,7 +137,26 @@ class CoursesController extends Controller implements HasMiddleware
 
     $course->tags()->attach($request->tags);
 
-    return redirect()->route('dashboard.instructor.courses.edit', ['course' => $course->id, 'step' => 2])->with('success', 'Course added successfully');
+    return redirect()->route('dashboard.instructor.courses.edit', ['course' => $course->id, 'step' => 2])
+      ->with('notification', [
+        'type' => 'success',
+        'message' => "Course Created successfully."
+      ]);
+  }
+
+  public function status(string $id)
+  {
+    return $id;
+  }
+
+  public function tracking(string $id)
+  {
+    return $id;
+  }
+
+  public function support()
+  {
+    return 'support is here';
   }
 
   /**
@@ -179,11 +197,19 @@ class CoursesController extends Controller implements HasMiddleware
    */
   public function destroy(Request $request)
   {
-    $course = Course::findOrFail($request->id);
+    $course = Course::withCount("enrolleds")->findOrFail($request->id);
     if ($course->user_id != auth()->user()->id) {
       return abort(403);
     }
-    $course->delete();
-    return redirect()->route('dashboard.instructor.courses')->with('success', 'Course deleted successfully');
+
+    $course->update([
+      'status' => 'removed'
+    ]);
+
+    return redirect()->route('dashboard.instructor.courses.index')
+      ->with('notification', [
+        'type' => 'success',
+        'message' => "Course deleted successfully."
+      ]);
   }
 }

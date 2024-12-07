@@ -5,7 +5,7 @@
     <div class="container mx-auto max-w-screen-xl p-4 mt-20">
         @if (Auth::user()->steps_forward != 'complate')
             <div
-                class="w-11/12 md:w-2/3  rounded-xl bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-200/25 p-2 mt-20  mx-auto">
+                class="w-11/12 md:w-2/3  rounded-xl bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-200/25 p-2 mx-auto">
                 @if (Auth::user()->steps_forward == 'new')
                     <h2 class="font-bold text-2xl text-center text-amber-600">Just one step, you are all set</h2>
                 @elseif (Auth::user()->steps_forward == 'info')

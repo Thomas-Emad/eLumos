@@ -42,7 +42,7 @@
                         class="border first:border-b-0 only-of-type:border   border-gray-200 first-of-type:rounded-t-xl last-of-type:rounded-b-xl only-of-type:rounded-xl  overflow-hidden">
                         <h2 id="content-course-heading-{{ $section->id }}">
                             <button type="button"
-                                class="flex items-center justify-between w-full px-4 py-2 font-sm rtl:text-right text-gray-500   hover:bg-gray-100 gap-3 "
+                                class="flex items-center justify-between w-full px-4 py-2 font-sm rtl:text-right text-gray-500 hover:bg-gray-100 gap-3 "
                                 data-accordion-target="#content-course-body-{{ $section->id }}" aria-expanded="true"
                                 aria-controls="content-course-body-{{ $section->id }}">
                                 <span>{{ $section->title }}</span>
@@ -152,27 +152,29 @@
                     <div data-popper-arrow></div>
                 </div>
             </div>
-            <div class="mt-2">
-                @php
-                    $existsInBasket = checkCourseInBasket($course->id);
-                @endphp
-                @if ($hasThisCourse)
-                    <a href="{{ route('dashboard.student.show', ['course' => $course->id]) }}"
-                        class="block w-full change-cart rounded-full py-2 px-4 bg-green-500 text-sm text-center font-bold text-white hover:bg-green-700 transition duration-300">
-                        Watch Course
-                    </a>
-                @elseif(!$existsInBasket)
-                    <button type="button" data-id="{{ $course->id }}"
-                        class="block w-full change-cart rounded-full py-2 px-4 bg-green-500 text-sm text-center font-bold text-white hover:bg-green-700 transition duration-300">
-                        Enroll Now
-                    </button>
-                @elseif ($existsInBasket)
-                    <button type="button" data-id="{{ $course->id }}"
-                        class="block w-full change-cart rounded-full py-2 px-4 text-sm text-center font-bold text-amber-700 hover:text-white border border-amber-700 hover:bg-amber-700 transition duration-300">
-                        Remove form Basket
-                    </button>
-                @endif
-            </div>
+            @if ($course->user_id !== auth()->user()->id)
+                <div class="mt-2">
+                    @php
+                        $existsInBasket = checkCourseInBasket($course->id);
+                    @endphp
+                    @if ($hasThisCourse)
+                        <a href="{{ route('dashboard.student.show', ['course' => $course->id]) }}"
+                            class="block w-full change-cart rounded-full py-2 px-4 bg-green-500 text-sm text-center font-bold text-white hover:bg-green-700 transition duration-300">
+                            Watch Course
+                        </a>
+                    @elseif(!$existsInBasket)
+                        <button type="button" data-id="{{ $course->id }}"
+                            class="block w-full change-cart rounded-full py-2 px-4 bg-green-500 text-sm text-center font-bold text-white hover:bg-green-700 transition duration-300">
+                            Enroll Now
+                        </button>
+                    @elseif ($existsInBasket)
+                        <button type="button" data-id="{{ $course->id }}"
+                            class="block w-full change-cart rounded-full py-2 px-4 text-sm text-center font-bold text-amber-700 hover:text-white border border-amber-700 hover:bg-amber-700 transition duration-300">
+                            Remove form Basket
+                        </button>
+                    @endif
+                </div>
+            @endif
         </div>
         <div class="p-4 bg-white dark:bg-gray-700 rounded-xl border border-gray-200">
             <h3 class="font-bold text-xl pb-2">Includes</h3>

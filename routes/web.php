@@ -49,7 +49,7 @@ Route::controller(NotificationContoller::class)->group(function () {
   Route::get('/get-notifications', 'getNotifications')->name('notifications.api');
 });
 
-// Checkout
+// Payment, Checkout
 Route::middleware(['middleware' => 'step-forward'])->group(function () {
   Route::post('/checkout/payment', [CheckoutController::class, 'viewPayment'])->name('checkout.viewPayment');
   Route::post('/checkout/processPayment/intent', [StripePaymentGateway::class, 'paymentIntent'])->name('checkout.processPayment.stripe.intent');
@@ -62,6 +62,11 @@ Route::post('/payment/webhook/stripe', [PaymentWebhookController::class, 'handle
 Route::post('/payment/webhook/paypal', [PaymentWebhookController::class, 'handlePaypalWebhook'])->name('checkout.paypal.webhook');
 
 Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
+  // Previous Orders, Payments
+  Route::get('/payments', [PaymentController::class, 'index'])->name('orders.index');
+  Route::get('/payments/show/{id}', [PaymentController::class, 'show'])->name('orders.show');
+
+
   // Course Pages for Student Courses
   Route::controller(CoursesEnrolledController::class)->group(function () {
     Route::get('/courses-list',  'index')->name('courses-list');
@@ -94,7 +99,6 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
 
   // Check From Steps Forward to get executed information
   Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
-    // Route::view('/', 'pages.dashboard.home')->name('index');
     Route::get('/', [DashboardController::class, "__invoke"])->name('index');
     Route::get('/profile/{id?}', [ProfileController::class, 'index'])->name('profile');
     Route::get('/profile/settings', [ProfileController::class, 'settings'])->name('profile.settings');
@@ -102,6 +106,9 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     /* *******************instructor************************* */
     // instructor Controllers
     Route::resource('/courses', CoursesController::class)->names('instructor.courses')->except('show');
+    Route::get('/courses/status/{id}', [CoursesController::class, 'status'])->name('instructor.courses.status');
+    Route::get('/courses/tracking/{id}', [CoursesController::class, 'tracking'])->name('instructor.courses.tracking');
+    Route::get('/support', [CoursesController::class, 'support'])->name('instructor.support');
     Route::get('/api/courses/show/{type?}',  [CoursesController::class, 'getCourses'])->name('api.instructor.courses.show');
 
     // Api CRUD Operations for Course Sections

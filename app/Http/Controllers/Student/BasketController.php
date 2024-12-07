@@ -7,7 +7,7 @@ use App\Http\Resources\BasketCoursesResource;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\http\Traits\BasketTrait;
+use App\Http\Traits\BasketTrait;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
 class BasketController extends Controller implements HasMiddleware

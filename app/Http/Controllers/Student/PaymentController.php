@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Student;
 
 use Illuminate\Http\Request;
+use App\Models\Payment;
 use App\Services\PaymentService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\View\View;
@@ -10,7 +11,6 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Factories\PaymentGatewayFactory;
 use Illuminate\Routing\Controllers\HasMiddleware;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class PaymentController extends Controller implements HasMiddleware
 {
@@ -20,6 +20,23 @@ class PaymentController extends Controller implements HasMiddleware
       'permission:buy-courses',
     ];
   }
+
+  public function index(): View
+  {
+    $payments = Payment::lastest()->paginate(20);
+    return view('pages.dashboard.student.payments.index', compact("payments"));
+  }
+
+  public function show(string $id): View
+  {
+    $payment = Payment::with([
+      'order',
+      'order.items',
+      'order.items.course',
+    ])->where('id', $id)->firstOrFail();
+    return view('pages.dashboard.student.payments.show', compact("payment"));
+  }
+
 
   /**
    * Process payment callback from Stripe.
@@ -43,8 +60,8 @@ class PaymentController extends Controller implements HasMiddleware
       $order = (new PaymentService)->createOrder(
         $callback['metadata']['user_id'],
         $status,
-        (int) $callback['metadata']['amountUseWallet'],
-        $callback['metadata']['courses_id']
+        $callback['metadata']['courses_id'],
+        (int) $callback['metadata']['amountUseWallet']
       );
 
       // Add New Payment

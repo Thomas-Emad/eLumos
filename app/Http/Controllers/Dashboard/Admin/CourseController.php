@@ -49,7 +49,8 @@ class CourseController extends Controller implements HasMiddleware
       'status' => "required|in:accept,redject"
     ]);
 
-    Course::where("id", $request->id)->update([
+    $course = Course::where("id", $request->id)->firstOrFail();
+    $course->update([
       'status' => $request->status == 'accept' ? 'active' : 'redject',
       'preview_at' => now()
     ]);

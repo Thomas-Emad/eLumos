@@ -33,7 +33,7 @@ class PaymentService
    * @param string $courses A comma-separated string of course IDs.
    * @return array An array containing the order ID, course IDs, and the total amount after wallet usage.
    */
-  public function createOrder($userId, string $status, float $amountUseWallet = 0, string $courses): array
+  public function createOrder($userId, string $status, string $courses, float $amountUseWallet = 0): array
   {
     $user =  User::where('id', $userId)->first();
     $courses = $this->getCourses($courses);

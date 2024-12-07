@@ -3,7 +3,7 @@
 namespace App\Observers\Dashboard;
 
 use App\Models\Course;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use App\Notifications\CourseInstructorNotification;
 use Illuminate\Support\Facades\Notification;
@@ -15,10 +15,9 @@ class CoursesObserver
    */
   public function created(Course $course): void
   {
-    Cache::forget("courses.draft." . auth()->id());
-    Cache::forget("courses.published." . auth()->id());
+    Cache::forget("courses.draft." . $course->user_id);
 
-    Notification::send(Auth::user(), new CourseInstructorNotification($course));
+    Notification::send(User::find($course->user_id), new CourseInstructorNotification($course));
   }
 
   /**
@@ -26,13 +25,13 @@ class CoursesObserver
    */
   public function updated(Course $course): void
   {
-    Cache::forget("courses.pending." . auth()->id());
-    Cache::forget("courses.published." . auth()->id());
-    Cache::forget("courses.draft." . auth()->id());
+    Cache::forget("courses.pending." . $course->user_id);
+    Cache::forget("courses.published." . $course->user_id);
+    Cache::forget("courses.draft." . $course->user_id);
 
     // send notifications:
-    if ($course->status == 'pending') {
-      Notification::send(Auth::user(), new CourseInstructorNotification($course));
+    if ($course->status != 'draft') {
+      Notification::send(User::find($course->user_id), new CourseInstructorNotification($course));
     }
   }
 
@@ -41,9 +40,11 @@ class CoursesObserver
    */
   public function deleted(Course $course): void
   {
-    Cache::forget("courses.pending." . auth()->id());
-    Cache::forget("courses.published." . auth()->id());
-    Cache::forget("courses.draft." . auth()->id());
+    Cache::forget("courses.pending." . $course->user_id);
+    Cache::forget("courses.published." . $course->user_id);
+    Cache::forget("courses.draft." . $course->user_id);
+
+    Notification::send(User::find($course->user_id), new CourseInstructorNotification($course));
   }
 
   /**
