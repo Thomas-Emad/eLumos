@@ -21,4 +21,9 @@ class ReviewCourse extends Model
   {
     return $this->belongsTo(User::class);
   }
+
+  public function course(): BelongsTo
+  {
+    return $this->belongsTo(Course::class);
+  }
 }

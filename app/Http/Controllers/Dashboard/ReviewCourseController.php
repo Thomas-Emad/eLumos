@@ -26,10 +26,10 @@ class ReviewCourseController extends Controller  implements HasMiddleware
    */
   public function index()
   {
-    //
+    $reviews = Auth::user()->reviews()->latest()->paginate(15);
+
+    return view('pages.dashboard.student.reviews', compact('reviews'));
   }
-
-
 
   /**
    * Get Statistics Rate For Course
