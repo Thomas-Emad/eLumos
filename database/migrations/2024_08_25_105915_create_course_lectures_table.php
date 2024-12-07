@@ -18,7 +18,7 @@ return new class extends Migration
       $table->foreign('section_id')->references('id')->on('course_sections')->onDelete('cascade');
 
       $table->json('video')->nullable();
-      $table->decimal('video_duration', 5, 2)->nullable();
+      $table->decimal('video_duration', 8, 2)->nullable();
       $table->text('content')->nullable();
 
       $table->string('title', 50);

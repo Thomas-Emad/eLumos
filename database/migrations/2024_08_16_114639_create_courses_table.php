@@ -21,7 +21,7 @@ return new class extends Migration
       $table->string('mockup', 255)->nullable();
       $table->string('preview_video', 255)->nullable();
       $table->foreignId('language_id')->nullable()->constrained();
-      $table->float('price', 2)->nullable();
+      $table->decimal('price', 8, 2)->nullable();
       $table->text('learn')->nullable();
       $table->text("requirements")->nullable();
       $table->json("message")->nullable();

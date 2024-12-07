@@ -17,7 +17,6 @@ return new class extends Migration
       $table->foreignId('question_id')->constrained('exam_questions', 'id')->cascadeOnDelete();
       $table->foreignId('answer_id')->constrained('exam_question_answers', 'id')->cascadeOnDelete();
 
-
       $table->text('content')->nullable();
       $table->boolean('is_true')->nullable();
       $table->text('info')->nullable();
