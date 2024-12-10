@@ -66,6 +66,7 @@ Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => '
   // Previous Orders, Payments
   Route::get('/payments', [PaymentController::class, 'index'])->name('orders.index');
   Route::get('/api/payments/show/{id?}', [PaymentController::class, 'show'])->name('orders.show.api');
+  Route::get('/pdf/payments/show/{id?}', [PaymentController::class, 'donwloadInovicePDF'])->name('orders.show.pdf');
 
 
   // Course Pages for Student Courses

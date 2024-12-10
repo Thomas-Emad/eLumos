@@ -7,8 +7,10 @@
             <p class="text-sm text-gray-500">Transaction Date: <b>{{ $payment->created_at }}</b></p>
         </div>
     </div>
-    <i
-        class="fa-solid fa-print cursor-pointer border border-gray-400 hover:border-gray-600 text-gray-400 hover:text-gray-600 py-1 px-3 rounded-full text-lg duration-200"></i>
+    <a href="{{ route('dashboard.orders.show.pdf', $payment->transaction_id) }}">
+        <i
+            class="fa-solid fa-print cursor-pointer border border-gray-400 hover:border-gray-600 text-gray-400 hover:text-gray-600 py-1 px-3 rounded-full text-lg duration-200"></i>
+    </a>
 </div>
 <hr class="block w-4/5 mx-auto my-4 bg-slate-500">
 <div class="flex justify-between flex-col md:flex-row gap-4">
@@ -40,7 +42,8 @@
     <div class="bg-white p-3 border border-gray-200 shadow-md rounded-lg w-full md:w-1/3">
         <div class="flex items-center justify-between gap-2">
             <h2 class="font-bold text-2xl text-gray-900 mb-2">Payment</h2>
-            <img class="w-12" src="{{ asset('assets/images/icons/payments/' . $payment->payment_provider . '.png') }}"
+            <img class="w-12"
+                src="{{ asset('assets/images/icons/payments/' . $payment->payment_provider . '.png') }}"
                 alt="icon Payment">
         </div>
         <hr>

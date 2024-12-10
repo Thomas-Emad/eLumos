@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Factories\PaymentGatewayFactory;
 use Illuminate\Routing\Controllers\HasMiddleware;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PaymentController extends Controller implements HasMiddleware
 {
@@ -52,11 +52,21 @@ class PaymentController extends Controller implements HasMiddleware
       'order.items.course',
     ])->where('transaction_id', $id)->firstOrFail();
     $payment = (object) (new InvoicePaymentResource($paymentContent))->toArray(request());
-
-    // return $payment->order['items'][0];
     $html = view('pages.dashboard.student.payments.partials.show-payment', compact('payment'))->render();
 
     return response()->json(['html' => $html]);
+  }
+
+  public function donwloadInovicePDF(string $id)
+  {
+    $paymentContent = Payment::with([
+      'order',
+      'order.items',
+      'order.items.course',
+    ])->where('transaction_id', $id)->firstOrFail();
+    $payment = (object) (new InvoicePaymentResource($paymentContent))->toArray(request());
+    $pdf = Pdf::loadView('pages.dashboard.student.payments.partials.pdf-invoice', ['payment' => $payment]);
+    return $pdf->download('invoice.pdf');
   }
 
   /**
