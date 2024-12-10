@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Student;
 use Illuminate\Http\Request;
 use App\Models\Payment;
 use App\Services\PaymentService;
+use App\Http\Resources\InvoicePaymentResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Factories\PaymentGatewayFactory;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class PaymentController extends Controller implements HasMiddleware
 {
@@ -38,15 +40,23 @@ class PaymentController extends Controller implements HasMiddleware
    * @param string $id
    * @return View
    */
-  public function show(string $id): View
+  public function show(string $id)
   {
-    $payment = Payment::with([
+    // if (!request()->ajax()) {
+    //   return abort(404);
+    // }
+
+    $paymentContent = Payment::with([
       'order',
       'order.items',
       'order.items.course',
     ])->where('transaction_id', $id)->firstOrFail();
+    $payment = (object) (new InvoicePaymentResource($paymentContent))->toArray(request());
 
-    return view('pages.dashboard.student.payments.show', compact('payment'));
+    // return $payment->order['items'][0];
+    $html = view('pages.dashboard.student.payments.partials.show-payment', compact('payment'))->render();
+
+    return response()->json(['html' => $html]);
   }
 
   /**

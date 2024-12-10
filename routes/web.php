@@ -65,7 +65,7 @@ Route::post('/payment/webhook/paypal', [PaymentWebhookController::class, 'handle
 Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
   // Previous Orders, Payments
   Route::get('/payments', [PaymentController::class, 'index'])->name('orders.index');
-  Route::get('/payments/show/{id}', [PaymentController::class, 'show'])->name('orders.show');
+  Route::get('/api/payments/show/{id?}', [PaymentController::class, 'show'])->name('orders.show.api');
 
 
   // Course Pages for Student Courses

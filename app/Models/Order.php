@@ -11,6 +11,7 @@ class Order extends Model
     'user_id',
     'amount',
     'discount',
+    'amount_use_wallet',
     'status',
   ];
 

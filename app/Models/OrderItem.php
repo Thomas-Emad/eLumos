@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OrderItem extends Model
 {
@@ -14,4 +15,9 @@ class OrderItem extends Model
     'platform_profit',
     'withdraw'
   ];
+
+  public function course(): BelongsTo
+  {
+    return $this->belongsTo(Course::class);
+  }
 }

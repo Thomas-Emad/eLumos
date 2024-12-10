@@ -40,6 +40,7 @@ class PaymentService
     $order = $user->orders()->create([
       'amount' => $courses->sum('price'),
       'status' => $status,
+      'amount_use_wallet' => $amountUseWallet,
       'discount' => 0,
     ]);
 

@@ -15,6 +15,7 @@ return new class extends Migration
       $table->id();
       $table->foreignId('user_id')->constrained()->cascadeOnDelete();
       $table->decimal('amount', 8, 2)->default(0);
+      $table->decimal('amount_use_wallet', 8, 2)->default(0);
       $table->decimal('discount', 8, 2)->default(0);
       $table->enum('status', ['pending', 'succeeded', 'failed', 'canceled'])->default('pending');
       $table->timestamps();
