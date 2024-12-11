@@ -85,7 +85,7 @@
 
 @if (Auth::check())
     <script>
-        // get basket after load page 2s
+        // get Notifications After Click it
         $(document).ready(() => {
             $('.sidebar-notify').on('click', function() {
                 $.ajax({
@@ -116,6 +116,7 @@
                     `;
                 });
                 $(".notify").append(notifys);
+                $(".badge-notify").remove();
             } else {
                 $(".notify").append(`
                   <div class="flex gap-4 py-2">

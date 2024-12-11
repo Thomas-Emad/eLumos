@@ -12,9 +12,23 @@
                     <i data-drawer-target="sidebar-cart" data-drawer-show="sidebar-cart" aria-controls="sidebar-cart"
                         class="fa-solid fa-basket-shopping px-3 py-1 text-sm  border-2 border-amber-500 rounded-full text-gray-600 hover:bg-amber-500 hover:text-white cursor-pointer transition-all dark:text-gray-200"></i>
                     @if (Auth::check())
-                        <i data-drawer-target="sidebar-notify" data-drawer-show="sidebar-notify"
-                            aria-controls="sidebar-notify"
-                            class="sidebar-notify fa-solid fa-bell px-3 py-1 text-sm  border-2 border-amber-500 rounded-full text-gray-600 hover:bg-amber-500 hover:text-white cursor-pointer transition-all dark:text-gray-200"></i>
+                        <div class="relative">
+                            <!-- Icon -->
+                            <button class="relative text-gray-600 hover:text-gray-800 focus:outline-none">
+                                <i data-drawer-target="sidebar-notify" data-drawer-show="sidebar-notify"
+                                    aria-controls="sidebar-notify"
+                                    class="sidebar-notify fa-solid fa-bell px-3 py-1 text-sm  border-2 border-amber-500 rounded-full text-gray-600 hover:bg-amber-500 hover:text-white cursor-pointer transition-all dark:text-gray-200"></i>
+                                <!-- Badge -->
+                                @if (auth()->user()->unReadNotifications()->count() > 0)
+                                    <span class="absolute top-0 right-0 flex h-3 w-3 badge-notify">
+                                        <span
+                                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+                                    </span>
+                                @endif
+                            </button>
+
+                        </div>
                     @endif
                     <button id="theme-toggle" type="button"
                         class=" px-3 py-1 text-sm border-2 border-amber-500 rounded-full text-gray-600 hover:bg-amber-500 hover:text-white cursor-pointer transition-all dark:text-gray-200">
@@ -130,7 +144,8 @@
     <div class="grid max-w-screen-xl px-4 py-5 mx-auto text-gray-900 dark:text-gray-200 sm:grid-cols-2 md:px-6">
         <ul>
             <li>
-                <a href="{{ route('courses') }}" class="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                <a href="{{ route('courses') }}"
+                    class="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                     <div class="font-semibold">Courses</div>
                     <span class="text-sm text-gray-500 dark:text-gray-400">Connect with third-party tools that
                         you're already using.</span>
@@ -264,7 +279,7 @@
 
             <p class="text-gray-400 pt-2 border-t-2 border-gray-400">
                 You Can See All Your Notifications from
-                <a href="{{ route('baskets') }}" class="hover:underline text-gray-800">
+                <a href="{{ route('notifications.index') }}" class="hover:underline text-gray-800">
                     here
                 </a>
             </p>

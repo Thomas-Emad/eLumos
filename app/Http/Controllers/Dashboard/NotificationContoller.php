@@ -12,10 +12,12 @@ class NotificationContoller extends Controller
 {
   public function index(): View
   {
-    return view('pages.dashboard.notifications');
+    $notifications = Auth::user()->notifications()->latest()->paginate(20);
+    $notifications->markAsRead();
+    return view('pages.dashboard.notifications', compact('notifications'));
   }
 
-  public function getNotifications(Request $request)
+  public function getNotifications()
   {
     if (!request()->ajax() || !Auth::check()) {
       return abort(404);

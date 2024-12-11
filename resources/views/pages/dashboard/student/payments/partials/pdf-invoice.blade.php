@@ -5,49 +5,36 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="@yield('description')" />
-    <meta name="keywords" content="@yield('keywords')" />
+    <meta name="robots" content="noindex">
 
-    <title>{{ config('app.name', 'eLumos') }} | @yield('title')</title>
+    <title>{{ config('app.name', 'eLumos') }} | Print Payment Invoice</title>
 
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}" type="image/x-icon">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-    {{-- styles --}}
-    <link rel="stylesheet" href="{{ asset('assets/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
-
-    @yield('css')
-
-    <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased bg-[#fafafa] dark:bg-gray-800 dark:text-gray-100">
+<body style="background-color: #eee;padding:10px; font-family: figtree">
+    <a href="{{ route('home') }}">
+        <img style="margin: 30px auto;display:block" src="{{ asset('assets/images/logo.png') }}" alt="">
+    </a>
+
     <div
-        style="display: flex; justify-content: space-between; align-items: center; background-color: white; padding: 12px; border: 1px solid #e5e7eb; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); border-radius: 8px;">
-        <div
-            style="display: flex; gap: 8px; flex-direction: column; align-items: center; @media (min-width: 768px) { flex-direction: row; }">
-            <img src="{{ $payment->photo }}" alt="photo payment status"
-                style="width: 48px; height: 48px; border-radius: 8px;">
-            <div>
-                <h1 style="font-weight: bold; font-size: 1.25rem; color: #111827;">{{ $payment->title }}</h1>
-                <p style="font-size: 0.875rem; color: #6b7280;">Transaction Id: <b>{{ $payment->transaction_id }}</b>
-                </p>
-                <p style="font-size: 0.875rem; color: #6b7280;">Transaction Date: <b>{{ $payment->created_at }}</b></p>
-            </div>
+        style="display:flex; gap: 16px; background-color: white; padding: 12px; border: 1px solid #e5e7eb; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); border-radius: 8px; width: 100%;">
+        <img src="{{ $payment->photo }}" alt="photo payment status"
+            style="width: 48px; height: 48px; border-radius: 8px;">
+        <div>
+            <h1 style="font-weight: bold; font-size: 1.25rem; color: #111827;">{{ $payment->title }}</h1>
+            <p style="font-size: 0.875rem; color: #6b7280;">Transaction Id: <b>{{ $payment->transaction_id }}</b>
+            </p>
+            <p style="font-size: 0.875rem; color: #6b7280;">Transaction Date: <b>{{ $payment->created_at }}</b></p>
         </div>
-        <a href="{{ route('dashboard.orders.show.pdf', $payment->transaction_id) }}">
-            <i
-                style="cursor: pointer; border: 1px solid #d1d5db; color: #9ca3af; padding: 4px 12px; border-radius: 9999px; font-size: 1.125rem; transition-duration: 200ms; &:hover { border-color: #4b5563; color: #4b5563; }"></i>
-        </a>
     </div>
     <hr style="display: block; width: 80%; margin: 16px auto; background-color: #64748b;">
     <div
-        style="display: flex; justify-content: space-between; flex-direction: column; gap: 16px; @media (min-width: 768px) { flex-direction: row; }">
+        style="display: flex; justify-content: space-between; flex-direction: row; gap: 16px; @media (min-width: 768px) { flex-direction: column; }">
         <div
             style="background-color: white; padding: 12px; border: 1px solid #e5e7eb; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); border-radius: 8px; width: 100%; @media (min-width: 768px) { width: 66.6667%; }">
             <h2 style="font-weight: bold; font-size: 1.25rem; color: #111827; margin-bottom: 8px;">Enrolled Courses:
@@ -61,18 +48,14 @@
                                 style="width: 64px; height: 64px; border-radius: 8px;">
                             <div>
                                 <h3
-                                    style="font-weight: bold; font-size: 1.125rem; color: #374151; cursor: pointer; &:hover { color: #f59e0b; transition-duration: 200ms; }">
-                                    <a href="{{ $item['url'] }}">
+                                    style="margin-bottom:10px;font-weight: bold; font-size: 1.125rem; cursor: pointer; &:hover { color: #f59e0b; transition-duration: 200ms; };">
+                                    <a href="{{ $item['url'] }}" style="text-decoration:none; color:inherit">
                                         {{ $item['title'] }}
                                     </a>
                                 </h3>
-                                <h4 style="color: #374151;">Price: <b>{{ $item['amount'] }}</b></h4>
+                                <h4 style="color: #374151; margin-top:0;">Price: <b>{{ $item['amount'] }}</b></h4>
                             </div>
                         </div>
-                        <a href="{{ $item['url'] }}"
-                            style="border: 1px solid #d1d5db; color: #9ca3af; padding: 4px 8px; border-radius: 9999px; font-size: 0.875rem; transition-duration: 200ms; &:hover { border-color: #4b5563; color: #4b5563; }">
-                            <i class="fa-regular fa-eye"></i>
-                        </a>
                     </div>
                 @endforeach
             </div>

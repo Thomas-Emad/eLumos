@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Factories\PaymentGatewayFactory;
 use Illuminate\Routing\Controllers\HasMiddleware;
-use Barryvdh\DomPDF\Facade\Pdf;
+use niklasravnsborg\LaravelPdf\Facades\Pdf;
+
 
 class PaymentController extends Controller implements HasMiddleware
 {
@@ -42,9 +43,9 @@ class PaymentController extends Controller implements HasMiddleware
    */
   public function show(string $id)
   {
-    // if (!request()->ajax()) {
-    //   return abort(404);
-    // }
+    if (!request()->ajax()) {
+      return abort(404);
+    }
 
     $paymentContent = Payment::with([
       'order',
@@ -65,8 +66,9 @@ class PaymentController extends Controller implements HasMiddleware
       'order.items.course',
     ])->where('transaction_id', $id)->firstOrFail();
     $payment = (object) (new InvoicePaymentResource($paymentContent))->toArray(request());
+
     $pdf = Pdf::loadView('pages.dashboard.student.payments.partials.pdf-invoice', ['payment' => $payment]);
-    return $pdf->download('invoice.pdf');
+    return $pdf->stream('invoice.pdf');
   }
 
   /**

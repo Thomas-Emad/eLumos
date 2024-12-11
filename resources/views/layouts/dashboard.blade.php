@@ -83,8 +83,13 @@
                                 <span>Payments</span>
                             </a>
                         </li>
+                        <li><a href="{{ route('notifications.index') }}"
+                                class="mt-2 flex items-center gap-2 @if (Route::is('notifications.index')) text-amber-600 @endif hover:text-amber-600 duration-200">
+                                <i class="fa-solid fa-bell"></i>
+                                <span>Notifications</span>
+                            </a>
+                        </li>
                         <hr class="mx-6 my-4">
-
                     </div>
                     {{-- 
                     <li><a href="{{ route('dashboard.index') }}/messages"
