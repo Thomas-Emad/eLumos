@@ -43,7 +43,7 @@ class WatchCourseLectureController extends Controller implements HasMiddleware
       ]);
     } catch (\Exception $e) {
       return response()->json([
-        'message' => 'failed'
+        'message' => 'failed: ' . $e->getMessage()
       ], 500);
     }
   }

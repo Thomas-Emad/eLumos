@@ -23,7 +23,10 @@ class CoursesEnrolledResource extends JsonResource
         'course_id' => $this->course->id,
         'title' => Str::limit($this->course->title, 20),
         'mockup' => json_decode($this->course->mockup)->url ?? null,
-        'progress' => ($this->progress_lectures / $this->course->lectures()->count()) * 100
+        'progress' => ($this->progress_lectures),
+        'rate' => [
+          'stars' => $this->course->average_rating,
+        ]
       ],
       'user' => [
         'id' => $this->course->user->id,

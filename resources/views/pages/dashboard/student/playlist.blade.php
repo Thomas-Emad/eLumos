@@ -215,6 +215,11 @@
                     },
                 }).always(function(response) {
                     console.log(response)
+                    if (response.message == 'done') {
+                        $('.notifications').append(`@include('components.notifications.success', [
+                            'message' => 'This lesson has been taught as a reading.',
+                        ])`);
+                    }
                 })
             }, timeout * 1000);
         }

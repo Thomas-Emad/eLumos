@@ -101,11 +101,25 @@
                 })
             }
 
+            // Display Stars Course
+            function buildHtmlStarsCourse(rate) {
+                let stars = '';
+                for (i = 1; i <= Math.floor(rate); i++) {
+                    stars += `<i class="fa-solid fa-star text-amber-500"></i>`;
+                }
+                if (rate - Math.floor(rate) >= 0.5) {
+                    stars += `<i class="fa-solid fa-star-half-stroke text-amber-500"></i>`;
+                }
+                for (i = 1; i <= 5 - Math.ceil(rate); i++) {
+                    stars += `<i class="fa-solid fa-star text-gray-400"></i>`;
+                }
+                return stars;
+            }
+
             // Display Courses
             function buildCoursesHTML(response, typeCourses) {
                 if (response.count > 0) {
                     response.courses.map((course) => {
-                        console.log(course)
                         let routePlayCourse = ("{{ route('dashboard.student.show', ':id') }}").replace(
                             ':id', course.data.course_id);
 
@@ -139,12 +153,8 @@
                               <hr>
                               <div class="text-sm py-2 flex justify-between gap-2">
                                   <div>
-                                      <i class="fa-solid fa-star text-amber-400"></i>
-                                      <i class="fa-solid fa-star text-amber-400"></i>
-                                      <i class="fa-solid fa-star text-amber-400"></i>
-                                      <i class="fa-solid fa-star text-amber-400"></i>
-                                      <i class="fa-solid fa-star text-gray-400"></i>
-                                      <span>4.0 (15)</span>
+                                      ${buildHtmlStarsCourse(course.data.rate.stars)}
+                                      <span>${course.data.rate.stars}</span>
                                   </div>
                                   <div class="font-bold">
                                     ${course.data.progress}%

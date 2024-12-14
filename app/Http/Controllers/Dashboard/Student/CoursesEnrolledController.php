@@ -58,8 +58,11 @@ class CoursesEnrolledController extends Controller implements HasMiddleware
       // Cache Courses
       $type = in_array(request()->input('type'), array_keys($this->getStatus)) ? request()->input('type') : 'all';
 
-      $courses = Cache::remember("courses.preview.$type." . auth()->id(), 60 * 60 * 60 * 6, function () use ($type) {
-        $data = CoursesEnrolled::with(['user', 'course'])->select('id', 'course_id', 'user_id', 'progress_lectures')
+      $courses = Cache::remember("courses.preview.$type." . auth()->id(), 3600, function () use ($type) {
+        $data = CoursesEnrolled::with([
+          'user:id,name,headline,photo',
+          'course:id,title,mockup,user_id,average_rating'
+        ])->select('id', 'course_id', 'user_id', 'progress_lectures')
           ->where('courses_enrolleds.user_id', auth()->id())
           ->whereIn('courses_enrolleds.status', $this->getStatus[$type])
           ->orderBy('buyer_at')

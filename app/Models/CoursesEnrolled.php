@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 use App\Observers\Dashboard\CoursesEnrolledCheckoutObserver;
 
 
@@ -15,7 +17,11 @@ class CoursesEnrolled extends Model
   use HasFactory;
 
   protected $fillable = [
-    'user_id', 'course_id', 'progress_lectures', 'status', 'buyer_at'
+    'user_id',
+    'course_id',
+    'progress_lectures',
+    'status',
+    'buyer_at'
   ];
 
   public function user(): BelongsTo
@@ -26,5 +32,10 @@ class CoursesEnrolled extends Model
   public function course(): BelongsTo
   {
     return $this->belongsTo(Course::class, 'course_id', 'id');
+  }
+
+  public function reviews(): HasMany
+  {
+    return $this->hasMany(ReviewCourse::class, 'course_id', 'course_id');
   }
 }

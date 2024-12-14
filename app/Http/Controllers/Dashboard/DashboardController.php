@@ -19,7 +19,7 @@ class DashboardController extends Controller
   public function __invoke(Request $request)
   {
     $coursesQuery = Auth::user()->enrolledCourses()
-      ->select(['courses.id', 'courses.user_id', 'courses.title', 'courses.status'])
+      ->select(['courses.id', 'courses.user_id', 'courses.title', 'courses.status', 'progress_lectures'])
       ->with([
         'user:id,name,photo,headline',
       ])
@@ -31,8 +31,8 @@ class DashboardController extends Controller
     // Calculate counts
     $studentStatistics = (object) [
       'coursesCount' => $courses?->total(),
-      'activeCoursesCount' =>  $courses?->filter(fn ($course) => $course->status === 'incomplete')->count(),
-      'completedCoursesCount' => $courses?->filter(fn ($course) => $course->status === 'completed')->count()
+      'activeCoursesCount' =>  $courses?->filter(fn($course) => $course->status === 'incomplete')->count(),
+      'completedCoursesCount' => $courses?->filter(fn($course) => $course->status === 'completed')->count()
     ];
 
     $coursesInstructor = $this->coursesInstructorWithCache();

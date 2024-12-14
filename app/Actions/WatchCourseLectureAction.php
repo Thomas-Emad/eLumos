@@ -29,9 +29,13 @@ class WatchCourseLectureAction
       $progress =  (Auth::user()->watchedCourseLectures()->count() / $total_lectures) * 100;
       $progress = $progress <= 100 ? $progress : 100;
 
-      Auth::user()->enrolledCourses()->where('course_id', $courseId)->update([
-        'progress_lectures' => $progress
-      ]);
+      // Update Status, Progress
+      $enrolled = Auth::user()->enrolled()->where('course_id', $courseId)->first();
+      if ($enrolled->progress_lectures == 0) {
+        $enrolled->status = 'incomplete';
+      }
+      $enrolled->progress_lectures = $progress;
+      $enrolled->save();
     }
   }
 }
