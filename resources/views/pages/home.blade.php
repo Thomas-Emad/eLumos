@@ -26,42 +26,21 @@
                 <h2 class="font-bold text-2xl">Top Categories</h2>
                 <p class="text-gray-700 dark:text-gray-200">Explore our Popular Categories</p>
             </div>
-            <a href="#"
+            <a href="{{ route('categories') }}"
                 class="block px-6 py-3 rounded-full text-gray-800 dark:text-gray-200 border-2 border-gray-800 hover:border-black hover:text-black dark:border-gray-200 dark:hover:border-amber-700 duration-300">All
                 Categories</a>
         </div>
         <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-5 mt-6">
-            <a href="#"
-                class="flex flex-col items-center p-4 px-16 border border-gray-200 rounded-lg hover:-translate-y-2 hover:shadow-md transition-all duration-300">
-                <img src="{{ asset('assets/images/icons/art.png') }}" class="h-8 w-8" alt="icon ">
-                <span class="font-bold text-xl my-2 whitespace-nowrap">Art & Design</span>
-                <span class="text-gray-700 dark:text-gray-200 text-sm">38 Courses</span>
-            </a>
-            <a href="#"
-                class="flex flex-col items-center p-4 px-16 border border-gray-200 rounded-lg hover:-translate-y-2 hover:shadow-md transition-all duration-300">
-                <img src="{{ asset('assets/images/icons/art.png') }}" class="h-8 w-8" alt="icon ">
-                <span class="font-bold text-xl my-2 whitespace-nowrap">Art & Design</span>
-                <span class="text-gray-700 dark:text-gray-200 text-sm">38 Courses</span>
-            </a>
-            <a href="#"
-                class="flex flex-col items-center p-4 px-16 border border-gray-200 rounded-lg hover:-translate-y-2 hover:shadow-md transition-all duration-300">
-                <img src="{{ asset('assets/images/icons/art.png') }}" class="h-8 w-8" alt="icon ">
-                <span class="font-bold text-xl my-2 whitespace-nowrap">Art & Design</span>
-                <span class="text-gray-700 dark:text-gray-200 text-sm">38 Courses</span>
-            </a>
-            <a href="#"
-                class="flex flex-col items-center p-4 px-16 border border-gray-200 rounded-lg hover:-translate-y-2 hover:shadow-md transition-all duration-300">
-                <img src="{{ asset('assets/images/icons/art.png') }}" class="h-8 w-8" alt="icon ">
-                <span class="font-bold text-xl my-2 whitespace-nowrap">Art & Design</span>
-                <span class="text-gray-700 dark:text-gray-200 text-sm">38 Courses</span>
-            </a>
-            <a href="#"
-                class="flex flex-col items-center p-4 px-16 border border-gray-200 rounded-lg hover:-translate-y-2 hover:shadow-md transition-all duration-300">
-                <img src="{{ asset('assets/images/icons/art.png') }}" class="h-8 w-8" alt="icon ">
-                <span class="font-bold text-xl my-2 whitespace-nowrap">Art & Design</span>
-                <span class="text-gray-700 dark:text-gray-200 text-sm">38 Courses</span>
-            </a>
-
+            @foreach ($topCatgeoiresUsed as $item)
+                <a href="{{ route('courses', ['category' => $item->category->id]) }}"
+                    class="flex flex-col items-center p-4 px-16 border border-gray-200 rounded-lg hover:-translate-y-2 hover:shadow-md transition-all duration-300">
+                    <img src="{{ asset('assets/images/icons/' . $item->category->url) }}" class="h-8 w-8"
+                        alt="icon $item->name"
+                        onerror="this.onerror=null;this.src='{{ asset('assets/images/icons/categories/where.png') }}';">
+                    <span class="font-bold text-xl my-2 whitespace-nowrap">{{ $item->category->name }}</span>
+                    <span class="text-gray-700 dark:text-gray-200 text-sm">{{ $item->count }} Courses</span>
+                </a>
+            @endforeach
         </div>
     </div>
 

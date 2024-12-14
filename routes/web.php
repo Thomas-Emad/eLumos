@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Classes\Payment\StripePaymentGateway;
-use App\Http\Controllers\{StepsForwardController, ProfileController};
+use App\Http\Controllers\{HomeController,  CategoryController, StepsForwardController, ProfileController};
 use App\Http\Controllers\Student\{CourseStudentController, BasketController, CheckoutController, WishlistController, PaymentController, PaymentWebhookController};
 use App\Http\Controllers\Dashboard\{DashboardController, ReviewCourseController, NotificationContoller};
 use App\Http\Controllers\Dashboard\Admin\{RoleController, CourseController as DashboardCoursesController};
@@ -10,14 +10,12 @@ use App\Http\Controllers\Dashboard\Instructor\{CoursesController, CourseSections
 use App\Http\Controllers\Dashboard\Instructor\Exams\{ExamController, ExamQuestionController};
 use App\Http\Controllers\Dashboard\Student\{CoursesEnrolledController, StudentExamController, WatchCourseLectureController};
 
-
-
-
 // Basic Pages
-Route::view('/', 'pages.home')->name('home');
+Route::get('/', HomeController::class)->name('home');
+Route::get('/categories', CategoryController::class)->name('categories');
+
 Route::view('privacy', 'pages.privacy')->name('privacy');
 Route::view('terms', 'pages.terms')->name('terms');
-
 
 /* *******************Student************************* */
 // Student Controllers
