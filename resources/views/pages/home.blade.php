@@ -31,7 +31,7 @@
                 Categories</a>
         </div>
         <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-5 mt-6">
-            @foreach ($topCatgeoiresUsed as $item)
+            @foreach ($content['categories'] as $item)
                 <a href="{{ route('courses', ['category' => $item->category->id]) }}"
                     class="flex flex-col items-center p-4 px-16 border border-gray-200 rounded-lg hover:-translate-y-2 hover:shadow-md transition-all duration-300">
                     <img src="{{ asset('assets/images/icons/' . $item->category->url) }}" class="h-8 w-8"
@@ -53,140 +53,52 @@
                 <h2 class="font-bold text-2xl">Featured courses</h2>
                 <p class="text-gray-700 dark:text-gray-200">Explore our Popular Courses</p>
             </div>
-            <a href="#"
+            <a href="{{ route('courses') }}"
                 class="block px-6 py-3 rounded-full text-gray-800 dark:text-gray-200 border-2 border-gray-800 hover:border-black hover:text-black dark:border-gray-200 dark:hover:border-amber-700 duration-300">All
                 Courses</a>
         </div>
         <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-5 mt-6">
-            <div
-                class="flex flex-col overflow-hidden rounded-xl border border-gray-200 transition-all duration-300 hover:shadow-md hover:-translate-y-2">
-                <a href="#" class="relative">
-                    <img src="{{ asset('assets/images/courses.png') }}" alt="photo course">
-                    <span
-                        class="absolute top-3 left-3 px-3 py-1 bg-gray-900 shadow shadow-gray-800 text-white text-sm rounded-lg">Web
-                        Development</span>
-                </a>
-                <div class="p-4 flex flex-col gap-2">
-                    <span class="text-sm"><span class="text-gray-800 dark:text-gray-200 ">by</span> <a href="#"
-                            class="font-bold">Thomas
-                            Emad</a></span>
-                    <a href="#"
-                        class="font-bold text-gray-800 dark:text-gray-200 dark:hover:text-amber-500 text-2xl -mt-2 hover:text-black transition">Learn
-                        Laravel 11.x</a>
-                    <div class="flex justify-between">
-                        <span class="flex items-center gap-2">
-                            <i class="fa-solid fa-clock text-amber-600"></i>
-                            <span class="text-sm text-gray-800 dark:text-gray-200">2 Weeks</span>
+            @foreach ($content['courses'] as $item)
+                <div
+                    class="flex flex-col overflow-hidden rounded-xl border border-gray-200 transition-all duration-300 hover:shadow-md hover:-translate-y-2">
+                    <a href="{{ route('course-details', $item->course->id) }}" class="relative">
+                        <img src="{{ json_decode($item->course?->mockup)?->url }}" alt="photo course">
+                        <span
+                            class="absolute top-3 left-3 px-3 py-1 bg-gray-900 shadow shadow-gray-800 text-white text-sm rounded-lg">
+                            {{ $item->course->category->name }}
                         </span>
-                        <span class="flex items-center gap-2">
-                            <i class="fa-solid fa-graduation-cap text-amber-600"></i>
-                            <span class="text-sm text-gray-800 dark:text-gray-200">2 Weeks</span>
+                    </a>
+                    <div class="p-4 flex flex-col gap-2">
+                        <span class="text-sm hover:text-amber-800 duration-200">
+                            <span class="text-gray-800 dark:text-gray-200 ">by</span>
+                            <a href="{{ route('dashboard.profile', $item->course->user->id) }}" class="font-bold">
+                                {{ $item->course->user->name }}
+                            </a>
                         </span>
-                    </div>
-                    <hr>
-                    <div class="flex justify-between text-gray-800 dark:text-gray-200">
-                        <span class="text-sm">50$</span>
-                        <a href="#" class="font-bold">View More</a>
-                    </div>
-                </div>
-            </div>
-            <div
-                class="flex flex-col overflow-hidden rounded-xl border border-gray-200 transition-all duration-300 hover:shadow-md hover:-translate-y-2">
-                <a href="#" class="relative">
-                    <img src="{{ asset('assets/images/courses.png') }}" alt="photo course">
-                    <span
-                        class="absolute top-3 left-3 px-3 py-1 bg-gray-900 shadow shadow-gray-800 text-white text-sm rounded-lg">Web
-                        Development</span>
-                </a>
-                <div class="p-4 flex flex-col gap-2">
-                    <span class="text-sm"><span class="text-gray-800 dark:text-gray-200 ">by</span> <a href="#"
-                            class="font-bold">Thomas
-                            Emad</a></span>
-                    <a href="#"
-                        class="font-bold text-gray-800 dark:text-gray-200 dark:hover:text-amber-500 text-2xl -mt-2 hover:text-black transition">Learn
-                        Laravel 11.x</a>
-                    <div class="flex justify-between">
-                        <span class="flex items-center gap-2">
-                            <i class="fa-solid fa-clock text-amber-600"></i>
-                            <span class="text-sm text-gray-800 dark:text-gray-200">2 Weeks</span>
-                        </span>
-                        <span class="flex items-center gap-2">
-                            <i class="fa-solid fa-graduation-cap text-amber-600"></i>
-                            <span class="text-sm text-gray-800 dark:text-gray-200">2 Weeks</span>
-                        </span>
-                    </div>
-                    <hr>
-                    <div class="flex justify-between text-gray-800 dark:text-gray-200">
-                        <span class="text-sm">50$</span>
-                        <a href="#" class="font-bold">View More</a>
+                        <a href="{{ route('course-details', $item->course->id) }}"
+                            class="font-bold text-gray-800 dark:text-gray-200 dark:hover:text-amber-500 text-2xl -mt-2 hover:text-black transition">
+                            {{ \Str::limit($item->course->title, 20) }}
+                        </a>
+                        <div class="flex justify-between">
+                            <span class="flex items-center gap-2">
+                                <i class="fa-solid fa-clock text-amber-600"></i>
+                                <span
+                                    class="text-sm text-gray-800 dark:text-gray-200">{{ explainSecondsToHumans($item->lectures_sum_video_duration) }}</span>
+                            </span>
+                            <span class="flex items-center gap-2">
+                                <i class="fa-solid fa-graduation-cap text-amber-600"></i>
+                                <span class="text-sm text-gray-800 dark:text-gray-200">{{ $item->count }} Student</span>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex justify-between text-gray-800 dark:text-gray-200">
+                            <span
+                                class="text-sm">{{ $item->course->price > 0 ? $item->course->price . '$' : 'Free' }}</span>
+                            <a href="{{ route('course-details', $item->course->id) }}" class="font-bold">View More</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div
-                class="flex flex-col overflow-hidden rounded-xl border border-gray-200 transition-all duration-300 hover:shadow-md hover:-translate-y-2">
-                <a href="#" class="relative">
-                    <img src="{{ asset('assets/images/courses.png') }}" alt="photo course">
-                    <span
-                        class="absolute top-3 left-3 px-3 py-1 bg-gray-900 shadow shadow-gray-800 text-white text-sm rounded-lg">Web
-                        Development</span>
-                </a>
-                <div class="p-4 flex flex-col gap-2">
-                    <span class="text-sm"><span class="text-gray-800 dark:text-gray-200 ">by</span> <a href="#"
-                            class="font-bold">Thomas
-                            Emad</a></span>
-                    <a href="#"
-                        class="font-bold text-gray-800 dark:text-gray-200 dark:hover:text-amber-500 text-2xl -mt-2 hover:text-black transition">Learn
-                        Laravel 11.x</a>
-                    <div class="flex justify-between">
-                        <span class="flex items-center gap-2">
-                            <i class="fa-solid fa-clock text-amber-600"></i>
-                            <span class="text-sm text-gray-800 dark:text-gray-200">2 Weeks</span>
-                        </span>
-                        <span class="flex items-center gap-2">
-                            <i class="fa-solid fa-graduation-cap text-amber-600"></i>
-                            <span class="text-sm text-gray-800 dark:text-gray-200">2 Weeks</span>
-                        </span>
-                    </div>
-                    <hr>
-                    <div class="flex justify-between text-gray-800 dark:text-gray-200">
-                        <span class="text-sm">50$</span>
-                        <a href="#" class="font-bold">View More</a>
-                    </div>
-                </div>
-            </div>
-            <div
-                class="flex flex-col overflow-hidden rounded-xl border border-gray-200 transition-all duration-300 hover:shadow-md hover:-translate-y-2">
-                <a href="#" class="relative">
-                    <img src="{{ asset('assets/images/courses.png') }}" alt="photo course">
-                    <span
-                        class="absolute top-3 left-3 px-3 py-1 bg-gray-900 shadow shadow-gray-800 text-white text-sm rounded-lg">Web
-                        Development</span>
-                </a>
-                <div class="p-4 flex flex-col gap-2">
-                    <span class="text-sm"><span class="text-gray-800 dark:text-gray-200 ">by</span> <a href="#"
-                            class="font-bold">Thomas
-                            Emad</a></span>
-                    <a href="#"
-                        class="font-bold text-gray-800 dark:text-gray-200 dark:hover:text-amber-500 text-2xl -mt-2 hover:text-black transition">Learn
-                        Laravel 11.x</a>
-                    <div class="flex justify-between">
-                        <span class="flex items-center gap-2">
-                            <i class="fa-solid fa-clock text-amber-600"></i>
-                            <span class="text-sm text-gray-800 dark:text-gray-200">2 Weeks</span>
-                        </span>
-                        <span class="flex items-center gap-2">
-                            <i class="fa-solid fa-graduation-cap text-amber-600"></i>
-                            <span class="text-sm text-gray-800 dark:text-gray-200">2 Weeks</span>
-                        </span>
-                    </div>
-                    <hr>
-                    <div class="flex justify-between text-gray-800 dark:text-gray-200">
-                        <span class="text-sm">50$</span>
-                        <a href="#" class="font-bold">View More</a>
-                    </div>
-                </div>
-            </div>
-
+            @endforeach
         </div>
     </div>
 
@@ -214,23 +126,27 @@
         <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4">
             <div
                 class="flex flex-col items-center gap-2 bg-gray-100 px-6 py-4 rounded-lg cursor-pointer  transition duration-300 hover:-translate-y-2 dark:bg-gray-700">
-                <span class="font-bold text-3xl text-amber-600 counter-target" data-target='1000'>1000</span>
+                <span class="font-bold text-3xl text-amber-600 counter-target"
+                    data-target='{{ $content['counters']->courses }}'>{{ $content['counters']->courses }}</span>
+                <span class="font-bold">Courses</span>
+            </div>
+            <div
+                class="flex flex-col items-center gap-2 bg-gray-100 px-6 py-4 rounded-lg cursor-pointer  transition duration-300 hover:-translate-y-2 dark:bg-gray-700">
+                <span class="font-bold text-3xl text-amber-600 counter-target"
+                    data-target='{{ $content['counters']->students }}'>{{ $content['counters']->students }}</span>
                 <span class="font-bold">Active Students</span>
             </div>
             <div
                 class="flex flex-col items-center gap-2 bg-gray-100 px-6 py-4 rounded-lg cursor-pointer  transition duration-300 hover:-translate-y-2 dark:bg-gray-700">
-                <span class="font-bold text-3xl text-amber-600 counter-target" data-target='1000'>1000</span>
-                <span class="font-bold">Total Courses</span>
+                <span class="font-bold text-3xl text-amber-600 counter-target"
+                    data-target='{{ $content['counters']->instructors }}'>{{ $content['counters']->instructors }}</span>
+                <span class="font-bold">Instructors</span>
             </div>
             <div
                 class="flex flex-col items-center gap-2 bg-gray-100 px-6 py-4 rounded-lg cursor-pointer  transition duration-300 hover:-translate-y-2 dark:bg-gray-700">
-                <span class="font-bold text-3xl text-amber-600 counter-target" data-target='1000'>1000</span>
-                <span class="font-bold">Instructor</span>
-            </div>
-            <div
-                class="flex flex-col items-center gap-2 bg-gray-100 px-6 py-4 rounded-lg cursor-pointer  transition duration-300 hover:-translate-y-2 dark:bg-gray-700">
-                <span class="font-bold text-3xl text-amber-600 counter-target" data-target='1000'>1000</span>
-                <span class="font-bold">Satisfaction rate</span>
+                <span class="font-bold text-3xl text-amber-600 counter-target"
+                    data-target='{{ $content['counters']->earns }}'>{{ $content['counters']->earns }}</span>
+                <span class="font-bold">Our Sales</span>
             </div>
         </div>
     </div>

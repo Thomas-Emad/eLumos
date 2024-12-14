@@ -33,6 +33,10 @@ class CoursesEnrolled extends Model
   {
     return $this->belongsTo(Course::class, 'course_id', 'id');
   }
+  public function lectures(): HasMany
+  {
+    return $this->hasMany(CourseLectures::class, 'course_id', 'id');
+  }
 
   public function reviews(): HasMany
   {

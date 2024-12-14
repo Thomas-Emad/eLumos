@@ -21,6 +21,21 @@ class CourseLectures extends Model
     'order_sort'
   ];
 
+  public function course(): BelongsTo
+  {
+    return $this->belongsTo(Course::class, 'course_id', 'id');
+  }
+  public function section(): BelongsTo
+  {
+    return $this->belongsTo(CourseSections::class, 'section_id', 'id');
+  }
+
+
+  public function watchedLecture(): HasOne
+  {
+    return $this->hasOne(WatchedCourseLecture::class, 'lecture_id', 'id');
+  }
+
   public function exam(): HasOne
   {
     return $this->hasOne(ExamCourseLecture::class, 'lecture_id', 'id');
@@ -33,19 +48,5 @@ class CourseLectures extends Model
   public function attachments(): HasMany
   {
     return $this->hasMany(CourseLectureAttachment::class, 'lecture_id', 'id');
-  }
-
-  public function course(): BelongsTo
-  {
-    return $this->belongsTo(Course::class, 'course_id', 'id');
-  }
-  public function section(): BelongsTo
-  {
-    return $this->belongsTo(CourseSections::class, 'section_id', 'id');
-  }
-
-  public function watchedLecture()
-  {
-    return $this->hasOne(WatchedCourseLecture::class, 'lecture_id', 'id');
   }
 }
