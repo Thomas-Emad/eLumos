@@ -29,7 +29,7 @@ class PaymentProcessFreeOrderJob implements ShouldQueue
   /**
    * Create a new job instance.
    */
-  public function __construct(public $userId, public $orders, public float $amountUseWallet)
+  public function __construct(public $userId, public $orders, public float $amountUseWallet = 0)
   {
     //
   }

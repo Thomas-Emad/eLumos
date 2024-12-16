@@ -30,5 +30,10 @@
                 </a>
             @endforeach
         </div>
+        @if ($topCatgeoiresUsed)
+            <p class="font-bold italic text-center text-gray-500">
+                It seems that there are no Categories here.
+            </p>
+        @endif
     </div>
 @endsection

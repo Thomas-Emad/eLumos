@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 use App\Observers\Dashboard\CoursesEnrolledCheckoutObserver;
-
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 #[ObservedBy(CoursesEnrolledCheckoutObserver::class)]
 class CoursesEnrolled extends Model
 {
-  use HasFactory;
+  use HasFactory, HasUuids;
 
   protected $fillable = [
     'user_id',

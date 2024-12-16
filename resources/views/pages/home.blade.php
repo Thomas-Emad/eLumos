@@ -42,6 +42,11 @@
                 </a>
             @endforeach
         </div>
+        @if ($content['categories'])
+            <p class="font-bold italic text-center text-gray-500">
+                It seems that there are no Categories here.
+            </p>
+        @endif
     </div>
 
     <hr class="w-10/12 m-auto my-4">
@@ -100,6 +105,11 @@
                 </div>
             @endforeach
         </div>
+        @if ($content['courses'])
+            <p class="font-bold italic text-center text-gray-500">
+                It seems that there are no courses here.
+            </p>
+        @endif
     </div>
 
     {{-- Section Four (baaner) --}}

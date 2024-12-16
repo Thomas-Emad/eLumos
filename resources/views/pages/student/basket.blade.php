@@ -31,9 +31,10 @@
                 @endphp
                 <div class="bg-white p-4 rounded-xl shadow-sm">
                     <p class="font-bold">Total</p>
-                    <p class="text-amber-800 font-bold text-2xl my-2 totalPrice">
+                    <p
+                        class="text-amber-800 font-bold text-2xl my-2 totalPrice @if ($totalPriceCourses == 0 && $totalCountCourses > 0) text-green-600 text-3xl @endif">
                         @if ($totalPriceCourses == 0 && $totalCountCourses > 0)
-                            <span class="text-green-600 text-3xl">Free</span>
+                            Free
                         @else
                             {{ $totalPriceCourses . "$" }}
                         @endif
@@ -172,7 +173,7 @@
         $(document).ready(function() {
             // Check if the total price is greater than or equal to 5
             $("form button[type=submit]").on('click', function(e) {
-                if ($(".totalPrice").html() == 'Free' || parseFloat($(".totalPrice").html()) > 5) {
+                if ($(".totalPrice").html().trim() === "Free" || parseFloat($(".totalPrice").html()) > 5) {
                     return true;
                 } else {
                     e.preventDefault();

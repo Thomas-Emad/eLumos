@@ -111,7 +111,7 @@
                     @endphp
                     @foreach ($courseStudent->course->sections as $section)
                         <div class="p-2 border-b-2 border-white">
-                            <h3 class="font-bold text-md mb-1">- {{ $section->title }}</h3>
+                            <h3 class="font-bold text-md mb-1">{{ $section->title }}</h3>
                             @foreach ($section->lectures as $lecture)
                                 <a href='@if ($currentLecture->id !== $lecture->id) {{ route('dashboard.student.show', ['course' => $courseStudent->course_id, 'lecture' => $lecture->id]) }} @else # @endif'
                                     class="mb-1 flex gap-2 justify-between items-center p-2 hover:bg-gray-800 duration-200 cursor-pointer rounded-lg @if ($currentLecture->id === $lecture->id) bg-amber-700 @elseif(!is_null($lecture->watchedLecture)) bg-green-700 @else bg-gray-950 @endif">
@@ -129,11 +129,12 @@
                             @endforeach
                         </div>
                     @endforeach
-                    <button type="button"
-                        @if ($courseStudent->progress_lectures == 100) data-modal-toggle='certificate-modal' data-modal-target="certificate-modal" @endif
-                        class="w-full mt-1 flex gap-2 justify-between items-center p-2 hover:bg-gray-800 duration-200 cursor-pointer rounded-lg @if ($courseStudent->progress_lectures == 100) bg-green-700 @else bg-gray-950 opacity-75 @endif">
-                        <h4 class="font-bold text-sm">Certificates of the course</h4>
-                    </button>
+                    <a href='@if ($courseStudent->progress_lectures == 100) {{ route('dashboard.student.show', ['course' => $courseStudent->course_id, 'lecture' => $lecture->id]) }} @else # @endif'
+                        class="mt-1 flex gap-2 justify-between items-center p-2 hover:bg-gray-800 duration-200 cursor-pointer rounded-lg @if ($courseStudent->progress_lectures == 100) bg-green-700 @else bg-gray-950 opacity-75 @endif">
+                        <div>
+                            <h4 class="font-bold text-sm">Certificates of the course</h4>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -204,62 +205,6 @@
             </div>
         </form>
     </x-modal>
-    <div id="certificate-modal" tabindex="-1" aria-hidden="true"
-        class="modal hidden  overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div class="relative p-4 w-full h-screen">
-            <!-- Modal content -->
-            <div
-                class="overflow-y-auto relative h-full bg-white rounded-lg shadow dark:bg-gray-700 flex flex-col justify-between">
-                <div>
-                    <!-- Modal header -->
-                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-50">
-                            <span>Congratulations!! to you truly from the bottom of my heart..</span>
-                        </h3>
-                        <button type="button"
-                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 dark:text-gray-50 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="certificate-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                    </div>
-                    <!-- Modal body -->
-                    <div class="p-4 md:p-5 text-gray-700">
-                        <h4 class="font-bold text-lg">This is a picture of the certificate:</h4>
-                        <div class="w-full h-60 bg-gray-200 rounded-xl"></div>
-                        <hr class="mt-2 h-.5 block bg-gray-200">
-                        <div class="my-2">
-                            <ol>
-                                <li><b>Certificate ID:</b><span>asd54axc4a2as-sad4as484-asd</span></li>
-                                <li><b>Course start date:</b><span>asd54axc4a2as-sad4as484-asd</span></li>
-                                <li><b>Course completion date:</b><span>asd54axc4a2as-sad4as484-asd</span></li>
-                                <li><b>Duration of the educational Course:</b><span>asd54axc4a2as-sad4as484-asd</span></li>
-                            </ol>
-                        </div>
-                        <hr class="mt-2 h-.5 block bg-gray-200">
-                        <h4 class="font-bold text-lg">What are you waiting for? Share your joy with others:</h4>
-                        <div class="flex items-center gap-2">
-                            <div class="w-full">
-                                <x-input-copy id="copy-link-certificate" value='yashndjasdhsk' />
-                            </div>
-                            <button type="button"
-                                class="py-2 px-4 text-white font-bold bg-amber-700 hover:bg-amber-800 duration-200 cursor-pointer rounded-xl">Download</button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Modal footer -->
-                <div class="p-2">
-                    <button data-modal-hide="certificate-modal" type="button"
-                        class="block w-full py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-whit rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
 @endsection
 
 @section('js')

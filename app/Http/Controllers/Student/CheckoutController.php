@@ -49,7 +49,7 @@ class CheckoutController extends Controller implements HasMiddleware
 
     // If the order amount after applying wallet is 0, process the free order
     if (($totalOrderAmount - $request->amountUseWallet) == 0) {
-      PaymentProcessFreeOrderJob::dispatch(auth()->user()->id, $order, $request->amountUseWallet);
+      PaymentProcessFreeOrderJob::dispatch(auth()->user()->id, $order, $request->amountUseWallet ?? 0);
 
       return redirect()->route('checkout.success');
     } else {

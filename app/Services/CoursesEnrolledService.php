@@ -39,7 +39,7 @@ class CoursesEnrolledService
         $query->where('user_id', auth()->user()->id);
       }
     ])->where("course_id", $course)->where('user_id', auth()->user()->id)
-      ->select('course_id')->firstOrFail();
+      ->select('course_id', 'progress_lectures')->firstOrFail();
 
     return $courseStudent;
   }

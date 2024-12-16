@@ -274,7 +274,7 @@
 
         function displayInstructorInfo(instructor) {
             return `
-              <div class="flex justify-between items-center gap-2 border-b border-gray-200 py-4">
+              <div class="flex justify-between items-center gap-2 border-b border-gray-200 py-4 break-words">
                   <div class="flex items-center gap-2">
                       <img src="${instructor.photo}"
                           onerror="this.onerror=null;this.src='{{ asset('assets/images/course.png') }}';"
@@ -309,7 +309,7 @@
                       <span>${instructor.totalStudents} students enrolled</span>
                   </div>
               </div>
-              <div class="text-gray-800 dark:text-gray-200 text-sm whitespace-pre-line">${instructor.description}</div>
+              <div class="text-gray-800 dark:text-gray-200 text-sm break-words">${instructor.description}</div>
           `;
         }
 
