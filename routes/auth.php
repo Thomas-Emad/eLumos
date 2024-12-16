@@ -9,9 +9,15 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\Auth\OAuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
+  ## OAuth By Extrnal Ways
+  Route::get("auth/redirect/{way}", [OAuthController::class, 'redirect'])->name('oauth.redirect');
+  Route::get("auth/callback/{way}", [OAuthController::class, 'callback'])->name('oauth.callback');
+
+
   Route::view("join", 'auth.join')->name("join");
 
   Route::middleware('check-baskets')->group(function () {

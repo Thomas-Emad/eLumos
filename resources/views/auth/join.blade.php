@@ -101,7 +101,12 @@
                         class="w-full rounded-full p-2 text-white bg-amber-500 hover:bg-amber-700 transition ">Register</button>
                 </form>
             </div>
-
+            <hr class="block w-96 mx-auto my-2">
+            <a href="{{ route('oauth.redirect', 'google') }}"
+                class="flex gap-2 items-center px-4 hover:bg-gray-100 w-full rounded-xl border border-gray-200 duration-200">
+                <img src="{{ asset('assets/images/icons/google.svg') }}" class="h-12" alt="icon google for login">
+                <span>Login With Google</span>
+            </a>
         </div>
 
     </div>

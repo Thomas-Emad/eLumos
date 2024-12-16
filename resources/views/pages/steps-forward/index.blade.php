@@ -6,10 +6,13 @@
         @if (Auth::user()->steps_forward != 'complate')
             <div
                 class="w-11/12 md:w-2/3  rounded-xl bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-200/25 p-2 mx-auto">
-                @if (Auth::user()->steps_forward == 'new')
+                @if (Auth::user()->steps_forward == 'type-user')
+                    <h2 class="font-bold text-2xl text-center text-amber-600">Choose You Account Type</h2>
+                @elseif (Auth::user()->steps_forward == 'new')
                     <h2 class="font-bold text-2xl text-center text-amber-600">Just one step, you are all set</h2>
                 @elseif (Auth::user()->steps_forward == 'info')
-                    <h2 class="font-bold text-2xl text-center text-amber-600">Instructor, please fill in the information</h2>
+                    <h2 class="font-bold text-2xl text-center text-amber-600">Instructor, please fill in the information
+                    </h2>
                 @endif
             </div>
         @endif

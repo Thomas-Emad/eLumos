@@ -23,7 +23,7 @@
     <hr class="w-10/12 m-auto my-4">
 
     <x-input-icon name='username' nameInput='username' id="username" title="- Unique Name"
-        placeholder='@You can write Unique Name' defValue='' typeInput='text' class="">
+        placeholder='You can write Unique Name' defValue='' typeInput='text' class="">
         <i class="fa-solid fa-address-card text-gray-500"></i>
     </x-input-icon>
 

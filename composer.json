@@ -13,6 +13,7 @@
     "cloudinary-labs/cloudinary-laravel": "^2.2",
     "illuminate/contracts": "^11.22",
     "laravel/framework": "^11.9",
+    "laravel/socialite": "^5.16",
     "laravel/telescope": "^5.2",
     "laravel/tinker": "^2.9",
     "niklasravnsborg/laravel-pdf": "^4.1",

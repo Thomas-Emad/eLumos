@@ -33,7 +33,9 @@ class StepsForwardController extends Controller
    */
   public function save(Request $request)
   {
-    if ($request->input('step') == 'new') {
+    if ($request->input('step') == 'type-user') {
+      return  $this::typeUser($request);
+    } elseif ($request->input('step') == 'new') {
       return  $this::newUserStep($request);
     } elseif ($request->input('step') == 'info') {
       return  $this::infoUserStep($request);
@@ -41,6 +43,35 @@ class StepsForwardController extends Controller
       return abort(404);
     }
   }
+
+  private static function typeUser(Request $request)
+  {
+    try {
+      $request->validate([
+        'type-user' => ['required', 'in:instructor,student'],
+      ]);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+      return redirect()->back()->withErrors($e->errors())
+        ->withInput()->with('notification', [
+          'type' => 'fail',
+          'message' => 'You Should Choose your Account Type (Instructor, Student)'
+        ]);
+    }
+
+    // Choose type USer
+    Auth::user()->update([
+      'steps_forward' =>  "new",
+    ]);
+
+    Auth::user()->assignRole($request->input('type-user'));
+
+
+    return redirect()->route('steps-forward',  'new')->with('notification', [
+      'type' => 'success',
+      'message' => 'You have successfully selected an account type.'
+    ]);
+  }
+
 
   /**
    * newUserStep function

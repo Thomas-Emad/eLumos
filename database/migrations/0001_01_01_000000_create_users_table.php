@@ -18,13 +18,16 @@ return new class extends Migration
       $table->string('headline', 50)->nullable();
       $table->string('email')->unique();
       $table->timestamp('email_verified_at')->nullable();
-      $table->string('password');
+      $table->string('password')->nullable();
       $table->string('photo')->nullable();
       $table->enum('status', ['active', 'inactive', 'blocked'])->default('active');
-      $table->enum('steps_forward', ['new', 'info', 'complate'])->default('new');
+      $table->enum('steps_forward', ['type-user', 'new', 'info', 'complate'])->default('new');
       $table->text('description')->nullable();
       $table->json('media')->nullable();
       $table->float('wallet', 8)->default(0);
+      $table->string('oauth_id')->nullable();
+      $table->string('oauth_provider')->nullable();
+      $table->string('oauth_token')->nullable();
       $table->rememberToken();
       $table->timestamps();
     });
