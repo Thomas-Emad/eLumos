@@ -30,7 +30,7 @@ class InstructorDashboardResource extends JsonResource
     }
 
     return  [
-      "courses" => $courses,
+      "courses" => $courses ?? null,
       "totalCourses" => $this->totalCourses,
       "totalStudents" => $this->totalStudents,
       "totalEarnings" => $this->totalEarnings
