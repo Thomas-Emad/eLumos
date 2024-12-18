@@ -152,7 +152,7 @@
                     <div data-popper-arrow></div>
                 </div>
             </div>
-            @if ($course->user_id !== auth()->user()->id)
+            @if ($course->user_id !== auth()->user()?->id)
                 <div class="mt-2">
                     @php
                         $existsInBasket = checkCourseInBasket($course->id);
@@ -165,7 +165,7 @@
                     @elseif(!$existsInBasket)
                         <button type="button" data-id="{{ $course->id }}"
                             class="block w-full change-cart rounded-full py-2 px-4 bg-green-500 text-sm text-center font-bold text-white hover:bg-green-700 transition duration-300">
-                            Enroll Now
+                            Add To Cart
                         </button>
                     @elseif ($existsInBasket)
                         <button type="button" data-id="{{ $course->id }}"

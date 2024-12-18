@@ -10,17 +10,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Traits\BasketTrait;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
-class BasketController extends Controller implements HasMiddleware
+class BasketController extends Controller
 {
   use BasketTrait;
-
-  public static function middleware(): array
-  {
-    return [
-      'permission:buy-courses',
-    ];
-  }
-
 
   /**
    * Display a listing of the resource.
@@ -66,7 +58,7 @@ class BasketController extends Controller implements HasMiddleware
       $messageButton = 'Add To Cart';
     } else {
       $baskets = $this->addCourseBasket($baskets, $request->id);
-      $messageButton = 'Remove from Cart';
+      $messageButton = 'Remove form Basket';
     }
 
     // Return the basket data

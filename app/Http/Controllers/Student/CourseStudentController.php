@@ -11,9 +11,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SearchCourseRequest;
 use App\Actions\StatisticsRateCourseAction;
 use App\Http\Resources\ReviewUserCourseResource;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use App\Http\Resources\InstructorCourseDetailsResource;
-
+use Illuminate\Support\Facades\Auth;
 
 class CourseStudentController extends Controller
 {
@@ -22,7 +21,7 @@ class CourseStudentController extends Controller
     $courses = Course::with([
       'user:id,name,photo,headline',
       'wishlist' => function ($query) {
-        $query->where('user_id', auth()->id());
+        $query->where('user_id', auth()?->id());
       }
     ])
       ->withCount('reviews as reviewsCount')
@@ -32,14 +31,14 @@ class CourseStudentController extends Controller
       ->levels($request->levels)
       ->selectBy($request->selectBy)
       ->when($request->tags, function ($query) use ($request) {
-        $query->whereHas('tags', fn ($query) => $query->whereIn('tag_id', (array) $request->tags));
+        $query->whereHas('tags', fn($query) => $query->whereIn('tag_id', (array) $request->tags));
       })
-      ->when($request->category && $request->category != 0, fn ($query) => $query->where('category_id', $request->category))
-      ->when($request->rates, fn ($query) => $query->whereIn('rate', $request->rates))
+      ->when($request->category && $request->category != 0, fn($query) => $query->where('category_id', $request->category))
+      ->when($request->rates, fn($query) => $query->whereIn('rate', $request->rates))
       ->paginate(9);
 
     $categories = Tag::get(['id', 'name']);
-    $enrolledStudent = auth()->user()->enrolledCourses()->pluck('course_id')->toArray();
+    $enrolledStudent = Auth::check() ? auth()->user()->enrolledCourses()->pluck('course_id')->toArray() : [];
     return view('pages.courses', compact('courses', 'categories', 'enrolledStudent'));
   }
 
@@ -63,11 +62,11 @@ class CourseStudentController extends Controller
     ])
       ->withCount(['lectures as totalLectures'])
       ->withSum('lectures as totalLecturesTime', 'video_duration')->findOrFail($id);
-    $reviewStudent = $course->reviews->where('user_id', auth()->user()->id)->first();
-    $hasThisCourse = !is_null($course->enrolleds->where('user_id', auth()->user()->id)->first());
+    $reviewStudent = $course->reviews->where('user_id', auth()->user()?->id)->first();
+    $hasThisCourse = !is_null($course->enrolleds->where('user_id', auth()->user()?->id)->first());
     $averageRating = $course->average_rating;
 
-    if ($course->status !== 'active' && !auth()->user()->hasAnyPermission('control-courses', 'instructors-control-courses')) {
+    if (Auth::check() && $course->status !== 'active' && !auth()->user()->hasAnyPermission('control-courses', 'instructors-control-courses')) {
       return abort(403);
     }
 

@@ -9,8 +9,10 @@ use App\Http\Controllers\Dashboard\Admin\{RoleController, CourseController as Da
 use App\Http\Controllers\Dashboard\Instructor\{CoursesController, CourseSectionsController, CourseLecturesController};
 use App\Http\Controllers\Dashboard\Instructor\Exams\{ExamController, ExamQuestionController};
 use App\Http\Controllers\Dashboard\Student\{CoursesEnrolledController, StudentExamController, WatchCourseLectureController};
+use App\Models\User;
 
 // Basic Pages
+
 Route::get('/', HomeController::class)->name('home');
 Route::get('/categories', CategoryController::class)->name('categories');
 
@@ -26,29 +28,29 @@ Route::controller(CourseStudentController::class)->group(function () {
   Route::get("course-details/reviews/api/{courseId?}",  'getReviews')->name("api.course-details.reviews");
 });
 
-// Wishlist
-Route::controller(WishlistController::class)->group(function () {
-  Route::get('dashboard/wishlist', "index")->name('dashboard.wishlist');
-  Route::post('course-details/{id?}/wishlist', "actionWishlist")->name('wishlist.controll');
-  Route::post('course/wishlist/api', "actionWishlistApi")->name('api.wishlist.controll');
-});
-
-// Baskets
-Route::controller(BasketController::class)->group(function () {
-  Route::get('/cart',  'index')->name('baskets');
-  Route::get('/cart-get-data', 'getData')->name('basket.getData');
-  Route::post('/cart-set-data', 'setData')->name('basket.setData');
-  Route::delete('/cart/destory/{id}', 'destory')->name('basket.destory');
-});
-
-// Notifications
-Route::controller(NotificationContoller::class)->group(function () {
-  Route::get('/notifications', 'index')->name('notifications.index');
-  Route::get('/get-notifications', 'getNotifications')->name('notifications.api');
-});
-
-// Payment, Checkout
 Route::middleware(['middleware' => 'step-forward'])->group(function () {
+  // Wishlist
+  Route::controller(WishlistController::class)->group(function () {
+    Route::get('dashboard/wishlist', "index")->name('dashboard.wishlist');
+    Route::post('course-details/{id?}/wishlist', "actionWishlist")->name('wishlist.controll');
+    Route::post('course/wishlist/api', "actionWishlistApi")->name('api.wishlist.controll');
+  });
+
+  // Baskets
+  Route::controller(BasketController::class)->group(function () {
+    Route::get('/cart',  'index')->name('baskets');
+    Route::get('/cart-get-data', 'getData')->name('basket.getData');
+    Route::post('/cart-set-data', 'setData')->name('basket.setData');
+    Route::delete('/cart/destory/{id}', 'destory')->name('basket.destory');
+  });
+
+  // Notifications
+  Route::controller(NotificationContoller::class)->group(function () {
+    Route::get('/notifications', 'index')->name('notifications.index');
+    Route::get('/get-notifications', 'getNotifications')->name('notifications.api');
+  });
+
+  // Payment, Checkout
   Route::post('/checkout/payment', [CheckoutController::class, 'viewPayment'])->name('checkout.viewPayment');
   Route::post('/checkout/processPayment/intent', [StripePaymentGateway::class, 'paymentIntent'])->name('checkout.processPayment.stripe.intent');
   Route::get('/checkout/payment/callback/{gateway?}', [PaymentController::class, 'callback'])->name('checkout.callback');
@@ -60,12 +62,16 @@ Route::middleware(['middleware' => 'step-forward'])->group(function () {
 Route::post('/payment/webhook/stripe', [PaymentWebhookController::class, 'handleStripeWebhook'])->name('checkout.stripe.webhook');
 Route::post('/payment/webhook/paypal', [PaymentWebhookController::class, 'handlePaypalWebhook'])->name('checkout.paypal.webhook');
 
+/* Sharing link Certificate */
+Route::get('/certificate/{id}', [CoursesEnrolledController::class, 'certificate'])->name('student.certificate');
+Route::get('courses-list/certificate', [CoursesEnrolledController::class, 'getCertificateModal'])->name('student.certificate.modal');
+
+
 Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
   // Previous Orders, Payments
   Route::get('/payments', [PaymentController::class, 'index'])->name('orders.index');
   Route::get('/api/payments/show/{id?}', [PaymentController::class, 'show'])->name('orders.show.api');
   Route::get('/pdf/payments/show/{id?}', [PaymentController::class, 'donwloadInovicePDF'])->name('orders.show.pdf');
-
 
   // Course Pages for Student Courses
   Route::controller(CoursesEnrolledController::class)->group(function () {

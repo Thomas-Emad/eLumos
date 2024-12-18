@@ -89,7 +89,7 @@
                                 {{ $course->price ? $course->price . '$' : 'Free' }}
                             </div>
                         </div>
-                        @if ($course->user_id !== auth()->user()->id)
+                        @if (Auth::check() && $course->user_id !== auth()->user()->id)
                             @if (in_array($course->id, $enrolledStudent))
                                 <a href="{{ route('dashboard.courses-list.show', $course->id) }}" target="_blank"
                                     class="block w-full font-bold text-sm text-center py-1 px-2  rounded-full border text-white bg-green-600 hover:bg-green-800 duration-300">

@@ -7,21 +7,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-
-use App\Observers\Dashboard\CoursesEnrolledCheckoutObserver;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use App\Observers\Dashboard\CoursesEnrolledCheckoutObserver;
 
 #[ObservedBy(CoursesEnrolledCheckoutObserver::class)]
 class CoursesEnrolled extends Model
 {
-  use HasFactory, HasUuids;
+  use HasFactory;
 
   protected $fillable = [
     'user_id',
     'course_id',
     'progress_lectures',
+    'certificate_id',
     'status',
-    'buyer_at'
+    'buyer_at',
+    'completed_at'
   ];
 
   public function user(): BelongsTo

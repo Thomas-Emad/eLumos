@@ -43,6 +43,7 @@ class WishlistController extends Controller
     ]);
   }
 
+
   public function actionWishlistApi(Request $request)
   {
     if (!request()->ajax() || !isset($request->course_id)) {

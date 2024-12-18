@@ -205,8 +205,8 @@
         </form>
     </x-modal>
     <div id="certificate-modal" tabindex="-1" aria-hidden="true"
-        class="modal hidden  overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div class="relative p-4 w-full h-screen">
+        class="modal hidden overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full h-screen ">
             <!-- Modal content -->
             <div
                 class="overflow-y-auto relative h-full bg-white rounded-lg shadow dark:bg-gray-700 flex flex-col justify-between">
@@ -228,28 +228,9 @@
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <div class="p-4 md:p-5 text-gray-700">
-                        <h4 class="font-bold text-lg">This is a picture of the certificate:</h4>
-                        <div class="w-full h-60 bg-gray-200 rounded-xl"></div>
-                        <hr class="mt-2 h-.5 block bg-gray-200">
-                        <div class="my-2">
-                            <ol>
-                                <li><b>Certificate ID:</b><span>asd54axc4a2as-sad4as484-asd</span></li>
-                                <li><b>Course start date:</b><span>asd54axc4a2as-sad4as484-asd</span></li>
-                                <li><b>Course completion date:</b><span>asd54axc4a2as-sad4as484-asd</span></li>
-                                <li><b>Duration of the educational Course:</b><span>asd54axc4a2as-sad4as484-asd</span></li>
-                            </ol>
-                        </div>
-                        <hr class="mt-2 h-.5 block bg-gray-200">
-                        <h4 class="font-bold text-lg">What are you waiting for? Share your joy with others:</h4>
-                        <div class="flex items-center gap-2">
-                            <div class="w-full">
-                                <x-input-copy id="copy-link-certificate" value='yashndjasdhsk' />
-                            </div>
-                            <button type="button"
-                                class="py-2 px-4 text-white font-bold bg-amber-700 hover:bg-amber-800 duration-200 cursor-pointer rounded-xl">Download</button>
-                        </div>
-                    </div>
+                    <x-loader classCall="loader-modal" />
+
+                    <div class="body"></div>
                 </div>
                 <!-- Modal footer -->
                 <div class="p-2">
@@ -263,6 +244,7 @@
 @endsection
 
 @section('js')
+
     <script>
         function markupLecture(timeout) {
             setTimeout(() => {
@@ -332,6 +314,21 @@
 
             }
         });
+
+        // Display modal Show Certificate
+        $("[data-modal-toggle='certificate-modal']").on('click', () => {
+            $('.loader-modal').removeClass('hidden');
+            $.ajax({
+                method: 'GET',
+                url: "{{ route('student.certificate.modal') }}",
+                data: {
+                    certificate_id: '{{ $courseStudent->certificate_id }}',
+                },
+            }).done((response) => {
+                $("#certificate-modal .body").html(response.content)
+                $('.loader-modal').addClass('hidden');
+            })
+        })
     </script>
 
     @if (is_null($currentLecture->exam))

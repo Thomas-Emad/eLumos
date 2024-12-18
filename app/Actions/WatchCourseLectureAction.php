@@ -35,7 +35,18 @@ class WatchCourseLectureAction
         $enrolled->status = 'incomplete';
       }
       $enrolled->progress_lectures = $progress;
+      $this->markupAsCompleted($enrolled, $progress);
       $enrolled->save();
     }
+  }
+
+  private function markupAsCompleted($enrolled, int $progress)
+  {
+    if ($progress === 100) {
+      $enrolled->certificate_id = $enrolled->user_id . '-' . $enrolled->id . '-' . time();
+      $enrolled->completed_at = now();
+      return true;
+    }
+    return false;
   }
 }

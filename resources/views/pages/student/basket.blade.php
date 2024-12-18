@@ -50,7 +50,7 @@
                             @endif
                         </button>
                         @php
-                            $wallet = Auth::user()->wallet;
+                            $wallet = Auth::user()?->wallet;
                         @endphp
                         @if ($totalPriceCourses != 0)
                             <div id="toggle-chechout" data-accordion="collapse" class="mt-4"

@@ -9,8 +9,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use App\Services\CoursesEnrolledService;
 use App\Http\Resources\CoursesEnrolledResource;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
-
+use App\Actions\QRCodeGeneratorAction;
+use Illuminate\Contracts\View\View;
+use Illuminate\Routing\Controllers\Middleware;
 
 class CoursesEnrolledController extends Controller implements HasMiddleware
 {
@@ -24,12 +28,19 @@ class CoursesEnrolledController extends Controller implements HasMiddleware
   public static function middleware(): array
   {
     return [
-      'permission:buy-courses',
+      new Middleware('permission:buy-courses', except: ['certificate']),
     ];
   }
 
-
-  public function index()
+  /**
+   * Display the student's courses list with status counts.
+   *
+   * This function counts the occurrences of each course status for the authenticated user 
+   * and returns a view with the count data.
+   *
+   * @return \Illuminate\View\View The courses list view with status counts.
+   */
+  public function index(): View
   {
     $courses = CoursesEnrolled::where('user_id', auth()->id())->select('status')->pluck('status');
 
@@ -48,7 +59,16 @@ class CoursesEnrolledController extends Controller implements HasMiddleware
     return view('pages.dashboard.student.courses-list', ['countCourses' => $countCourses]);
   }
 
-  public function getCourses()
+  /**
+   * Retrieve and cache the list of courses for the authenticated user.
+   *
+   * This function checks if the request is AJAX, retrieves courses based on the selected type, 
+   * caches the results for 1 hour, and returns the course data along with pagination information.
+   * In case of an error, it returns a JSON response with the error message.
+   *
+   * @return \Illuminate\Http\JsonResponse JSON response with course data and pagination info.
+   */
+  public function getCourses(): \Illuminate\Http\JsonResponse|View
   {
     if (!request()->ajax()) {
       return abort(404);
@@ -109,5 +129,73 @@ class CoursesEnrolledController extends Controller implements HasMiddleware
         'reviewStudent'
       )
     );
+  }
+  /**
+   * Display the certificate page with QR code.
+   *
+   * This function retrieves the certificate details by its ID and generates a QR code 
+   * for the certificate URL. It then returns a view displaying the certificate and QR code.
+   *
+   * @param int $certificateId The ID of the certificate.
+   * @return \Illuminate\View\View The view displaying the certificate and QR code.
+   */
+  public function certificate($certificateId): View
+  {
+    $certificate = $this->certificateDetails($certificateId);
+    $qrCode = (new QRCodeGeneratorAction)->generate(50, $certificate->url_share);
+    return view('pages.dashboard.student.certificate', compact('certificate', 'qrCode'));
+  }
+
+  /**
+   * Get the certificate modal content.
+   *
+   * This function handles the AJAX request to fetch the certificate modal content. 
+   * It retrieves the certificate details based on the provided certificate ID 
+   * and generates a QR code for the certificate URL. The content of the modal 
+   * is then returned as a JSON response.
+   *
+   * @param \Illuminate\Http\Request $request The HTTP request instance.
+   * @return \Illuminate\Http\JsonResponse JSON response containing the modal content.
+   */
+  public function getCertificateModal(Request $request): \Illuminate\Http\JsonResponse|View
+  {
+    if (!request()->ajax()) {
+      return abort(404);
+    }
+    $certificate = $this->certificateDetails($request->certificate_id);
+    $qrCode = (new QRCodeGeneratorAction)->generate(50,  $certificate->url_share);
+
+    $content = view('pages.dashboard.student.partials.certificate-modal', compact('certificate', 'qrCode'))->render();
+    return response()->json([
+      'content' => $content
+    ]);
+  }
+
+  /**
+   * Retrieve the details of a certificate.
+   *
+   * This function fetches the details of a certificate, including the associated user's 
+   * information, course title, and enrollment dates. It returns the details as an object.
+   *
+   * @param int $certificateID The ID of the certificate.
+   * @return object The details of the certificate, including user name, course title, 
+   *                enrollment dates, and certificate URL.
+   */
+  private function certificateDetails($certificateID): object
+  {
+    $enrolled = CoursesEnrolled::with([
+      'user:id,name',
+      'course:id,title'
+    ])->where('certificate_id', $certificateID)->firstOrFail();
+
+    return (object) [
+      'id' => $certificateID,
+      'start_date' => Carbon::parse($enrolled->created_at)->format("Y/m/d"),
+      'completed_at' => Carbon::parse($enrolled->completed_at)->format("Y/m/d"),
+      'completed_year' => Carbon::parse($enrolled->completed_at)->format("Y"),
+      'url_share' => route('student.certificate', $certificateID),
+      'user_name' => $enrolled->user->name,
+      'course_title' => $enrolled->course->title,
+    ];
   }
 }

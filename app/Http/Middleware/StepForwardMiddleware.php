@@ -16,14 +16,14 @@ class StepForwardMiddleware
    */
   public function handle(Request $request, Closure $next): Response
   {
-    $similarsRoles = array_intersect(auth()->user()->roles->pluck('name')->toArray(), ['owner', 'admin']);
-    if (
-      Auth::user()->steps_forward !== 'complate' &&
-      sizeof($similarsRoles) === 0
-    ) {
-      return redirect()->route('steps-forward', Auth::user()->steps_forward);
-    } else {
-      return $next($request);
+    if (Auth::check()) {
+      $similarsRoles = array_intersect(auth()->user()->roles->pluck('name')->toArray(), ['owner', 'admin']);
+      if (
+        Auth::user()->steps_forward !== 'complate' && sizeof($similarsRoles) === 0
+      ) {
+        return redirect()->route('steps-forward', Auth::user()->steps_forward);
+      }
     }
+    return $next($request);
   }
 }
