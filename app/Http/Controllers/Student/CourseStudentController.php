@@ -66,8 +66,10 @@ class CourseStudentController extends Controller
     $hasThisCourse = !is_null($course->enrolleds->where('user_id', auth()->user()?->id)->first());
     $averageRating = $course->average_rating;
 
-    if (Auth::check() && $course->status !== 'active' && !auth()->user()->hasAnyPermission('control-courses', 'instructors-control-courses')) {
-      return abort(403);
+    if ($course->status !== 'active') {
+      if (!Auth::check() || Auth::check() &&  !auth()->user()->hasAnyPermission('admin-control-courses', 'instructors-control-courses')) {
+        return abort(404);
+      }
     }
 
     return view('pages.course-details', compact('course', 'reviewStudent', 'hasThisCourse', 'averageRating'));

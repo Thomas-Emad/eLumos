@@ -8,7 +8,6 @@ use Illuminate\Validation\Rule;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Models\CourseSections;
 
-
 class CourseLectureRequest extends FormRequest
 {
   protected $section;

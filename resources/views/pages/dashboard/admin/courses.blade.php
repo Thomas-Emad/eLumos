@@ -3,8 +3,6 @@
 
 @section('content-dashboard')
     <div class="container max-auto min-h-auto-xl">
-
-
         <form action="{{ route('dashboard.admin.courses') }}" method="get"
             class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
             <div>
@@ -164,8 +162,8 @@
                                 {{ $course->price }}
                             </td>
                             <td class="px-6 py-4">
-                                <a data-id='{{ $course->id }}' data-modal-target="settings-modal"
-                                    data-modal-toggle="settings-modal"
+                                <a data-id='{{ $course->id }}' data-course-id="{{ $course->id }}"
+                                    data-modal-target="settings-modal" data-modal-toggle="settings-modal"
                                     class="settings text-white font-bold text-sm py-1 px-2 rounded-lg bg-blue-900 hover:bg-slate-800 duration-300 cursor-pointer">
                                     settings
                                 </a>
@@ -182,55 +180,60 @@
         </div>
     </div>
 
-    <x-modal id="settings-modal">
-
-        <!-- Modal header -->
-        <div class="flex  items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-50">
-                <span>What you see here should change?!</span>
-            </h3>
-            <button type="button"
-                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 dark:text-gray-50 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                data-modal-hide="settings-modal">
-                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 14 14">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                </svg>
-                <span class="sr-only">Close modal</span>
-            </button>
-        </div>
-        <!-- Modal body -->
-        <div class="p-4 md:p-5 space-y-4">
-            <form action="{{ route('dashboard.admin.courses.review-course') }}" method="POST"
-                class="flex gap-2 justify-between items-center">
-                <h3>After You Preview This Course, It should?!</h3>
-                @csrf
-                <input type="hidden" name="id">
-                <div>
-                    {{-- If we orready accept or redject it will be hidden  --}}
-                    <button data-modal-hide="settings-modal" type="submit" name='status' value="accept"
-                        class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                        Accept
+    <!-- Modal HTML -->
+    <div id="settings-modal" tabindex="-1" aria-hidden="true"
+        class="modal hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-4xl max-h-full">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 ">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                        <span>Add New Role</span>
+                    </h3>
+                    <button type="button"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 dark:text-gray-50 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="settings-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span class="sr-only">Close modal</span>
                     </button>
-                    <button data-modal-hide="settings-modal" type="submit" name='status' value="redject"
-                        class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
-                        Redjact
-                    </button>
-                    <hr>
                 </div>
-            </form>
-        </div>
+                <!-- Modal content -->
+                <div class="modal-content p-4"></div>
+                <!-- Modal footer -->
+                <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                    <button data-modal-hide="settings-modal" type="button"
+                        class="w-full py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-amber-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Close</button>
+                </div>
+            </div>
 
-    </x-modal>
+        </div>
+    </div>
 @endsection
 
 @section('js')
     <script>
-        $(document).ready(() => {
-            $('.settings').on('click', function() {
-                $('#settings-modal input[name=id]').val($(this).attr('data-id'));
+        $(document).ready(function() {
+            $('[data-modal-target="settings-modal"]').on('click', function() {
+                $("#loader").removeClass('hidden');
+                var courseId = $(this).data('course-id');
+
+                $.ajax({
+                    url: "{{ route('dashboard.admin.show.course') }}",
+                    data: {
+                        id: courseId
+                    },
+                    method: 'GET',
+                    success: function(response) {
+                        $('#settings-modal .modal-content').html(response.content);
+                        $("#loader").addClass('hidden');
+
+                    }
+                });
             });
-        })
+        });
     </script>
 @endsection

@@ -255,8 +255,6 @@
                 <div class="p-4 md:p-5 space-y-4">
                     <h3 class="mb-2 text-xl font-semibold text-gray-900 dark:text-white">Users:</h3>
                     <div class="w-full users">
-
-
                         <div class="relative overflow-x-auto sm:rounded-lg">
                             <div id="users-form"
                                 class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 p-4 rounded-xl bg-gray-100 dark:bg-gray-800">

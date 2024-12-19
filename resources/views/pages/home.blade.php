@@ -30,19 +30,19 @@
                 class="block px-6 py-3 rounded-full text-gray-800 dark:text-gray-200 border-2 border-gray-800 hover:border-black hover:text-black dark:border-gray-200 dark:hover:border-amber-700 duration-300">All
                 Categories</a>
         </div>
-        <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-5 mt-6">
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-5 mt-6">
             @foreach ($content['categories'] as $item)
                 <a href="{{ route('courses', ['category' => $item->category->id]) }}"
                     class="flex flex-col items-center p-4 px-16 border border-gray-200 rounded-lg hover:-translate-y-2 hover:shadow-md transition-all duration-300">
                     <img src="{{ asset('assets/images/icons/' . $item->category->url) }}" class="h-8 w-8"
                         alt="icon $item->name"
                         onerror="this.onerror=null;this.src='{{ asset('assets/images/icons/categories/where.png') }}';">
-                    <span class="font-bold text-xl my-2 whitespace-nowrap">{{ $item->category->name }}</span>
+                    <span class="font-bold text-xl my-2 whitespace-wrap text-center">{{ $item->category->name }}</span>
                     <span class="text-gray-700 dark:text-gray-200 text-sm">{{ $item->count }} Courses</span>
                 </a>
             @endforeach
         </div>
-        @if ($content['categories'])
+        @if (sizeof($content['categories']) == 0)
             <p class="font-bold italic text-center text-gray-500">
                 It seems that there are no Categories here.
             </p>
@@ -105,7 +105,7 @@
                 </div>
             @endforeach
         </div>
-        @if ($content['courses'])
+        @if (sizeof($content['courses']) == 0)
             <p class="font-bold italic text-center text-gray-500">
                 It seems that there are no courses here.
             </p>

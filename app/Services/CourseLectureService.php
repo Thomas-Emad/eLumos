@@ -10,14 +10,6 @@ class CourseLectureService
   use UploadAttachmentTrait;
 
   /**
-   * Create a new class instance.
-   */
-  public function __construct()
-  {
-    //
-  }
-
-  /**
    * Sync exam for a lecture.
    *
    * @param  \App\Models\ExamCourseLecture|null  $oldExam

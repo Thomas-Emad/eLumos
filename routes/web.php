@@ -4,8 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Classes\Payment\StripePaymentGateway;
 use App\Http\Controllers\{HomeController,  CategoryController, StepsForwardController, ProfileController};
 use App\Http\Controllers\Student\{CourseStudentController, BasketController, CheckoutController, WishlistController, PaymentController, PaymentWebhookController};
-use App\Http\Controllers\Dashboard\{DashboardController, ReviewCourseController, NotificationContoller};
-use App\Http\Controllers\Dashboard\Admin\{RoleController, CourseController as DashboardCoursesController};
+use App\Http\Controllers\Dashboard\{CourseReviewLogController, DashboardController, ReviewCourseController, NotificationContoller};
+use App\Http\Controllers\Dashboard\Admin\{RoleController, CourseController as CourseAdminController};
 use App\Http\Controllers\Dashboard\Instructor\{CoursesController, CourseSectionsController, CourseLecturesController};
 use App\Http\Controllers\Dashboard\Instructor\Exams\{ExamController, ExamQuestionController};
 use App\Http\Controllers\Dashboard\Student\{CoursesEnrolledController, StudentExamController, WatchCourseLectureController};
@@ -142,9 +142,16 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
   });
 
   // Course Pages for Admin
-  Route::controller(DashboardCoursesController::class)->group(function () {
+  Route::controller(CourseAdminController::class)->group(function () {
     Route::get('dashboard/admin/courses', 'index')->name('dashboard.admin.courses');
+    Route::get('dashboard/admin/show/course', 'show')->name('dashboard.admin.show.course');
+
     Route::post('dashboard/admin/courses', 'reviewStatusCourse')->name('dashboard.admin.courses.review-course');
+  });
+
+  Route::controller(CourseReviewLogController::class)->group(function () {
+    Route::get('dashboard/review/log/show', 'show')->name('dashboard.review.log.show');
+    Route::post('dashboard/review/log/update', 'store')->name('dashboard.review.log.update');
   });
 });
 

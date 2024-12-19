@@ -29,7 +29,7 @@ return new class extends Migration
       $table->json("steps_status")->nullable();
       $table->float('average_rating', 2)->default(0);
       $table->integer('rate')->default(0);
-      $table->enum('status', ['draft', 'pending', 'redject', 'active', 'inactive', 'removed', 'blocked'])->default('draft');
+      $table->enum('status', ['draft', 'pending', 'rejected', 'active', 'inactive', 'removed', 'blocked'])->default('draft');
       $table->enum('level', ['beginner', 'intermediate', 'advanced'])->default('beginner');
       $table->timestamp("preview_at")->nullable();
       $table->softDeletes();
