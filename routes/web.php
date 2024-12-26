@@ -150,6 +150,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
   });
 
   Route::controller(CourseReviewLogController::class)->group(function () {
+    Route::get('dashboard/review/log/index', 'index')->name('dashboard.review.log.index');
     Route::get('dashboard/review/log/show', 'show')->name('dashboard.review.log.show');
     Route::post('dashboard/review/log/update', 'store')->name('dashboard.review.log.update');
   });

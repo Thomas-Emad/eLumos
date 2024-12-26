@@ -14,11 +14,12 @@ use App\Http\Resources\CoursesDashboardResource;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use App\Services\StatisticCourseService;
 use Illuminate\Support\Facades\DB;
+use App\Http\Traits\UploadAttachmentTrait;
 
 
 class CoursesController extends Controller implements HasMiddleware
 {
-  use CoursesUpdateTrait;
+  use CoursesUpdateTrait, UploadAttachmentTrait;
 
   protected array $getStatus = [
     'published' => ['active'],
@@ -152,7 +153,20 @@ class CoursesController extends Controller implements HasMiddleware
     return $id;
   }
 
-  public function statistics(StatisticCourseService $statistic, string $id)
+  /**
+   * Display statistics for a specific course.
+   *
+   * This function retrieves detailed statistical data for a given course, 
+   * including logs, order items (aggregated by month and grouped by course), 
+   * reviews, and their associated users. It calculates average watch time 
+   * and profits using the provided service.
+   *
+   * @param StatisticCourseService $statistic The service handling statistical calculations.
+   * @param string $id The ID of the course whose statistics are being retrieved.
+   * 
+   * @return \Illuminate\View\View The statistics view with the relevant data.
+   */
+  public function statistics(StatisticCourseService $statistic, string $id): View
   {
     $course = Course::with([
       'logs',
@@ -168,12 +182,31 @@ class CoursesController extends Controller implements HasMiddleware
       ->findOrFail($id);
     $avargetWatchs = $statistic->avargetWatchs($course->enrolleds());
     $profits =  $statistic->profits($course->orderItems, '');
-    // return $profitWithRates;
+
     return view('pages.dashboard.instructor.controll-course.statistics', compact(
       'course',
       'avargetWatchs',
       'profits'
     ));
+  }
+
+  public function updatePriceCourse(Request $request)
+  {
+    $request->validate([
+      'course_id' => 'required|exists:course,id',
+      'price' => 'required|decimal:1,2|min:0.0|max:10000.0',
+    ]);
+
+    $course = Course::where('id', $request->course_id)->first();
+    $course->update([
+      'price' => $request->price,
+    ]);
+
+    return redirect()->route('course-details', $request->course_id)
+      ->with('notification', [
+        'type' => 'success',
+        'message' => "Updated Price has been done."
+      ]);
   }
 
   public function support()
@@ -224,14 +257,52 @@ class CoursesController extends Controller implements HasMiddleware
       return abort(403);
     }
 
-    $course->update([
-      'status' => 'removed'
-    ]);
+    // Check If there is anyone have this course?!
+    if ($course->enrolleds_count == 0) {
+      $this->deleteContentCloudCourse($course->id);
+      $course->delete();
+    } else {
+      $course->update([
+        'status' => 'removed'
+      ]);
+    }
 
     return redirect()->route('dashboard.instructor.courses.index')
       ->with('notification', [
         'type' => 'success',
         'message' => "Course deleted successfully."
       ]);
+  }
+
+  /**
+   * Delete all associated media content of a course from cloud storage.
+   *
+   * This function handles the deletion of:
+   * - Lecture videos associated with the course.
+   * - The main course video, if present.
+   * - The course's mockup image, if present.
+   *
+   * @param int $id The ID of the course whose media content is to be deleted.
+   * 
+   * @return void
+   */
+  private function deleteContentCloudCourse($id)
+  {
+    $course = Course::with([
+      'lectures'
+    ])->findOrFail($id);
+
+    foreach ($course->lectures as $lecture) {
+      if (!is_null($lecture->video)) {
+        static::destoryAttachment($lecture->video, 'video');
+      }
+    }
+
+    if (!is_null($course->video)) {
+      static::destoryAttachment($course->video, 'video');
+    }
+    if (!is_null($course->mockup)) {
+      static::destoryAttachment($course->mockup, 'image');
+    }
   }
 }

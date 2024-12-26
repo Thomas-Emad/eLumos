@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\Request;
 
 class CourseReviewLogRequest extends FormRequest
 {
@@ -13,7 +14,28 @@ class CourseReviewLogRequest extends FormRequest
    */
   public function authorize(): bool
   {
-    return auth()->check() && auth()->user()->can('admin-control-courses');
+    $user = auth()->user();
+
+    // Check if the user is authenticated
+    if (!$user) {
+      return false;
+    }
+
+    // Check if the user has admin privileges
+    if ($user->can('admin-control-courses')) {
+      return true;
+    }
+
+    // Check if the user has instructor privileges and owns the course
+    if (
+      $user->can('instructors-control-courses') &&
+      $user->courses()->whereKey($this->course_id)->exists() &&
+      in_array($this->status, ['active', 'inactive', 'removed'])
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   /**

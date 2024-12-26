@@ -78,7 +78,7 @@ class CourseInstructorNotification extends Notification implements ShouldQueue
       'blocked' => 'This course has been banned from the platform for some reason. If you see this as an error, you can contact technical support to find out more.',
     };
   }
-  
+
   /**
    * messageMailByStatus function
    * 
@@ -166,5 +166,4 @@ class CourseInstructorNotification extends Notification implements ShouldQueue
       'last_line' => "We apologize for the inconvenience and are here to help."
     ];
   }
-
 }

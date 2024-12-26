@@ -7,9 +7,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CourseReviewLogRequest;
 use App\Models\{Course, CourseReviewLog};
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class CourseReviewLogController extends Controller
 {
+
+  public function index()
+  {
+    $logs = CourseReviewLog::with("course:id,title,mockup")
+      ->whereIn('course_id', $this->getCoursesIdUser())->latest()->paginate(20);
+
+    return  view('pages.dashboard.instructor.logs', compact('logs'));
+  }
+
+  private function getCoursesIdUser(): array
+  {
+    return Auth::user()->courses()->pluck('id')->toArray();
+  }
   /**
    * Display the course review logs for a given course.
    *
