@@ -121,6 +121,8 @@
                     response.courses.map((course) => {
                         let editRoute = `{{ route('dashboard.instructor.courses.edit', ':id') }}`
                             .replace(':id', course.data.id);
+                        let statisticsRoute = `{{ route('dashboard.instructor.courses.tracking', ':id') }}`
+                            .replace(':id', course.data.id);
 
                         $(`.courses`).append(`
                             <div class="p-2 bg-white dark:bg-gray-600  border border-gray-200 rounded-xl">
@@ -146,12 +148,18 @@
                                 </a>
                                 <hr>
                                 <div class="text-sm p-2 flex justify-between gap-2  text-gray-800  dark:text-gray-200">
-                                    <a href='${editRoute}' class="flex gap-2 hover:text-amber-600 duration-300">
-                                        <i class="fa-solid fa-pen-to-square"></i><span>Edit</span>
-                                    </a>
-                                    <a data-id="${course.data.id}" data-title="${course.data.title}" data-modal-target="delete-course-modal" data-modal-toggle="delete-course-modal" class="deleteCourse flex gap-2 hover:text-amber-600 duration-300 cursor-pointer">
-                                        <i class="fa-solid fa-trash-can"></i><span>Delete</span>
-                                    </a>
+                                    ${course.data.status == 'active' ? `
+                                        <a href='${statisticsRoute}' class="flex items-center gap-2 hover:text-amber-600 duration-300">
+                                            <i class="fa-solid fa-chart-line"></i><span>Statistics</span>
+                                        </a>
+                                    ` : `
+                                      <a href='${editRoute}' class="flex  items-center gap-2 hover:text-amber-600 duration-300">
+                                          <i class="fa-solid fa-pen-to-square"></i><span>Edit</span>
+                                      </a>
+                                      <a data-id="${course.data.id}" data-title="${course.data.title}" data-modal-target="delete-course-modal" data-modal-toggle="delete-course-modal" class="deleteCourse flex  items-center gap-2 hover:text-amber-600 duration-300 cursor-pointer">
+                                          <i class="fa-solid fa-trash-can"></i><span>Delete</span>
+                                      </a>
+                                    `}
                                 </div>
                             </div>
                         `)

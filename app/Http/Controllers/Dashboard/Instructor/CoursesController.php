@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Cache;
 use App\Http\Traits\CoursesUpdateTrait;
 use App\Http\Resources\CoursesDashboardResource;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use App\Services\StatisticCourseService;
+use Illuminate\Support\Facades\DB;
+
 
 class CoursesController extends Controller implements HasMiddleware
 {
@@ -149,9 +152,28 @@ class CoursesController extends Controller implements HasMiddleware
     return $id;
   }
 
-  public function tracking(string $id)
+  public function statistics(StatisticCourseService $statistic, string $id)
   {
-    return $id;
+    $course = Course::with([
+      'logs',
+      'orderItems' => function ($query) {
+        return $query->select(DB::raw("sum(user_profit) as profit, DATE_FORMAT(created_at, '%Y/%m') as date"), 'course_id')
+          ->groupBy('course_id', DB::raw("DATE_FORMAT(created_at, '%Y/%m')"))
+          ->orderBy('date');
+      },
+      'reviews',
+      'reviews.user:id,name'
+    ])
+      ->withCount('reviews')
+      ->findOrFail($id);
+    $avargetWatchs = $statistic->avargetWatchs($course->enrolleds());
+    $profits =  $statistic->profits($course->orderItems, '');
+    // return $profitWithRates;
+    return view('pages.dashboard.instructor.controll-course.statistics', compact(
+      'course',
+      'avargetWatchs',
+      'profits'
+    ));
   }
 
   public function support()

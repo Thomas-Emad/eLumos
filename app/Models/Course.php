@@ -110,6 +110,11 @@ class Course extends Model
     return $this->hasMany(OrderItem::class);
   }
 
+  public function logs(): HasMany
+  {
+    return $this->hasMany(CourseReviewLog::class, 'course_id', 'id');
+  }
+
   /*  Scopes  */
   public function scopeSearch(Builder $query, $search)
   {

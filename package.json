@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "@preline/stepper": "^2.5.1",
+        "apexcharts": "^4.3.0",
         "flowbite": "^2.4.1",
         "preline": "^2.3.0"
     }

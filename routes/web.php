@@ -113,7 +113,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     // instructor Controllers
     Route::resource('/courses', CoursesController::class)->names('instructor.courses')->except('show');
     Route::get('/courses/status/{id}', [CoursesController::class, 'status'])->name('instructor.courses.status');
-    Route::get('/courses/tracking/{id}', [CoursesController::class, 'tracking'])->name('instructor.courses.tracking');
+    Route::get('/courses/tracking/{id}', [CoursesController::class, 'statistics'])->name('instructor.courses.tracking');
     Route::get('/support', [CoursesController::class, 'support'])->name('instructor.support');
     Route::get('/api/courses/show/{type?}',  [CoursesController::class, 'getCourses'])->name('api.instructor.courses.show');
 
