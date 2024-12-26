@@ -2,73 +2,19 @@
 
 ### **eLumos - Educational Platform**
 
-eLumos is a modern educational platform connecting instructors and students, providing powerful tools for creating and managing courses, lessons, and exams. Recent updates and features include:
+eLumos is a modern educational platform that connects instructors with students, providing powerful tools to create and manage courses, lessons, and exams. The platform offers: 
 
-### **New Features**
+-   **Dynamic Exam Creation** with various question types and automatic grading.
+-   **Course Structure** that allows instructors to organize content into sections and lessons.
+-   **Role Management** for flexible access control by the platform owner.
+-   **Admin Review System** ensuring courses comply with platform policies.
+-   **Detailed Exam Reports** summarizing student performance with grades and mistakes.
+-   **Secure Video Hosting** using **Cloudinary API** for automatic video management.
+-   **Advanced Search** features to help students find courses with multiple filters.
+-   **Integrated Payment Gateways** including Stripe and PayPal, with a robust **wallet system** for transactions.
 
-1.  **Certificate Generation:**
-    
-    *   After completing a course, students can download a personalized certificate.
-        
-    *   Certificates can be shared directly with friends and social networks.
-        
-2.  **Purchase Tracking and Invoicing:**
-    
-    *   Users can track all purchase transactions in their accounts.
-        
-    *   Downloadable invoices for each purchase.
-        
-3.  **Enhanced Admin Dashboard:**
-    
-    *   Admins can change course statuses easily.
-        
-    *   A detailed review history log is available for tracking course updates and decisions.
-        
-
-### **Core Features**
-
-#### **1\. Course and Lesson Management**
-
-*   Courses can include sections with lessons in text, video, or quiz formats.
-    
-
-#### **2\. Exam Creation and Reports**
-
-*   Dynamic exam creation with automatic grading.
-    
-*   Comprehensive reports detailing mistakes, grades, and overall performance.
-    
-
-#### **3\. Secure Video Hosting**
-
-*   Videos managed securely with **Cloudinary API**.
-    
-
-#### **4\. Role Management**
-
-*   Platform owners can create roles for students, instructors, and admins.
-    
-
-#### **5\. Admin Review System**
-
-*   Courses require admin approval to meet platform standards.
-    
-
-#### **6\. Payment Integration**
-
-*   Supports **Stripe** and **PayPal**.
-    
-*   Webhooks for secure and reliable transactions.
-    
-*   A wallet system to manage funds for students and instructors.
-    
-
-#### **7\. Advanced Search and Recommendations**
-
-*   Advanced filtering for courses.
-    
-*   Personalized recommendations based on preferences.
 * * * * *
+
 ### **Installation**
 
 Follow these steps to set up eLumos on your local environment:
@@ -120,37 +66,64 @@ Follow these steps to set up eLumos on your local environment:
     ```
 
 * * * * *
+
+### **Features**
+
+#### **1\. Course and Lesson Management**
+
+-   Courses can have multiple sections, and each section can include lessons in text, video, or quiz format.
+
+#### **2\. Exam Creation and Reports**
+
+-   Customize exams with time limits and various question types.
+-   Automatic grading with a detailed report after submission, highlighting mistakes, scores, and feedback.
+
+#### **3\. Secure Video Hosting**
+
+-   Videos are uploaded and managed securely using **Cloudinary API**.
+
+#### **4\. Role Management**
+
+-   Owners can create and manage roles for students, instructors, and admins.
+
+#### **5\. Admin Review System**
+
+-   All submitted courses require admin approval to ensure compliance.
+
+#### **6\. Payment Integration**
+
+-   **Stripe** and **PayPal** for seamless payments.
+-   **Webhook handling** ensures reliability during transactions.
+-   A **wallet system** for students and instructors to manage course purchases.
+
+#### **7\. Advanced Search and Recommendations**
+
+-   Students can find courses easily using advanced filters.
+-   Personalized course recommendations based on individual preferences.
+
+* * * * *
+
 ### **Roles and Permissions**
 
-#### **1\. Students:**
+1.  **Students:**
 
-*   Browse and enroll in courses.
-    
-*   Manage wallets, purchases, and certificates.
-    
+    -   Browse, enroll in courses, and complete exams.
+    -   Manage wallets and payments.
+2.  **Instructors:**
 
-#### **2\. Instructors:**
+    -   Create, update, and manage courses and lessons.
+    -   Monitor student progress and feedback.
+3.  **Admins:**
 
-*   Create and update courses.
-    
-*   Monitor student progress.
-    
+    -   Oversee platform activity, manage users, and review courses.
+    -   Generate reports and resolve issues.
 
-#### **3\. Admins:**
-
-*   Oversee platform activity.
-    
-*   Manage users, review courses, and monitor logs.
-* * * * * 
+* * * * *
 
 ### **Usage Highlights**
 
-*   Certificates upon course completion.
-    
-*   Secure payment handling.
-    
-*   Detailed purchase history and invoicing.
-    
-*   A streamlined admin interface with enhanced features.
-    
+-   After completing an exam, students receive a **detailed performance report**.
+-   Payments are handled securely with real-time issue management via webhooks.
+-   The platform provides **intuitive navigation** for all users, ensuring a smooth experience.
+
 * * * * *
