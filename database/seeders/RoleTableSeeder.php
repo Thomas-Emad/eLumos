@@ -14,16 +14,20 @@ class RoleTableSeeder extends Seeder
   public function run(): void
   {
     $roles = [
-      ['name' => 'owner'], ['name' => 'instructor'], ['name' => 'student']
+      ['name' => 'owner'],
+      ['name' => 'instructor'],
+      ['name' => 'support'],
+      ['name' => 'student']
     ];
 
     foreach ($roles as $role) {
       $role = Role::create($role);
 
       $permissionsAsRole = match ($role->name) {
-        'owner' => ['users', 'roles', 'admin-control-courses', 'buy-courses'],
+        'owner' => ['users', 'roles', 'admin-control-courses', 'buy-courses', 'support'],
         'instructor' => ['instructors-control-courses', 'instructors-control-exams', 'buy-courses'],
         'student' => ['buy-courses'],
+        'support' => ['support'],
         $role->name => abort(404)
       };
       $role->givePermissionTo($permissionsAsRole);

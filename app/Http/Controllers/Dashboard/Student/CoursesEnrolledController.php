@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Dashboard\Student;
 
-use App\Models\CourseLectures;
 use App\Models\CoursesEnrolled;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;

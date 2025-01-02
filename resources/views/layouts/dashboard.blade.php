@@ -96,13 +96,13 @@
                             <i class="fa-solid fa-comment-dots"></i>
                             <span>Messages</span>
                         </a>
-                    </li>
-                    <li><a href="{{ route('dashboard.index') }}/tickets"
-                            class="mt-2 flex items-center gap-2 @if (request()->is('dashboard/tickets')) @endif hover:text-amber-600 duration-200">
+                    </li> --}}
+                    <li><a href="{{ route('dashboard.tickets.index') }}"
+                            class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.tickets.index'))  @endif hover:text-amber-600 duration-200">
                             <i class="fa-solid fa-ticket"></i>
                             <span>Support Tickets</span>
                         </a>
-                    </li> --}}
+                    </li>
                     @haspermission('instructors-control-courses')
                         <div>
                             <hr class="mx-6 my-4">
@@ -131,29 +131,44 @@
                         </div>
                     @endhaspermission
                     <div>
-                        @can(['roles', 'control-courses'])
+                        @canAny(['roles', 'admin-control-courses'])
                             <hr class="mx-6 my-4">
                             <h2 class="font-bold text-gray-900 text-lg dark:text-gray-50">Mangement</h2>
+                            @haspermission('roles')
+                                <li><a href="{{ route('roles.index') }}"
+                                        class="mt-2 flex items-center gap-2 @if (Route::is('roles.index')) text-amber-600 @endif hover:text-amber-600 duration-200">
+                                        <i class="fa-solid fa-user-gear"></i>
+                                        <span>Roles</span>
+                                    </a>
+                                </li>
+                            @endhaspermission
+                            @haspermission('admin-control-courses')
+                                <li class="flex justify-between items-center gap-2">
+                                    <a href="{{ route('dashboard.admin.courses') }}"
+                                        class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.admin.courses')) text-amber-600 @endif hover:text-amber-600 duration-200">
+                                        <i class="fa-solid fa-graduation-cap"></i>
+                                        <span>Courses</span>
+                                    </a>
+                                    <span
+                                        class="bg-gray-600/70 px-2 py-1 rounded-xl text-xs text-white">({{ \App\Models\Course::where('status', 'pending')->count() }})</span>
+                                </li>
+                            @endhaspermission
+                        @endcanAny
+                    </div>
+                    <div>
+                        @can(['support'])
+                            <hr class="mx-6 my-4">
+                            <h2 class="font-bold text-gray-900 text-lg dark:text-gray-50">Support</h2>
                         @endcan
-                        @haspermission('roles')
-                            <li><a href="{{ route('roles.index') }}"
-                                    class="mt-2 flex items-center gap-2 @if (Route::is('roles.index')) text-amber-600 @endif hover:text-amber-600 duration-200">
-                                    <i class="fa-solid fa-user-gear"></i>
-                                    <span>Roles</span>
-                                </a>
-                            </li>
-                        @endhaspermission
                         @haspermission('admin-control-courses')
-                            <li class="flex justify-between items-center gap-2">
-                                <a href="{{ route('dashboard.admin.courses') }}"
-                                    class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.admin.courses')) text-amber-600 @endif hover:text-amber-600 duration-200">
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                    <span>Courses</span>
+                            <li><a href="{{ route('dashboard.tickets.index') }}"
+                                    class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.tickets.index'))  @endif hover:text-amber-600 duration-200">
+                                    <i class="fa-solid fa-ticket"></i>
+                                    <span>Support Tickets</span>
                                 </a>
-                                <span
-                                    class="bg-gray-600/70 px-2 py-1 rounded-xl text-xs text-white">({{ \App\Models\Course::where('status', 'pending')->count() }})</span>
                             </li>
                         @endhaspermission
+
                         @can(['roles', 'admin-control-courses'])
                             <hr class="mx-6 my-4">
                         @endcan

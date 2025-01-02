@@ -44,7 +44,7 @@ trait UploadAttachmentTrait
         "asset_folder" => "$folder/",
         'resource_type' => "$typeResource",
         "chunk_size" => 6000000,
-        'allowed_formats' => ['png', 'jpg', 'jpeg', 'pdf']
+        'allowed_formats' => ['png', 'jpg', 'jpeg', 'pdf', 'word']
       ]);
       $attachmentJson = [
         'public_id' => $attachment->getPublicId(),

@@ -1,4 +1,4 @@
-@props(['name' => '', 'label' => ''])
+@props(['name' => '', 'label' => '', 'accept' => '', 'multiple' => false])
 <div class="flex items-center justify-center w-full">
     <label for="{{ $name }}-file"
         class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -12,6 +12,7 @@
                 or drag and drop</p>
             <p class="text-xs text-gray-500 dark:text-gray-400">{{ $label }}</p>
         </div>
-        <input id="{{ $name }}-file" type="file" name="{{ $name }}" class="hidden" />
+        <input id="{{ $name }}-file" type="file" name="{{ $name }}" class="hidden"
+            accept="{{ $accept }}" @if ($multiple) multiple @endif />
     </label>
 </div>

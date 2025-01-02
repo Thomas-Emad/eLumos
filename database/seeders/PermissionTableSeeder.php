@@ -14,6 +14,7 @@ class PermissionTableSeeder extends Seeder
     'instructors-control-exams',
     'admin-control-courses',
     'buy-courses',
+    'support',
   ];
   /**
    * Run the database seeds.

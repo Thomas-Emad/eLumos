@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Classes\Payment\StripePaymentGateway;
 use App\Http\Controllers\{HomeController,  CategoryController, StepsForwardController, ProfileController};
 use App\Http\Controllers\Student\{CourseStudentController, BasketController, CheckoutController, WishlistController, PaymentController, PaymentWebhookController};
-use App\Http\Controllers\Dashboard\{CourseReviewLogController, DashboardController, ReviewCourseController, NotificationContoller};
+use App\Http\Controllers\Dashboard\{CourseReviewLogController, DashboardController, ReviewCourseController, NotificationContoller, TicketController, TicketMessageController};
 use App\Http\Controllers\Dashboard\Admin\{RoleController, CourseController as CourseAdminController};
 use App\Http\Controllers\Dashboard\Instructor\{CoursesController, CourseSectionsController, CourseLecturesController};
 use App\Http\Controllers\Dashboard\Instructor\Exams\{ExamController, ExamQuestionController};
@@ -149,11 +149,27 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     Route::post('dashboard/admin/courses', 'reviewStatusCourse')->name('dashboard.admin.courses.review-course');
   });
 
+  // Reviews Log For Course
   Route::controller(CourseReviewLogController::class)->group(function () {
     Route::get('dashboard/review/log/index', 'index')->name('dashboard.review.log.index');
     Route::get('dashboard/review/log/show', 'show')->name('dashboard.review.log.show');
     Route::post('dashboard/review/log/update', 'store')->name('dashboard.review.log.update');
   });
+
+  // Support
+  Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
+    Route::resource('tickets', TicketController::class);
+    Route::post('tickets/send', [TicketMessageController::class, 'broadcast'])->name('tickets.send');
+    Route::post('tickets/receiver', [TicketMessageController::class, 'receiver'])->name('tickets.receiver');
+  });
+
+  // Route::controller()
+  //   ->group(function () {
+  //     Route::get('dashboard/tickets', 'index')->name('dashboard.tickets.index');
+  //     Route::get('dashboard/tickets/create', 'create')->name('dashboard.tickets.create');
+  //     Route::get('dashboard/tickets/create', 'create')->name('dashboard.tickets.create');
+
+  //   });
 });
 
 
