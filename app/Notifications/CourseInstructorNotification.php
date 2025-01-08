@@ -51,7 +51,8 @@ class CourseInstructorNotification extends Notification implements ShouldQueue
   {
     return [
       'sender' => "system",
-      'course_id' => $this->course->id,
+      'type' => 'course',
+      'id' => $this->course->id,
       'title' => $this->course->title,
       'status' => $this->course->status,
       'message' => $this->messageByStatus($this->course->status)

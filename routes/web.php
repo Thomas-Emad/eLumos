@@ -161,6 +161,8 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     Route::resource('tickets', TicketController::class);
     Route::post('tickets/send', [TicketMessageController::class, 'broadcast'])->name('tickets.send');
     Route::post('tickets/receiver', [TicketMessageController::class, 'receiver'])->name('tickets.receiver');
+    Route::post('tickets/closeTicket', [TicketController::class, 'closeTicket'])->name('tickets.closeTicket');
+    Route::post('tickets/review', [TicketController::class, 'review'])->name('tickets.review');
   });
 
   // Route::controller()

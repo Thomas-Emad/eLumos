@@ -3,7 +3,8 @@
         {{ $message->message }}
         <span class="block text-xs text-end text-gray-200 italic">
             <i class="fa-regular fa-clock"></i>
-            <span>{{ $message->created_at->diffForHumans() }}</span>
+            <span class="time_message"
+                data-create="{{ $message->created_at }}">{{ $message->created_at->diffForHumans() }}</span>
         </span>
     </div>
 </div>

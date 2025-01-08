@@ -19,7 +19,7 @@ return new class extends Migration
       $table->text('description')->nullable();
       $table->json('attachments')->nullable();
       $table->enum('type', ['assistant', 'payment', 'technial_support', 'other'])->default('assistant');
-      $table->enum('status', ['pending', 'wait_support', 'wait_user', 'solved'])->default('pending');
+      $table->enum('status', ['pending', 'wait_support', 'wait_user', 'solved', 'close_support', 'close_user'])->default('pending');
       $table->enum('priority', ['low', 'medium', 'high'])->default('medium');
       $table->integer('rate')->nullable();
       $table->text('feedback')->nullable();

@@ -19,15 +19,16 @@
                 new Request
             </a>
         </div>
-        <div class='mt-2 p-4 rounded-xl border border-gray-200 bg-white relative overflow-x-auto shadow-md sm:rounded-lg'>
+        <div
+            class='mt-2 p-4 rounded-xl border min-h-screen border-gray-200 bg-white relative overflow-x-auto shadow-md sm:rounded-lg'>
             <div
                 class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
                 <div>
                     <button id="dropdownActionButton" data-dropdown-toggle="dropdownAction"
                         class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
                         type="button">
-                        <span class="sr-only">Action button</span>
-                        Action
+                        <span class="sr-only">Status button</span>
+                        Status
                         <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 10 6">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -40,23 +41,33 @@
                         <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownActionButton">
                             <li>
                                 <a href="#"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Reward</a>
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Pending</a>
                             </li>
                             <li>
                                 <a href="#"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Promote</a>
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Wait
+                                    Support</a>
                             </li>
                             <li>
                                 <a href="#"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Activate
-                                    account</a>
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Wait
+                                    User</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Closed
+                                    By Support</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Closed
+                                    By User</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Solved</a>
                             </li>
                         </ul>
-                        <div class="py-1">
-                            <a href="#"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete
-                                User</a>
-                        </div>
                     </div>
                 </div>
                 <label for="table-search" class="sr-only">Search</label>
@@ -83,6 +94,9 @@
                             Subject
                         </th>
                         <th scope="col" class="px-6 py-3">
+                            Priority
+                        </th>
+                        <th scope="col" class="px-6 py-3">
                             Created
                         </th>
                         <th scope="col" class="px-6 py-3">
@@ -107,14 +121,21 @@
                                 {{ Str::limit($ticket->subject, 20) }}
                             </td>
                             <td class="px-6 py-4">
+                                <div class="flex items-center">
+                                    <div class="h-2.5 w-2.5 rounded-full {{ $ticket->priority->bgColor() }} me-2"></div>
+                                    {{ $ticket->priority->label() }}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
                                 {{ $ticket->created_at->diffForHumans() }}
                             </td>
                             <td class="px-6 py-4">
-                                2024
+                                {{ $ticket->messages()->latest()->first()?->created_at->diffForHumans() ?? 'N/A' }}
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center">
-                                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> Online
+                                    <div class="h-2.5 w-2.5 rounded-full {{ $ticket->status->bgColor() }} me-2"></div>
+                                    {{ $ticket->status->label() }}
                                 </div>
                             </td>
                         </tr>
@@ -130,4 +151,29 @@
             </table>
         </div>
     </div>
+@endsection
+
+@section('js')
+    {{-- @include('pages.dashboard.tickets.pusher-js')
+    <script>
+        $(document).ready(() => {
+            var channel = pusher.subscribe('ticket-notification');
+            channel.bind('notification', function(data) {
+                var ticketLink = "{{ route('dashboard.tickets.show', ['ticket' => '__TICKET_ID__']) }}";
+                ticketLink = ticketLink.replace('__TICKET_ID__', data.ticketId);
+
+                var notificationHTML = `@php
+                    echo view('components.notifications.success', [
+                        'message' => 'There is a new ticket here, click on it.',
+                        'link' => "${ticketLink}",
+                    ])->render();
+                @endphp`;
+
+                $('.notifications').append(notificationHTML);
+            });
+        });
+    </script> --}}
+
+
+
 @endsection

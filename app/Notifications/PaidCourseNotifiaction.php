@@ -53,9 +53,18 @@ class PaidCourseNotifiaction extends Notification  implements ShouldQueue
    */
   public function toArray(object $notifiable): array
   {
+    // return [
+    //   'sender' => "system",
+    //   'payment_id' => $this->payment->id,
+    //   'message' => $this->messageByStatus($this->payment->status)
+    // ];
+
     return [
       'sender' => "system",
-      'payment_id' => $this->payment->id,
+      'type' => 'payment',
+      'id' => $this->payment->id,
+      // 'title' => $this->payment->title,
+      'status' => $this->payment->status,
       'message' => $this->messageByStatus($this->payment->status)
     ];
   }

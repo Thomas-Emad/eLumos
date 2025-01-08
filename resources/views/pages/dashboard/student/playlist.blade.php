@@ -172,9 +172,9 @@
                 <h4 class="font-bold text-lg">What is your Rating of this course?:</h4>
                 <div>
                     <div class="flex gap-2 justify-between flex-col md:flex-row">
+                        <input type="hidden" name="course_id" value="{{ $courseStudent->course->id }}">
                         @for ($i = 1; $i <= 5; $i++)
                             <div class="w-full">
-                                <input type="hidden" name="course_id" value="{{ $courseStudent->course->id }}">
                                 <input type="radio" name="rate" id="rating-{{ $i }}-option"
                                     value="{{ $i }}" class="hidden peer" @checked($reviewStudent?->rate == $i || (is_null($reviewStudent) && $i == 1))>
 
