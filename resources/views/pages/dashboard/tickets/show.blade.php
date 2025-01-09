@@ -159,6 +159,8 @@
 @endsection
 @section('js')
     @include('pages.dashboard.tickets.pusher-js')
+    @include('pages.dashboard.tickets.partials.notification-new-ticket')
+
     <script>
         $(document).ready(() => {
             var channel = pusher.subscribe('ticket.{{ $ticket->id }}');

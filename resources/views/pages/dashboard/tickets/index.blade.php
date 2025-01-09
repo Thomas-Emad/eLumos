@@ -154,26 +154,6 @@
 @endsection
 
 @section('js')
-    {{-- @include('pages.dashboard.tickets.pusher-js')
-    <script>
-        $(document).ready(() => {
-            var channel = pusher.subscribe('ticket-notification');
-            channel.bind('notification', function(data) {
-                var ticketLink = "{{ route('dashboard.tickets.show', ['ticket' => '__TICKET_ID__']) }}";
-                ticketLink = ticketLink.replace('__TICKET_ID__', data.ticketId);
-
-                var notificationHTML = `@php
-                    echo view('components.notifications.success', [
-                        'message' => 'There is a new ticket here, click on it.',
-                        'link' => "${ticketLink}",
-                    ])->render();
-                @endphp`;
-
-                $('.notifications').append(notificationHTML);
-            });
-        });
-    </script> --}}
-
-
-
+    @include('pages.dashboard.tickets.pusher-js')
+    @include('pages.dashboard.tickets.partials.notification-new-ticket')
 @endsection

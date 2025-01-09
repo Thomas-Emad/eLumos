@@ -15,7 +15,7 @@ class NewTicketNotificationBroadcast  implements ShouldBroadcast
   /**
    * Create a new event instance.
    */
-  public function __construct(public int $ticketID)
+  public function __construct(public string $requestId)
   {
     //
   }

@@ -1,16 +1,14 @@
 <script src="{{ asset('assets/js/pusher.js') }}"></script>
 
 <script>
-    $(document).ready(function() {
-        const PUSHER_CLUSTER = "{{ config('broadcasting.connections.pusher.options.cluster') }}";
-        const PUSHER_KEY = "{{ config('broadcasting.connections.pusher.key') }}";
+    const PUSHER_CLUSTER = "{{ config('broadcasting.connections.pusher.options.cluster') }}";
+    const PUSHER_KEY = "{{ config('broadcasting.connections.pusher.key') }}";
 
-        // Enable pusher logging - don't include this in production
-        Pusher.logToConsole = true;
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
 
-        var pusher = new Pusher(PUSHER_KEY, {
-            cluster: PUSHER_CLUSTER,
-            encrypted: true,
-        });
-    })
+    var pusher = new Pusher(PUSHER_KEY, {
+        cluster: PUSHER_CLUSTER,
+        encrypted: true,
+    });
 </script>

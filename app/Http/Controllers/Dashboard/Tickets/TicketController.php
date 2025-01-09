@@ -76,7 +76,7 @@ class TicketController extends Controller
     ]);
 
     // Broadcast the event
-    broadcast(new NewTicketNotificationBroadcast($ticket->id))->toOthers();
+    broadcast(new NewTicketNotificationBroadcast($ticket->request_id))->toOthers();
 
     return redirect()->route('dashboard.tickets.show', ['ticket' => $ticket->request_id])->with([
       'notification' => [
