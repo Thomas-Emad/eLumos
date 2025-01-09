@@ -33,6 +33,11 @@ class Ticket extends Model
     return $this->hasMany(TicketMessage::class);
   }
 
+  public function logs(): HasMany
+  {
+    return $this->hasMany(TicketLog::class);
+  }
+
   protected function casts(): array
   {
     return [

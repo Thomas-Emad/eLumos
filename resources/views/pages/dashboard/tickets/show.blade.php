@@ -27,11 +27,7 @@
                             </span>
                         </p>
                         <p><b>Priority Request: </b>
-                            <span @class([
-                                'text-green-600' => $ticket->priority == 'low',
-                                'text-amber-600' => $ticket->priority == 'medium',
-                                'text-red-600' => $ticket->priority == 'high',
-                            ])>{{ $ticket->priority }}</span>
+                            <span class="{{ $ticket->priority->color() }}">{{ $ticket->priority->label() }}</span>
                         </p>
                     </div>
                 </div>
@@ -72,20 +68,22 @@
                     </div>
                 </div>
                 <hr class="block w-2/3 mx-auto my-2">
-                @if (auth()->user()->id === $ticket->user_id && in_array($ticket->status, ['pending', 'wait_support', 'wait_user']))
+                @if (auth()->user()->id === $ticket->user_id &&
+                        in_array($ticket->status->value, ['pending', 'wait_support', 'wait_user']))
                     <button type="button" data-modal-toggle="close-ticket-modal" data-modal-target="close-ticket-modal"
                         class="close-request block text-white font-bold bg-red-700 hover:bg-red-800 duration-200 py-2 px-6 rounded-lg mx-auto">
                         Close Request
                     </button>
                 @elseif (auth()->user()->id === $ticket->user_id &&
                         is_null($ticket->rate) &&
-                        !in_array($ticket->status, ['pending', 'wait_support', 'wait_user']))
+                        in_array($ticket->status->value, ['solved', 'close_support', 'close_user']))
                     <button type="button" data-modal-toggle="review-ticket-modal" data-modal-target="review-ticket-modal"
                         class="close-request block text-white font-bold bg-amber-700 hover:bg-amber-800 duration-200 py-2 px-6 rounded-lg mx-auto">
                         Review
                     </button>
-                @elseif (auth()->user()->id === !$ticket->user_id)
-                    <button type="button"
+                @elseif (auth()->user()->hasPermissionTo('support'))
+                    <button type="button" data-modal-toggle="settings-ticket-modal"
+                        data-modal-target="settings-ticket-modal"
                         class="close-request block text-white font-bold bg-amber-700 hover:bg-amber-800 duration-200 py-2 px-6 rounded-lg mx-auto">
                         Settings
                     </button>
@@ -132,9 +130,9 @@
                     </div>
                     <div class="p-4 bg-white border-t border-gray-300">
                         <form id="send-message" class="flex items-center space-x-2">
-                            <input type="text" placeholder="Type a message..." @disabled(!is_null($ticket->rate))
+                            <input type="text" placeholder="Type a message..." @disabled(!$allowSendMessage)
                                 class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:ring-blue-300">
-                            <button type="submit" @disabled(!is_null($ticket->rate))
+                            <button type="submit" @disabled(!$allowSendMessage)
                                 class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Send</button>
                         </form>
                     </div>
@@ -143,14 +141,19 @@
         </div>
     </div>
 
-    @if (auth()->user()->id === $ticket->user_id && in_array($ticket->status, ['pending', 'wait_support', 'wait_user']))
+    @if (auth()->user()->id === $ticket->user_id &&
+            in_array($ticket->status->value, ['pending', 'wait_support', 'wait_user']))
         @include('pages.dashboard.tickets.modals.close-ticket-modal', ['id' => $ticket->id])
     @elseif (auth()->user()->id === $ticket->user_id &&
             is_null($ticket->rate) &&
-            !in_array($ticket->status, ['pending', 'wait_support', 'wait_user']))
+            !in_array($ticket->status->value, ['pending', 'wait_support', 'wait_user']))
         @include('pages.dashboard.tickets.modals.review-ticket-modal', ['id' => $ticket->id])
-    @elseif (auth()->user()->id === !$ticket->user_id)
-        @include('pages.dashboard.tickets.modals.settings-ticket-modal', ['id' => $ticket->id])
+    @elseif (auth()->user()->hasPermissionTo('support'))
+        @include('pages.dashboard.tickets.modals.settings-ticket-modal', [
+            'id' => $ticket->id,
+            'status' => $ticket->status,
+            'priority' => $ticket->priority,
+        ])
     @endif
 
 @endsection
@@ -180,9 +183,9 @@
             });
 
             $("#send-message button[type=submit]").on('click', function(event) {
+                event.preventDefault();
                 const mesasge = $("#send-message input[type=text]").val();
                 $("#send-message input[type=text]").val('');
-                event.preventDefault();
 
                 $.ajax({
                     url: '{{ route('dashboard.tickets.send') }}',

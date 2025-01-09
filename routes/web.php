@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Classes\Payment\StripePaymentGateway;
 use App\Http\Controllers\{HomeController,  CategoryController, StepsForwardController, ProfileController};
 use App\Http\Controllers\Student\{CourseStudentController, BasketController, CheckoutController, WishlistController, PaymentController, PaymentWebhookController};
-use App\Http\Controllers\Dashboard\{CourseReviewLogController, DashboardController, ReviewCourseController, NotificationContoller, TicketController, TicketMessageController};
+use App\Http\Controllers\Dashboard\{CourseReviewLogController, DashboardController, ReviewCourseController, NotificationContoller, Tickets\TicketController, Tickets\TicketMessageController, Tickets\TicketLogController};
 use App\Http\Controllers\Dashboard\Admin\{RoleController, CourseController as CourseAdminController};
 use App\Http\Controllers\Dashboard\Instructor\{CoursesController, CourseSectionsController, CourseLecturesController};
 use App\Http\Controllers\Dashboard\Instructor\Exams\{ExamController, ExamQuestionController};
@@ -161,17 +161,11 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     Route::resource('tickets', TicketController::class);
     Route::post('tickets/send', [TicketMessageController::class, 'broadcast'])->name('tickets.send');
     Route::post('tickets/receiver', [TicketMessageController::class, 'receiver'])->name('tickets.receiver');
-    Route::post('tickets/closeTicket', [TicketController::class, 'closeTicket'])->name('tickets.closeTicket');
     Route::post('tickets/review', [TicketController::class, 'review'])->name('tickets.review');
+    Route::post('tickets/change-status', [TicketLogController::class, 'changeStatus'])->name('tickets.changeStatus');
+    Route::post('tickets/change-priority', [TicketLogController::class, 'changePriority'])->name('tickets.changePriority');
   });
-
-  // Route::controller()
-  //   ->group(function () {
-  //     Route::get('dashboard/tickets', 'index')->name('dashboard.tickets.index');
-  //     Route::get('dashboard/tickets/create', 'create')->name('dashboard.tickets.create');
-  //     Route::get('dashboard/tickets/create', 'create')->name('dashboard.tickets.create');
-
-  //   });
+  Route::get('tickets/logs', [TicketLogController::class, 'logs'])->name('dashboard.tickets.logs');
 });
 
 

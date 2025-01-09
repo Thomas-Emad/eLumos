@@ -16,7 +16,14 @@ enum PriorityTicketEnum: string
       static::HIGH => 'High',
     };
   }
-
+  public function color(): string
+  {
+    return match ($this) {
+      static::LOW => 'text-gray-700',
+      static::MEDIUM => 'text-amber-700',
+      static::HIGH => 'text-red-700',
+    };
+  }
   public function bgColor(): string
   {
     return match ($this) {

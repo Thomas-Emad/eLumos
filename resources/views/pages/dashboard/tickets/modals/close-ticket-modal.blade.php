@@ -1,6 +1,6 @@
 @props(['id' => ''])
 <x-modal id="close-ticket-modal">
-    <form action="{{ route('dashboard.tickets.closeTicket') }}" method="POST">
+    <form action="{{ route('dashboard.tickets.changeStatus') }}" method="POST">
         @csrf
         <!-- Modal header -->
         <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
@@ -27,6 +27,8 @@
                 If this ticket is closed, you will no longer be able to view or solve it. Are you sure about this
                 procedure?
             </h2>
+
+            <x-textarea name="reason" label="Why You Want do that?!" placeholder="Why You Want do that?!" required />
         </div>
         <!-- Modal footer -->
         <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
