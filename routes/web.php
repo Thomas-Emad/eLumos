@@ -165,6 +165,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     Route::post('tickets/change-status', [TicketLogController::class, 'changeStatus'])->name('tickets.changeStatus');
     Route::post('tickets/change-priority', [TicketLogController::class, 'changePriority'])->name('tickets.changePriority');
   });
+  Route::get('tickets/table', [TicketController::class, 'table'])->name('dashboard.tickets.table');
   Route::get('tickets/logs', [TicketLogController::class, 'logs'])->name('dashboard.tickets.logs');
 });
 

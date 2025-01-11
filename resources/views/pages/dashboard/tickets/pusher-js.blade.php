@@ -5,7 +5,7 @@
     const PUSHER_KEY = "{{ config('broadcasting.connections.pusher.key') }}";
 
     // Enable pusher logging - don't include this in production
-    Pusher.logToConsole = true;
+    Pusher.logToConsole = false;
 
     var pusher = new Pusher(PUSHER_KEY, {
         cluster: PUSHER_CLUSTER,

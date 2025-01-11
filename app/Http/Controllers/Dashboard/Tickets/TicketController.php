@@ -18,21 +18,83 @@ class TicketController extends Controller
   use UploadAttachmentTrait;
 
   /**
-   * Display a list of tickets for the logged-in user.
+   * Display the list of tickets based on the given request parameters.
    *
-   * This method filters tickets based on the user's permissions. Non-support
-   * users can only view their own tickets. The tickets are paginated to 
-   * improve performance.
+   * This method retrieves the tickets using the `getTickets` method, passing the current request. 
+   * It returns the view with the tickets data for rendering the tickets list.
    *
-   * @return Illuminate\Contracts\View\View The view displaying the list of tickets.
+   * @param \Illuminate\Http\Request $request The request instance containing query parameters such as subject and status.
+   * 
+   * @return \Illuminate\View\View The view for the ticket index page with the retrieved tickets.
    */
-  public function index(): View
+  public function index(Request $request): View
+  {
+    $tickets =  $this->getTickets($request);
+
+    return view('pages.dashboard.tickets.index', compact('tickets'));
+  }
+
+  /**
+   * Fetch and return the table data for tickets, including pagination and content.
+   *
+   * This method retrieves the tickets based on the current request and passes them 
+   * to a view that generates the table content and pagination links. It ensures 
+   * that the correct query parameters are preserved in the pagination links.
+   *
+   * @param \Illuminate\Http\Request $request The current HTTP request instance.
+   * 
+   * @return \Illuminate\Http\JsonResponse A JSON response containing the table content and pagination.
+   */
+  public function table(Request $request)
+  {
+    $tickets = $this->getTickets($request);
+
+    // Get the current URL with query parameters for pagination links
+    $paginationLinks = $tickets->withPath(url('/dashboard/tickets') . '?' . http_build_query($request->except('page')));
+
+    return response()->json([
+      'content' => view('pages.dashboard.tickets.partials.table', compact('tickets'))->render(),
+      'pagination' => view('pages.dashboard.tickets.partials.pagination', compact('tickets'))->render(),
+    ]);
+  }
+
+  /**
+   * Retrieve the tickets based on the given request parameters.
+   *
+   * This method fetches the tickets for the current user (or all tickets if the user has permission), 
+   * filters them based on the provided `subject` and `status`, and paginates the results. 
+   * It also ensures that the pagination links preserve the filters.
+   *
+   * @param \Illuminate\Http\Request $request The current HTTP request instance containing query parameters like subject and status.
+   * 
+   * @return \Illuminate\Pagination\LengthAwarePaginator The paginated tickets collection.
+   */
+  private function getTickets(Request $request)
   {
     $tickets = Ticket::when(!Auth::user()->hasPermissionTo('support'), function (Builder $query) {
       return $query->where('user_id', Auth::id());
-    })->latest()->paginate(10);
+    })
+      ->where('subject', "like", "%$request->subject%")
+      ->whereIn('status', $this->getStatusTickets($request->status))
+      ->latest()->paginate(10);
 
-    return view('pages.dashboard.tickets.index', compact('tickets'));
+    // Ensure the pagination links include query parameters for filters
+    $tickets->withPath(url('/dashboard/tickets')  . '?' . http_build_query($request->except('page')));
+
+    return $tickets;
+  }
+
+  /**
+   * Get the list of statuses to filter tickets by.
+   *
+   * Returns all statuses if `null` or 'all' is passed, otherwise returns the specific status.
+   *
+   * @param string|null $status The status to filter by.
+   * @return array List of statuses.
+   */
+  private function getStatusTickets(string|null $status): array
+  {
+    return (is_null($status) || $status == 'all') ? ['pending', 'wait_support', 'wait_user', 'solved', 'close_support', 'close_user'] : [$status];
   }
 
   /**
