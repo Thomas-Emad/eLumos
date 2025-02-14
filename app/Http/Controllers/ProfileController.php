@@ -20,7 +20,7 @@ class ProfileController extends Controller
       $username = Auth::user()->username;
     }
 
-    $user = User::select('id', 'name',  'email', 'headline', 'username', 'photo', 'description', 'created_at', 'email_verified_at')
+    $user = User::select('id', 'username', 'name',  'email', 'headline', 'username', 'photo', 'description', 'created_at', 'email_verified_at')
       ->with([
         'courses' => function ($query) {
           $query->with([

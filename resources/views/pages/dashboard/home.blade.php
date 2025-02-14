@@ -85,7 +85,7 @@
                                 class="flex justify-between items-center gap-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-400  p-4 border-b border-b-gray-200 last-of-type:border-none only-of-type:border-none">
                                 <a href="{{ route('course-details', $course->id) }}"
                                     class="flex gap-2 items-center text-lg hover:text-amber-600 duration-200">
-                                    <img src="{{ json_decode($course->mockup)->url }}"
+                                    <img src="{{ getParameterFromJsonOrNull($course->mockup, 'url') }}"
                                         onerror="this.onerror=null;this.src='{{ asset('assets/images/course.png') }}';"
                                         alt="Image courses" class="w-16 h-16 rounded-lg">
                                     <h3>
@@ -106,11 +106,38 @@
         @endcan
         <hr class="my-4">
         <h2 class="font-bold text-gray-800 dark:text-gray-200 text-2xl my-4">Recently Enrolled Courses</h2>
+        @if ($lastWatchedCourse)
+            <a href="{{ route('dashboard.student.show', ['course' => $lastWatchedCourse->course_id]) }}"
+                class="block cursor-pointer duration-200 hover:opacity-80 relative  w-full rounded-xl bg-white  shadow-sm border border-gray-200 p-3 overflow-hidden">
+                <div class="bg-no-repeat bg-cover opacity-50 h-full w-full absolute inset-0"
+                    style="background-image: url({{ asset('assets/images/banner-study.jpg') }})"></div>
+                <div
+                    class="relative w-full z-10  flex flex-col md:flex-row justify-between items-center p-4 bg-white/50 rounded-xl">
+                    <img src="{{ getParameterFromJsonOrNull($lastWatchedCourse->mockup, 'url') }}"
+                        onerror="this.onerror=null;this.src='{{ asset('assets/images/course.png') }}';" alt="photo course"
+                        class="w-full md:w-56 h-40 rounded-xl shadow">
+                    <div class="w-full md:w-1/3 mt-4 md:mt-0">
+                        <div>
+                            <h2 class="text-2xl mb-2">{{ $lastWatchedCourse->title }}</h2>
+                            <p class="text-gray-600 text-sm  break-words ">
+                                {{ str($lastWatchedCourse->headline)->limit(30) }}</p>
+                        </div>
+
+                        <div class="w-full bg-gray-100 rounded-md overflow-hidden p-1 relative">
+                            <span
+                                class="block w-[{{ $lastWatchedCourse->progress_lectures }}%] bg-blue-600 absolute inset-0 z-10"></span>
+                        </div>
+                        <span class="text-xs text-right block">{{ $lastWatchedCourse->progress_lectures }}%</span>
+                    </div>
+                </div>
+            </a>
+        @endif
+
         <div class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-8 mt-4 text-gray-800 dark:text-gray-200">
             @foreach ($courses as $course)
                 <div class="p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-400 rounded-xl">
                     <a href="{{ route('course-details') }}" class="block rounded-xl overflow-hidden">
-                        <img src="{{ json_decode($course->mockup)->url }}"
+                        <img src="{{ getParameterFromJsonOrNull($course->mockup, 'url') }}"
                             onerror="this.onerror=null;this.src='{{ asset('assets/images/course.png') }}';"
                             class="w-full h-[150px] hover:scale-125 duration-300" alt="photo course">
                     </a>
@@ -120,7 +147,7 @@
                                 class="w-10 h-10 rounded-full" alt="photo Instructor">
                             <div>
                                 <h3 class=" font-bold hover:text-amber-600 duration-200">
-                                    <a href="{{ route('dashboard.profile', $course->user->id) }}">
+                                    <a href="{{ route('dashboard.profile', $course->user->username) }}">
                                         {{ $course->user->name }}
                                     </a>
                                 </h3>

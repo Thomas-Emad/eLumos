@@ -5,7 +5,7 @@
         defValue="{{ old('headline') }}" placeholder="Headline">
         <i class="fa-solid fa-newspaper text-gray-400"></i>
     </x-input-icon>
-    <x-textarea name='description' placeholder='The course description can be written here..' label='Description'>
+    <x-textarea name='description' label='Description'>
         {{ old('description') }}
     </x-textarea>
     <p class="text-sm text-gray-500 dark:text-gray-100 ">- Your description should be between 3 characters and 2000

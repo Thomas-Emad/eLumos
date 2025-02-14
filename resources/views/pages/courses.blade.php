@@ -5,7 +5,7 @@
     <form action="{{ route('courses') }}" method="get"
         class="container mx-auto max-w-screen-xl p-4 flex flex-col-reverse md:flex-row gap-4 mt-20">
         <div class="w-full md:w-2/3">
-            <div action="{{ route('courses') }}" method="get" class="flex gap-3 w-full">
+            <div class="flex gap-3 w-full">
                 <div class="w-full">
                     <label for="search" class="mb-2 text-sm font-sm text-gray-900 sr-only">Search</label>
                     <div class="relative">
@@ -36,7 +36,7 @@
                 @foreach ($courses as $course)
                     <div class="p-2 bg-white dark:bg-gray-700  border border-gray-200 rounded-xl">
                         <a href="{{ route('course-details', $course->id) }}" class="block rounded-xl overflow-hidden">
-                            <img src="{{ json_decode($course->mockup)->url }}"
+                            <img src="{{ getParameterFromJsonOrNull($course->mockup, 'url') }}"
                                 onerror="this.onerror=null;this.src='{{ asset('assets/images/course.png') }}';"
                                 class="w-full h-[150px] hover:scale-125 duration-300" alt="photo course">
                         </a>
@@ -345,7 +345,7 @@
                 const csrfToken = $('meta[name="csrf-token"]').attr('content');
                 $.ajax({
                     method: "POST",
-                    url: "{{ route('api.wishlist.controll') }}/",
+                    url: "{{ route('api.wishlist.controll') }}",
                     data: {
                         _token: csrfToken,
                         course_id: course_id

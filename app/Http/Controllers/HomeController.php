@@ -49,7 +49,7 @@ class HomeController extends Controller
     return  CoursesEnrolled::with([
       'course:id,user_id,category_id,title,mockup,price',
       'course.category:id,name',
-      'course.user:id,name',
+      'course.user:id,username,name',
     ])->select('course_id', DB::raw('count(*) as count'))
       ->addSelect(DB::raw('(SELECT SUM(video_duration) FROM course_lectures WHERE course_lectures.course_id = courses_enrolleds.course_id) as lectures_sum_video_duration'))
       ->groupBy('course_id')

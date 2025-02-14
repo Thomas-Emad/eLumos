@@ -25,7 +25,7 @@
             <!-- Modal body -->
             <div class="p-4 md:p-5 space-y-4">
                 <iframe class="w-full rounded-xl"
-                    src="https://player.cloudinary.com/embed/?public_id={{ json_decode($course->preview_video)->public_id }}&cloud_name=dtyvom84s&player[autoplay]=true&player[autoplayMode]=on-scroll&player[aiHighlightsGraph]=true"
+                    src="https://player.cloudinary.com/embed/?public_id={{ getParameterFromJsonOrNull($course->preview_video, 'public_id') }}&cloud_name=dtyvom84s&player[autoplay]=true&player[autoplayMode]=on-scroll&player[aiHighlightsGraph]=true"
                     height="360" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" undefined
                     allowfullscreen frameborder="0"></iframe>
 

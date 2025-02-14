@@ -76,7 +76,7 @@
                     <div class="p-4 flex flex-col gap-2">
                         <span class="text-sm hover:text-amber-800 duration-200">
                             <span class="text-gray-800 dark:text-gray-200 ">by</span>
-                            <a href="{{ route('dashboard.profile', $item->course->user->id) }}" class="font-bold">
+                            <a href="{{ route('dashboard.profile', $item->course->user->username) }}" class="font-bold">
                                 {{ $item->course->user->name }}
                             </a>
                         </span>
@@ -289,7 +289,7 @@
                 <h2 class="font-bold text-2xl">Latest articles</h2>
                 <p class="text-gray-700 dark:text-gray-200">Explore our Free Acticles</p>
             </div>
-            <a href="#"
+            <a href="{{ route('articles.index') }}"
                 class="block px-6 py-3 rounded-full text-gray-800 dark:text-gray-200 border-2 border-gray-800 hover:border-black hover:text-black dark:border-gray-200 dark:hover:border-amber-700 duration-300">All
                 Articles</a>
         </div>

@@ -27,7 +27,7 @@ class TicketLogController extends Controller
     if (!request()->ajax()) {
       return abort(404);
     }
-    $logs = TicketLog::with('user:id,name')
+    $logs = TicketLog::with('user:id,username,name')
       ->where('ticket_id', $request->ticket_id)->latest()->take(20)->get();
 
     $content = view('pages.dashboard.tickets.partials.logs-history', [

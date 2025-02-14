@@ -19,15 +19,18 @@ class DashboardController extends Controller
   public function __invoke(Request $request)
   {
     $coursesQuery = Auth::user()->enrolledCourses()
-      ->select(['courses.id', 'courses.user_id', 'courses.title', 'courses.status', 'progress_lectures'])
+      ->select(['courses.id', 'courses.user_id', 'courses.title', 'courses.status', 'progress_lectures', 'courses_enrolleds.updated_at'])
       ->with([
-        'user:id,name,photo,headline',
+        'user:id,username,name,photo,headline',
       ])
       ->withCount(['reviews as reviewsCount', 'wishlist']);
 
     // Paginate courses
     $courses = $coursesQuery->paginate(10);
-
+    $lastWatchedCourse = $coursesQuery->orderByDesc('courses_enrolleds.updated_at')
+      ->select(['course_id', 'mockup', 'title', 'headline', 'price', 'progress_lectures'])
+      ->first();
+      
     // Calculate counts
     $studentStatistics = (object) [
       'coursesCount' => $courses?->total(),
@@ -38,7 +41,13 @@ class DashboardController extends Controller
     $coursesInstructor = $this->coursesInstructorWithCache();
     $admin = $this->adminWithCache();
 
-    return view("pages.dashboard.home", compact("courses", 'studentStatistics', 'coursesInstructor', 'admin'));
+    return view("pages.dashboard.home", compact(
+      "courses", 
+      'studentStatistics', 
+      'coursesInstructor',
+      'admin',
+      'lastWatchedCourse'
+    ));
   }
 
   /**
@@ -62,7 +71,7 @@ class DashboardController extends Controller
    */
   private function coursesInstructorWithCache()
   {
-    return Cache::remember('dashboard.instructor' . Auth::id(), 60 * 60, function () {
+    return Cache::remember('dashboard.instructor.' . Auth::id(), 60 * 60, function () {
       return $this->coursesInstructor();
     });
   }

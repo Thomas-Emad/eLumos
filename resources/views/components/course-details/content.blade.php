@@ -77,7 +77,7 @@
                                             </div>
                                             @if ($isFirstSetion && !is_null($lecture->video))
                                                 <button type='button'
-                                                    data-url="https://player.cloudinary.com/embed/?public_id={{ json_decode($lecture->video)->public_id }}&cloud_name=dtyvom84s&player[autoplay]=true&player[autoplayMode]=on-scroll&player[aiHighlightsGraph]=true"
+                                                    data-url="https://player.cloudinary.com/embed/?public_id={{ getParameterFromJsonOrNull($lecture->video, 'public_id') }}&cloud_name=dtyvom84s&player[autoplay]=true&player[autoplayMode]=on-scroll&player[aiHighlightsGraph]=true"
                                                     data-modal-target="view-lecture" data-modal-toggle="view-lecture"
                                                     class="cursor-pointer underline hover:text-amber-600 duration-300 mr-1">Preview</button>
                                             @elseif(!$isFirstSetion)
@@ -102,7 +102,7 @@
         <div class="p-4 bg-white dark:bg-gray-700 rounded-xl border border-gray-200 ">
             <div class="relative cursor-pointer rounded-xl overflow-hidden" data-modal-target="video-preview"
                 data-modal-toggle="video-preview">
-                <img src="{{ json_decode($course->mockup)->url }}"
+                <img src="{{ getParameterFromJsonOrNull($course->mockup, 'url') }}"
                     onerror="this.onerror=null;this.src='{{ asset('assets/images/course.png') }}';"
                     class="w-full h-[200px] " alt="view course">
                 <div
@@ -122,8 +122,7 @@
             <div class="text-sm text-amber-700 flex justify-between items-center gap-2">
                 <form action="{{ route('wishlist.controll', $course->id) }}" method='POST'>
                     @csrf
-                    @if (Auth::check() &&
-                            auth()->user()->wishlist()->where('course_id', $course->id)->whereNull('deleted_at')->exists())
+                    @if (Auth::check() && auth()->user()->wishlist()->where('course_id', $course->id)->whereNull('deleted_at')->exists())
                         <button type="submit" name="type" value="remove"
                             class="whitespace-nowrap w-full transition duration-300 px-4 py-2 border border-amber-700 rounded-full hover:bg-amber-700 hover:text-white ">
                             <i class="fa-solid fa-heart mr-1"></i>

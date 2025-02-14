@@ -176,7 +176,7 @@ class CoursesController extends Controller implements HasMiddleware
           ->orderBy('date');
       },
       'reviews',
-      'reviews.user:id,name'
+      'reviews.user:id,username,name'
     ])
       ->withCount('reviews')
       ->findOrFail($id);

@@ -7,7 +7,6 @@ use Spatie\Permission\Models\Role;
 
 class RoleTableSeeder extends Seeder
 {
-
   /**
    * Run the database seeds.
    */
@@ -24,7 +23,7 @@ class RoleTableSeeder extends Seeder
       $role = Role::create($role);
 
       $permissionsAsRole = match ($role->name) {
-        'owner' => ['users', 'roles', 'admin-control-courses', 'buy-courses', 'support'],
+        'owner' => ['customize-layout', 'users', 'roles', 'admin-control-courses', 'buy-courses', 'support'],
         'instructor' => ['instructors-control-courses', 'instructors-control-exams', 'buy-courses'],
         'student' => ['buy-courses'],
         'support' => ['support'],

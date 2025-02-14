@@ -67,26 +67,41 @@
             lectureContainer.classList.add('flex', 'gap-4', 'flex-col', 'mt-2');
 
             if (lectures.length > 0) {
-                lectures.forEach((lecture, index) => {
-                    lectureContainer.innerHTML += `
-                        <div class="px-4 py-2 bg-white dark:bg-gray-600 rounded-xl flex justify-between gap-2 items-center">
-                          <div class="flex gap-2 items-center font-bold text-gray-900 dark:text-gray-50 text-xl">
-                              <i class="fa-solid fa-laptop-file"></i>
-                              <h4>${lecture.title}</h4>  
-                          </div>
-                          <div class="flex gap-4 text-gray-600">
+                lectures.forEach((lecture) => {
+                    const div = document.createElement("div");
+                    div.className =
+                        "px-4 py-2 bg-white dark:bg-gray-600 rounded-xl flex justify-between gap-2 items-center";
+
+                    div.innerHTML = `
+                        <div class="flex gap-2 items-center font-bold text-gray-900 dark:text-gray-50 text-xl">
+                            <i class="fa-solid fa-laptop-file"></i>
+                            <h4></h4>  
+                        </div>
+                        <div class="flex gap-4 text-gray-600">
                             <div class='flex gap-2 items-center text-sm text-gray-400 dark:text-ammber-500'>
-                              ${lecture.hasContent ? '<i class="fa-solid fa-book"></i>' : ''}
-                              ${lecture.hasVideo ? '<i class="fa-solid fa-video"></i>' : ''}
-                              ${lecture.hasExam ? '<i class="fa-solid fa-clipboard-question"></i>' : ''}
+                                ${lecture.hasContent ? '<i class="fa-solid fa-book"></i>' : ''}
+                                ${lecture.hasVideo ? '<i class="fa-solid fa-video"></i>' : ''}
+                                ${lecture.hasExam ? '<i class="fa-solid fa-clipboard-question"></i>' : ''}
                             </div>
-                            <i data-lecture-id="${lecture.id}" data-lecture-content="${lecture.content}" data-lecture-title="${lecture.title}" class="showModal fa-solid fa-pen-to-square hover:text-amber-700 duration-300 cursor-pointer"
-                              data-modal-target="edit-lecture-modal" data-modal-toggle="edit-lecture-modal"></i>
-                            <i data-lecture-id="${lecture.id}"  class="showModal delete fa-solid fa-trash hover:text-amber-700 duration-300 cursor-pointer"
-                              data-modal-target="delete-lecture-modal" data-modal-toggle="delete-lecture-modal"></i>
-                          </div>
-                        </div>`;
+                            <i data-lecture-id="${lecture.id}" 
+                              data-lecture-content="${encodeURIComponent(lecture.content)}" 
+                              data-lecture-title="${encodeURIComponent(lecture.title)}"
+                              class="showModal fa-solid fa-pen-to-square hover:text-amber-700 duration-300 cursor-pointer"
+                              data-modal-target="edit-lecture-modal" 
+                              data-modal-toggle="edit-lecture-modal"></i>
+                            <i data-lecture-id="${lecture.id}" 
+                              class="showModal delete fa-solid fa-trash hover:text-amber-700 duration-300 cursor-pointer"
+                              data-modal-target="delete-lecture-modal" 
+                              data-modal-toggle="delete-lecture-modal"></i>
+                        </div>
+                    `;
+
+                    // Set title safely
+                    div.querySelector("h4").textContent = lecture.title.substring(0, 10) + "...";
+
+                    lectureContainer.appendChild(div);
                 });
+
             } else {
                 lectureContainer.innerHTML = `
                   <p class="bg-white p-2 rounded-xl text-sm text-center text-gray-500 dark:text-gray-100">You can add up to 10 lectures</p></p>
@@ -110,10 +125,11 @@
             // Get Lecture By api
             try {
                 let lecture = await getLecture(lectureId);
+                console.log(lecture)
                 if (lecture.title.length > 0) {
                     $(`${nameModal} form input[name=id]`).val(lecture.id);
                     $(`${nameModal} form input[name=title]`).val(lecture.title);
-                    $(`${nameModal} form input[name=content]`).val(lecture.content);
+                    $(`${nameModal} form textarea[name=content]`).val(lecture.content);
 
                     // checkon Exam
                     $(`${nameModal} form input[name='exam'][value='${lecture.exam}']`).prop(

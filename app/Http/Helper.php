@@ -80,3 +80,11 @@ if (!function_exists('getMessagePaymentByStatus')) {
     };
   }
 }
+
+
+if (!function_exists('getParameterFromJsonOrNull')) {
+  function getParameterFromJsonOrNull($condition, $attribute)
+  {
+    return isset($condition) ? json_decode($condition)->$attribute : '';
+  }
+}

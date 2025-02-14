@@ -30,6 +30,7 @@ class CoursesEnrolledResource extends JsonResource
       ],
       'user' => [
         'id' => $this->course->user->id,
+        'username' => $this->course->user->username,
         'name' =>  $this->course->user->name,
         'headline' => Str::limit($this->course->user->headline, 20),
         'photo' => Storage::url($this->course->user->photo),

@@ -24,6 +24,7 @@ class ExamController extends Controller implements HasMiddleware
       'permission:instructors-control-exams',
     ];
   }
+
   /**
    * Display a listing of the resource.
    */

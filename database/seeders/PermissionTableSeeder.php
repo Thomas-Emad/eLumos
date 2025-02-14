@@ -8,6 +8,7 @@ use Spatie\Permission\Models\Permission;
 class PermissionTableSeeder extends Seeder
 {
   private array $permissions = [
+    'customize-layout',
     'users',
     'roles',
     'instructors-control-courses',

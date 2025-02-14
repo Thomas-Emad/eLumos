@@ -165,7 +165,7 @@ class TicketController extends Controller
   public function show($requestID)
   {
     $ticket = Ticket::with([
-      'user:id,name,photo',
+      'user:id,username,name,photo',
       'messages:ticket_id,user_id,message,created_at'
     ])
       ->where('request_id', $requestID)->firstOrFail();

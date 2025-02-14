@@ -124,7 +124,7 @@
                                           alt="photo Instructor">
                                       <div>
                                           <h3 class=" font-bold hover:text-amber-600 duration-200">
-                                            <a href="{{ route('dashboard.profile') }}/${course.user.id}">
+                                            <a href="{{ route('dashboard.profile') }}/${course.user.username}">
                                               ${course.user.name}    
                                             </a>
                                           </h3>

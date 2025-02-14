@@ -19,7 +19,7 @@ class CourseStudentController extends Controller
   public function index(SearchCourseRequest $request)
   {
     $courses = Course::with([
-      'user:id,name,photo,headline',
+      'user:id,username,name,photo,headline',
       'wishlist' => function ($query) {
         $query->where('user_id', auth()?->id());
       }
@@ -53,7 +53,7 @@ class CourseStudentController extends Controller
     $course = Course::with([
       'tags:id,name',
       'category:id,name',
-      'user:id,name,headline,photo',
+      'user:id,username,name,headline,photo',
       'reviews:id,course_id,user_id,rate,content',
       'enrolleds:id,course_id,user_id',
       'sections:id,course_id,title,order_sort',
@@ -133,7 +133,7 @@ class CourseStudentController extends Controller
    */
   private function fetchInstructor(string $instructor_id)
   {
-    return User::select('id', 'name', 'headline', 'photo', 'description')
+    return User::select('id', 'username', 'name', 'headline', 'photo', 'description')
       ->with(['courses' => function ($query) {
         $query->with([
           'enrolleds:id,course_id',

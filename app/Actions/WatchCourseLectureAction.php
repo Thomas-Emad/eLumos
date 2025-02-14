@@ -45,6 +45,7 @@ class WatchCourseLectureAction
     if ($progress === 100) {
       $enrolled->certificate_id = $enrolled->user_id . '-' . $enrolled->id . '-' . time();
       $enrolled->completed_at = now();
+      $enrolled->status = 'completed';
       return true;
     }
     return false;

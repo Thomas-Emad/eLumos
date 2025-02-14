@@ -4,15 +4,23 @@ use Illuminate\Support\Facades\Route;
 use App\Classes\Payment\StripePaymentGateway;
 use App\Http\Controllers\{HomeController,  CategoryController, StepsForwardController, ProfileController};
 use App\Http\Controllers\Student\{CourseStudentController, BasketController, CheckoutController, WishlistController, PaymentController, PaymentWebhookController};
-use App\Http\Controllers\Dashboard\{CourseReviewLogController, DashboardController, ReviewCourseController, NotificationContoller, Tickets\TicketController, Tickets\TicketMessageController, Tickets\TicketLogController};
-use App\Http\Controllers\Dashboard\Admin\{RoleController, CourseController as CourseAdminController};
+use App\Http\Controllers\Dashboard\{
+  CourseReviewLogController,
+  DashboardController,
+  ReviewCourseController,
+  NotificationContoller,
+  Tickets\TicketController,
+  Tickets\TicketMessageController,
+  Tickets\TicketLogController,
+  Blog\ArticleControlController
+};
+use App\Http\Controllers\Dashboard\Admin\{RoleController, CourseController as CourseAdminController, CustomizeLayoutController};
 use App\Http\Controllers\Dashboard\Instructor\{CoursesController, CourseSectionsController, CourseLecturesController};
 use App\Http\Controllers\Dashboard\Instructor\Exams\{ExamController, ExamQuestionController};
 use App\Http\Controllers\Dashboard\Student\{CoursesEnrolledController, StudentExamController, WatchCourseLectureController};
-use App\Models\User;
+use App\Http\Controllers\Blog\ArticleController;
 
 // Basic Pages
-
 Route::get('/', HomeController::class)->name('home');
 Route::get('/categories', CategoryController::class)->name('categories');
 
@@ -112,9 +120,11 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     /* *******************instructor************************* */
     // instructor Controllers
     Route::resource('/courses', CoursesController::class)->names('instructor.courses')->except('show');
-    Route::get('/courses/status/{id}', [CoursesController::class, 'status'])->name('instructor.courses.status');
-    Route::get('/courses/tracking/{id}', [CoursesController::class, 'statistics'])->name('instructor.courses.tracking');
-    Route::get('/support', [CoursesController::class, 'support'])->name('instructor.support');
+    Route::controller(CoursesController::class)->as('instructor.')->group(function () {
+      Route::get('/courses/status/{id}',  'status')->name('courses.status');
+      Route::get('/courses/tracking/{id}', 'statistics')->name('courses.tracking');
+      Route::get('/support',  'support')->name('support');
+    });
     Route::get('/api/courses/show/{type?}',  [CoursesController::class, 'getCourses'])->name('api.instructor.courses.show');
 
     // Api CRUD Operations for Course Sections
@@ -125,11 +135,13 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
     Route::apiResource('/api/courses/lectures', CourseLecturesController::class)->names('api.instructor.courses.lectures');
 
     // Exams
-    Route::resource('instructor/exams', ExamController::class)->names('instructor.exams')->only(['index', 'store', 'show', 'destroy']);
-    Route::resource('instructor/exam/questions', ExamQuestionController::class)->names('instructor.exams.questions')->only(['store', 'show', 'destroy']);
-    Route::get('instructor/exam/questions/component/{type?}',  [ExamQuestionController::class, 'getComponent'])->name('instructor.exams.get-component');
-    Route::post('instructor/exams/question/answer-student', [StudentExamController::class, 'getInfoQuestion'])->name('instructor.exams.get-info-question');
-    Route::post('instructor/exams/question/correct-answer', [StudentExamController::class, 'correctAnswer'])->name('instructor.exams.correct-answer');
+    Route::prefix('instructor')->as("instructor.")->group(function () {
+      Route::resource('exams', ExamController::class)->names('exams')->only(['index', 'store', 'show', 'destroy']);
+      Route::resource('exam/questions', ExamQuestionController::class)->names('exams.questions')->only(['store', 'show', 'destroy']);
+      Route::get('exam/questions/component/{type?}',  [ExamQuestionController::class, 'getComponent'])->name('exams.get-component');
+      Route::post('exams/question/answer-student', [StudentExamController::class, 'getInfoQuestion'])->name('exams.get-info-question');
+      Route::post('exams/question/correct-answer', [StudentExamController::class, 'correctAnswer'])->name('exams.correct-answer');
+    });
   });
 
   /* *******************Admin************************* */
@@ -157,16 +169,36 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
   });
 
   // Support
-  Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
-    Route::resource('tickets', TicketController::class);
-    Route::post('tickets/send', [TicketMessageController::class, 'broadcast'])->name('tickets.send');
-    Route::post('tickets/receiver', [TicketMessageController::class, 'receiver'])->name('tickets.receiver');
-    Route::post('tickets/review', [TicketController::class, 'review'])->name('tickets.review');
-    Route::post('tickets/change-status', [TicketLogController::class, 'changeStatus'])->name('tickets.changeStatus');
-    Route::post('tickets/change-priority', [TicketLogController::class, 'changePriority'])->name('tickets.changePriority');
+  Route::resource('dashboard/tickets', TicketController::class)
+    ->middleware("step-forward")->names('dashboard.tickets');
+  Route::group(['middleware' => 'step-forward', 'prefix' => 'dashboard/tickets', 'as' => 'dashboard.tickets'], function () {
+    Route::post('send', [TicketMessageController::class, 'broadcast'])->name('send');
+    Route::post('receiver', [TicketMessageController::class, 'receiver'])->name('receiver');
+    Route::post('review', [TicketController::class, 'review'])->name('review');
+    Route::post('change-status', [TicketLogController::class, 'changeStatus'])->name('changeStatus');
+    Route::post('change-priority', [TicketLogController::class, 'changePriority'])->name('changePriority');
   });
   Route::get('tickets/table', [TicketController::class, 'table'])->name('dashboard.tickets.table');
   Route::get('tickets/logs', [TicketLogController::class, 'logs'])->name('dashboard.tickets.logs');
+
+  /* Blog Module => Article */
+  // Route::group([
+  //   'middleware' => 'step-forward',
+  //   'prefix' => 'dashboard/articles',
+  //   'as' => 'dashboard.articles.',
+  //   'controller' => ArticleControlController::class
+  // ], function () {
+  //   Route::get('/', 'index')->name('index');
+  // });
+  Route::resource("dashboard/articles", ArticleControlController::class)
+    ->names("dashboard.articles")
+    ->middleware('step-forward');
+});
+
+/* Blog Module => Article */
+Route::controller(ArticleController::class)->group(function () {
+  Route::get('blog/search', 'index')->name('articles.index');
+  Route::get('blog/{article:slug}', 'show')->name('articles.show');
 });
 
 

@@ -16,6 +16,7 @@ class LectureCourseResource extends JsonResource
   {
     return [
       'id' => $this->id,
+      'username' => $this->username,
       'title' => $this->title,
       'order_sort' => $this->order_sort,
       'hasContent' => !is_null($this->content),

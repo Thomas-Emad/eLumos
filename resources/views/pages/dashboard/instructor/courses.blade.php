@@ -136,7 +136,7 @@
                                             alt="photo Instructor">
                                         <div>
                                             <h3 class=" font-bold hover:text-amber-600 duration-200">
-                                                <a href="{{ route('dashboard.profile') }}/${course.user.id}">Thomas E.</a>
+                                                <a href="{{ route('dashboard.profile') }}/${course.user.username}">Thomas E.</a>
                                             </h3>
                                             <span class="text-sm">${course.user.headline}</span>
                                         </div>
@@ -149,17 +149,17 @@
                                 <hr>
                                 <div class="text-sm p-2 flex justify-between gap-2  text-gray-800  dark:text-gray-200">
                                     ${course.data.status == 'active' ? `
-                                        <a href='${statisticsRoute}' class="flex items-center gap-2 hover:text-amber-600 duration-300">
-                                            <i class="fa-solid fa-chart-line"></i><span>Statistics</span>
-                                        </a>
-                                    ` : `
-                                      <a href='${editRoute}' class="flex  items-center gap-2 hover:text-amber-600 duration-300">
-                                          <i class="fa-solid fa-pen-to-square"></i><span>Edit</span>
-                                      </a>
-                                      <a data-id="${course.data.id}" data-title="${course.data.title}" data-modal-target="delete-course-modal" data-modal-toggle="delete-course-modal" class="deleteCourse flex  items-center gap-2 hover:text-amber-600 duration-300 cursor-pointer">
-                                          <i class="fa-solid fa-trash-can"></i><span>Delete</span>
-                                      </a>
-                                    `}
+                                            <a href='${statisticsRoute}' class="flex items-center gap-2 hover:text-amber-600 duration-300">
+                                                <i class="fa-solid fa-chart-line"></i><span>Statistics</span>
+                                            </a>
+                                        ` : `
+                                          <a href='${editRoute}' class="flex  items-center gap-2 hover:text-amber-600 duration-300">
+                                              <i class="fa-solid fa-pen-to-square"></i><span>Edit</span>
+                                          </a>
+                                          <a data-id="${course.data.id}" data-title="${course.data.title}" data-modal-target="delete-course-modal" data-modal-toggle="delete-course-modal" class="deleteCourse flex  items-center gap-2 hover:text-amber-600 duration-300 cursor-pointer">
+                                              <i class="fa-solid fa-trash-can"></i><span>Delete</span>
+                                          </a>
+                                        `}
                                 </div>
                             </div>
                         `)

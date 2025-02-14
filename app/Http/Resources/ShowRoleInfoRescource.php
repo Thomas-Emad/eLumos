@@ -17,6 +17,7 @@ class ShowRoleInfoRescource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'username' => $this->username,
             'name' => $this->name,
             'created' => $this->created_at->toDateTimeString(),
             'users_count' => $this->users()->count(),

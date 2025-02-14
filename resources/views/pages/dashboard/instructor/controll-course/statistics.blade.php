@@ -113,7 +113,7 @@
                             <div class='flex justify-between items-center gap-2'>
                                 <img src="{{ Stroage::url($review->user->photo) }}" class='w-12 h-12 rounded-full'
                                     alt="photo user reviewer">
-                                <a href="{{ route('dashboard.profile', $review->user->id) }}" target="__blank">
+                                <a href="{{ route('dashboard.profile', $review->user->username) }}" target="__blank">
                                     <h3
                                         class="text-md font-semibold text-gray-900 dark:text-white hover:text-amber-500 duration-200">
                                         {{ $review->user->name }}

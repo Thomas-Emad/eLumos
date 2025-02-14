@@ -16,7 +16,6 @@
             <!-- QR Code -->
             <div>
                 {!! $qrCode !!}
-                {{-- <img src="https://via.placeholder.com/100" alt="QR Code" class="w-16"> --}}
             </div>
         </div>
 

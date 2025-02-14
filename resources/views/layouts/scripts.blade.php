@@ -2,41 +2,86 @@
 
 {{-- Basket Code --}}
 <script>
-    // get basket after load page 2s
-    $(document).ready(() => {
-        setBasket('.change-cart');
-        setTimeout(() => {
-            getBasket();
-        }, 2000);
-    })
+    $(".btn-cart").on("click", async function() {
+        $(".cart-content").addClass("hidden");
+        $(".loader-cart").removeClass("hidden");
 
-    // set new course in Basket for User unAuthenticated
-    function setBasket(classButtonCourse) {
-        $('body').on('click', classButtonCourse, function() {
+        try {
+            await triggerBasketUpdate();
+            await getBasket();
+        } catch (error) {
+            console.error("Error updating basket:", error);
+        }
+
+        $(".cart-content").removeClass("hidden");
+        $(".loader-cart").addClass("hidden");
+    });
+
+    // Click event for each individual .change-cart button
+    $("body").on("click", ".change-cart", async function() {
+        try {
+            await setBasket($(this));
+            await getBasket();
+        } catch (error) {
+            console.error("Error updating basket:", error);
+        }
+    });
+
+
+    // Function to trigger clicks on all .change-cart buttons
+    async function triggerBasketUpdate() {
+        let buttons = $(".change-cart");
+        let promises = [];
+
+        buttons.each(function() {
+            promises.push(setBasket($(this)));
+        });
+
+        return Promise.all(promises);
+    }
+
+    // Send a course to the basket
+    function setBasket(courseButton) {
+        return new Promise((resolve, reject) => {
+            let courseId = courseButton.attr("data-id");
+
             $.ajax({
-                type: 'POST',
-                url: '{{ route('basket.setData') }}',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    _method: 'POST',
-                    id: $(this).attr('data-id')
-                }
-            }).done((data) => {
-                $(this).html(data.message);
-                getBasket();
-            })
+                    type: "POST",
+                    url: "{{ route('basket.setData') }}",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        _method: "POST",
+                        id: courseId,
+                    },
+                })
+                .done((data) => {
+                    courseButton.html(data.message); // Update button text
+                    resolve();
+                })
+                .fail((jqXHR, textStatus, errorThrown) => {
+                    reject(errorThrown);
+                });
         });
     }
 
-    // get Content Basket
+    // Get content basket
     function getBasket() {
-        $.ajax({
-            type: 'GET',
-            url: '{{ route('basket.getData') }}',
-        }).done((data) => {
-            displayBasket(data.courses);
-        })
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                    type: "GET",
+                    url: "{{ route('basket.getData') }}",
+                })
+                .done((data) => {
+                    displayBasket(data.courses);
+                    resolve();
+                })
+                .fail((jqXHR, textStatus, errorThrown) => {
+                    reject(errorThrown);
+                });
+        });
     }
+
+
 
     function displayBasket(content) {
         $(".cart").empty(); // Clear existing items
@@ -52,7 +97,7 @@
                         <span class="text-green-700">${element.price}$</span>
                       </div>
                       <button type="button" data-id="${element.id}" data-type='add'
-                        class="add-to-cart inline-block text-sm py-1 px-4 w-full rounded-xl text-red-800 border border-red-800 hover:bg-red-800 hover:text-white transition duration-300 remove-item">
+                        class="change-cart inline-block text-sm py-1 px-4 w-full rounded-xl text-red-800 border border-red-800 hover:bg-red-800 hover:text-white transition duration-300 remove-item">
                         remove
                       </button>
                     </div>

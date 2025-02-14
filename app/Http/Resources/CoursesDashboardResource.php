@@ -23,6 +23,7 @@ class CoursesDashboardResource extends JsonResource
       ],
       'user' => [
         'id' => $this->user->id,
+        'username' => $this->user->username,
         'name' => $this->user->name,
         'headline' => $this->user->headline,
         'photo' => $this->user->photo,

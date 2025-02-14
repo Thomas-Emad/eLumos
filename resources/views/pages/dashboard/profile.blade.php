@@ -75,7 +75,7 @@
             </div>
         </div>
 
-        @if (!empty($courses))
+        @if (sizeof($courses) > 0)
             <hr class="block my-4 mx-auto w-2/3">
             <div
                 class="p-4  rounded-xl border border-gray-200 bg-white flex gap-4 items-center flex-col md:flex-row justify-between">
@@ -104,7 +104,7 @@
                 @foreach ($courses as $course)
                     <div class="p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-400 rounded-xl">
                         <a href="{{ route('course-details', $course->id) }}" class="block rounded-xl overflow-hidden">
-                            <img src="{{ json_decode($course->mockup)->url }}"
+                            <img src="{{ getParameterFromJsonOrNull($course->mockup, 'url') }}"
                                 onerror="this.onerror=null;this.src='{{ asset('assets/images/course.png') }}';"
                                 class="w-full h-[150px] hover:scale-125 duration-300" alt="photo course">
                         </a>

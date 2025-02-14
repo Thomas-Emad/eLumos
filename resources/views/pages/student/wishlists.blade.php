@@ -20,7 +20,7 @@
                                 class="w-10 h-10 rounded-full" alt="photo Instructor">
                             <div>
                                 <h3 class=" font-bold hover:text-amber-600 duration-200">
-                                    <a href="{{ route('dashboard.profile', $item->course->user->id) }}/">Thomas E.</a>
+                                    <a href="{{ route('dashboard.profile', $item->course->user->username) }}">Thomas E.</a>
                                 </h3>
                                 <span class="text-sm">{{ $item->course->user->headline }}</span>
                             </div>

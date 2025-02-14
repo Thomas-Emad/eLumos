@@ -58,7 +58,7 @@ class CourseController extends Controller implements HasMiddleware
       'sections:id,course_id,title',
       'sections.lectures:id,section_id,title,video_duration,content,video',
       'sections.lectures.exam:id,lecture_id',
-      'user:id,name'
+      'user:id,username,name'
     ])->withCount('lectures')
       ->firstOrFail();
 

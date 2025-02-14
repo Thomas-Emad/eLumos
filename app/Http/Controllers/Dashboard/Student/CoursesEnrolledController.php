@@ -183,7 +183,7 @@ class CoursesEnrolledController extends Controller implements HasMiddleware
   private function certificateDetails($certificateID): object
   {
     $enrolled = CoursesEnrolled::with([
-      'user:id,name',
+      'user:id,username,name',
       'course:id,title'
     ])->where('certificate_id', $certificateID)->firstOrFail();
 

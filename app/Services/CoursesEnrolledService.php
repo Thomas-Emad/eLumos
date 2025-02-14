@@ -6,18 +6,8 @@ use App\Models\CoursesEnrolled;
 use App\Models\CourseLectures;
 use Illuminate\Support\Str;
 
-
 class CoursesEnrolledService
 {
-  /**
-   * Create a new class instance.
-   */
-  public function __construct()
-  {
-    //
-  }
-
-
   /**
    * Get the course enrolled for the current user.
    *
@@ -29,7 +19,7 @@ class CoursesEnrolledService
   {
     $courseStudent = CoursesEnrolled::with([
       'course:id,user_id,title,mockup',
-      'course.user:id,photo',
+      'course.user:id,username,photo',
       'course.reviews:course_id,user_id,rate,content',
       'course.sections:id,course_id,title',
       'course.sections.lectures:id,course_id,section_id,title,video,video_duration,content,order_sort',
@@ -66,13 +56,10 @@ class CoursesEnrolledService
         if ($indexCurrent !== false) {
           $currentLecture =  $section->lectures[$indexCurrent];
         }
-      } else {
-        $currentLecture =  $section->lectures[0];
-        break;
-      }
+      } 
     }
 
-    return $currentLecture;
+    return $currentLecture ??  $courseStudent->course->sections->first()->lectures->first();
   }
   /**
    * Gets the next lecture after the current one from all lectures in the course.

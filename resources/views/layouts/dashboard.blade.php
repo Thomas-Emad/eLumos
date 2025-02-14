@@ -63,6 +63,17 @@
 
                     <div>
                         <hr class="mx-6 my-4">
+                        <h2 class="font-bold text-gray-900 text-lg dark:text-gray-50">Blog</h2>
+                        <li>
+                            <a href="{{ route('dashboard.articles.index') }}"
+                                class="mt-2 flex items-center gap-2 @if (Route::is('dashboard.articles.index')) text-amber-600 @endif hover:text-amber-600 duration-200">
+                                <i class="fa-solid fa-heart"></i>
+                                <span>Articles</span>
+                            </a>
+                        </li>
+                    </div>
+                    <div>
+                        <hr class="mx-6 my-4">
                         <h2 class="font-bold text-gray-900 text-lg dark:text-gray-50">Others</h2>
                         <li>
                             <a href="{{ route('dashboard.wishlist') }}"
