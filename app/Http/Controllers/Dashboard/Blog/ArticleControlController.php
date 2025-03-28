@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard\Blog;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Article;
+use App\Http\Requests\Dashboard\ArticleRequest;
 
 class ArticleControlController extends Controller
 {
@@ -44,17 +45,14 @@ class ArticleControlController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ArticleRequest $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        return dd($request->validated());
+        $article = Article::create($request->validated());
+        return redirect()->route('articles.show', ['article' => $article->slug])->with('notification', [
+            'type' => 'success',
+            'message' => 'Your Article as been Published Successfully..'
+        ]);
     }
 
     /**

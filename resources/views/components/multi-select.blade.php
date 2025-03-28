@@ -1,4 +1,4 @@
-@props(['name', 'placeholder', 'data'])
+@props(['name', 'placeholder'])
 <!-- Select -->
 <select multiple="" name="{{ $name }}" {{ $attributes }}
     data-hs-select='{

@@ -21,7 +21,6 @@ class SearchCourseRequest extends FormRequest
       'levels' => $this->input('levels') ?? ['beginner', 'intermediate', 'advanced'],
       'freeCourse' => in_array('free', $this->input('coursePrice') ?? []),
       'paidCourse' => in_array('paid', $this->input('coursePrice') ?? []),
-
     ]);
   }
 

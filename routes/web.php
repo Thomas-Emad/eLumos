@@ -182,14 +182,6 @@ Route::group(['middleware' => 'auth', 'middleware' => 'verified'], function () {
   Route::get('tickets/logs', [TicketLogController::class, 'logs'])->name('dashboard.tickets.logs');
 
   /* Blog Module => Article */
-  // Route::group([
-  //   'middleware' => 'step-forward',
-  //   'prefix' => 'dashboard/articles',
-  //   'as' => 'dashboard.articles.',
-  //   'controller' => ArticleControlController::class
-  // ], function () {
-  //   Route::get('/', 'index')->name('index');
-  // });
   Route::resource("dashboard/articles", ArticleControlController::class)
     ->names("dashboard.articles")
     ->middleware('step-forward');

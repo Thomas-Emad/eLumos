@@ -1,5 +1,6 @@
+@props(['name' => '', 'placeholder' => 'This is Tags'])
 <!-- Select -->
-<select id="{{ $name }}-select" multiple name="{{ $name }}"
+<select id="{{ $name }}-select" multiple name="{{ $name }}[]"
     data-hs-select='{
     "placeholder": "{{ $placeholder }}",
     "toggleTag": "<button type=\"button\"></button>",
@@ -17,5 +18,7 @@
     <option value="">Choose</option>
     {{ $slot }}
 </select>
-
+@error($name)
+    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+@enderror
 <!-- End Select -->
